@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>metrics</artifactId>
+    <groupId>eu.sqooss</groupId>
+    <version>0.95-SNAPSHOT</version>
+  </parent>
+  <groupId>eu.sqooss.metrics</groupId>
+  <artifactId>framac</artifactId>
+  <version>0.0.1</version>
+  <packaging>bundle</packaging>
+  <name>Frama-C Metrics Plugin</name>
+  <dependencies>
+    <dependency>
+      <groupId>eu.sqooss.alitheia</groupId>
+      <artifactId>core</artifactId>
+      <version>0.95-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.core</artifactId>
+      <version>4.2.0</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <version>4.2.0</version>
+      <optional>true</optional>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>2.2.0</version>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Export-Package>eu.sqooss.metrics.framac</Export-Package>
+            <Bundle-Activator>eu.sqooss.metrics.framac.FramaCActivator</Bundle-Activator>
+            <Bundle-SymbolicName>eu.sqooss.metrics.framac</Bundle-SymbolicName>
+            <Bundle-Version>0.0.1</Bundle-Version>
+            <Bundle-Vendor>eu.sqooss.metrics</Bundle-Vendor>
+            <Bundle-Description>eu.sqooss.metrics.framac Frama-C integration plugin for Alitheia Core</Bundle-Description>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
