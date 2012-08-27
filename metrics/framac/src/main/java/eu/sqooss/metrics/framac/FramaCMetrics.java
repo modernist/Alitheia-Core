@@ -44,26 +44,35 @@
 */
 package eu.sqooss.metrics.framac;
 
+import java.io.File;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 /* These are imports of standard Alitheia core services and types.
 ** You are going to need these anyway; some others that you might
 ** need are the FDS and other Metric interfaces, as well as more
 ** DAO types from the database service.
 */
+import eu.sqooss.core.AlitheiaCore;
 import eu.sqooss.service.abstractmetric.AbstractMetric;
 import eu.sqooss.service.abstractmetric.MetricDecl;
 import eu.sqooss.service.abstractmetric.MetricDeclarations;
 import eu.sqooss.service.abstractmetric.Result;
 import eu.sqooss.service.db.Metric;
 import eu.sqooss.service.db.ProjectFile;
+import eu.sqooss.service.db.ProjectFileMeasurement;
+import eu.sqooss.service.fds.FDSService;
+import eu.sqooss.service.fds.OnDiskCheckout;
+import eu.sqooss.service.util.Pair;
 
 /**
- * Implementation of the FRAMA-C driver plug-in. It should be activated in 
- * File, Directory or Project scope.
- *  
+ * Implementation of the FRAMA-C driver plug-in. It should be activated in ProjectFile, 
+ * ProjectDirectory or Project scope. The implementation currently supports only ProjectFile.  
  */ 
 @MetricDeclarations(metrics= {
 	@MetricDecl(mnemonic="FramaC.DoubleFree", activators={ProjectFile.class}, descr="FramaC: Double Free Vulnerability"),
@@ -74,21 +83,63 @@ import eu.sqooss.service.db.ProjectFile;
 })
 public class FramaCMetrics extends AbstractMetric {
     
+	static String FRAMAC_PATH = "";
+	static Map<String, String> configurations; //config -> params
+	// Alternatively we could use the form config -> list<Params<name, value>>
+	static {
+        if (System.getProperty("findbugs.path") != null)
+            FRAMAC_PATH = System.getProperty("framac.path");
+        else
+            FRAMAC_PATH = "frama-c";
+        
+        configurations = new HashMap<String, String>();
+        configurations.put("Double_free", "-print-final");
+        configurations.put("Format_string", "-print-final");
+        configurations.put("SQL_Injection", "-print-final");
+        configurations.put("User_kernel_Trust_error", "-print-final");
+        configurations.put("XSS", "-print-final");
+    }
+	
+	
+	// Holds the instance of the Alitheia core service
+    private AlitheiaCore core;
+	
+	
     public FramaCMetrics(BundleContext bc) {
-        super(bc);        
+        super(bc);
+        
+        // Retrieve the instance of the Alitheia core service
+        ServiceReference serviceRef = bc.getServiceReference(
+                AlitheiaCore.class.getName());
+        if (serviceRef != null)
+            core = (AlitheiaCore) bc.getService(serviceRef);
+        else
+        	core = AlitheiaCore.getInstance();
     }
 
     public List<Result> getResult(ProjectFile a, Metric m) {
-        // Return a list of ResultEntries by querying the DB for the 
-        // measurements implement by the supported metric and calculated 
-        // for the specific project file.
-        return null;
+    	return getResult(a, ProjectFileMeasurement.class,
+                m, Result.ResultType.STRING);
     }
     
     public void run(ProjectFile a) {
-        // 1. Get stuff related to the provided project file
-        // 2. Calculate one or more numbers
-        // 3. Store a result to the database
+    	FDSService fds = core.getFDSService();
+
+        OnDiskCheckout odc = null;
+        File file = fds.getFile(a);
+        
+        for(String config: configurations.keySet()){
+        	//for each configuration build the command string, execute it and parse the results
+        	
+        	String cmd = buildCommand(file);
+        	
+        }
+        
+    }
+    
+    private String buildCommand(File f)
+    {
+    	return null;
     }
     
 }
