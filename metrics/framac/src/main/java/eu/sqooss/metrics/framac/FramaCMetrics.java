@@ -45,6 +45,7 @@
 package eu.sqooss.metrics.framac;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -67,8 +68,7 @@ import eu.sqooss.service.db.Metric;
 import eu.sqooss.service.db.ProjectFile;
 import eu.sqooss.service.db.ProjectFileMeasurement;
 import eu.sqooss.service.fds.FDSService;
-import eu.sqooss.service.fds.OnDiskCheckout;
-import eu.sqooss.service.util.Pair;
+//import eu.sqooss.service.fds.OnDiskCheckout;
 
 /**
  * Implementation of the FRAMA-C driver plug-in. It should be activated in ProjectFile, 
@@ -84,13 +84,19 @@ import eu.sqooss.service.util.Pair;
 public class FramaCMetrics extends AbstractMetric {
     
 	static String FRAMAC_PATH = "";
+	static String FRAMAC_CFG_PATH = "";
 	static Map<String, String> configurations; //config -> params
 	// Alternatively we could use the form config -> list<Params<name, value>>
 	static {
-        if (System.getProperty("findbugs.path") != null)
+        if (System.getProperty("framac.path") != null)
             FRAMAC_PATH = System.getProperty("framac.path");
         else
             FRAMAC_PATH = "frama-c";
+        
+        if (System.getProperty("framac.cfg.path") != null)
+            FRAMAC_CFG_PATH = System.getProperty("framac.cfg.path");
+        else
+            FRAMAC_CFG_PATH = "/tmp";
         
         configurations = new HashMap<String, String>();
         configurations.put("Double_free", "-print-final");
@@ -98,8 +104,14 @@ public class FramaCMetrics extends AbstractMetric {
         configurations.put("SQL_Injection", "-print-final");
         configurations.put("User_kernel_Trust_error", "-print-final");
         configurations.put("XSS", "-print-final");
+        
+        exportConfigurations();
     }
 	
+	
+	private static void exportConfigurations(){
+		
+	}
 	
 	// Holds the instance of the Alitheia core service
     private AlitheiaCore core;
@@ -125,21 +137,63 @@ public class FramaCMetrics extends AbstractMetric {
     public void run(ProjectFile a) {
     	FDSService fds = core.getFDSService();
 
-        OnDiskCheckout odc = null;
+        //OnDiskCheckout odc = null;
         File file = fds.getFile(a);
         
         for(String config: configurations.keySet()){
         	//for each configuration build the command string, execute it and parse the results
         	
-        	String cmd = buildCommand(file);
+        	String cmd = buildCommand(file, config);
         	
+        	try {
+        	
+	        	ProcessBuilder framacProcessBuilder = new ProcessBuilder(cmd);
+	        	framacProcessBuilder.redirectErrorStream(true);
+	        	framacProcessBuilder.directory(file.getParentFile());
+	        	
+	        	File resultFile = File.createTempFile("framac-result", null);
+	        	
+	        	int exitCode = getProcessExitCode(framacProcessBuilder.start(), resultFile.getPath());
+	        	
+	        	if(exitCode != 0) {
+	        		log.warn(String.format("The external tool exited with code %i", exitCode));
+	        		resultFile.delete();
+	        		continue;
+	        	}
+	        	
+	        	processResult(resultFile);
+	        	resultFile.delete();
+	        	
+        	} catch(Exception ignored) {
+        		continue;
+        	}
         }
         
     }
     
-    private String buildCommand(File f)
+    //TODO: mark as protected for base plugin
+    private String buildCommand(File f, String config)
     {
-    	return null;
+    	return String.format("%s -config-file  %s/%s/default.cfg "
+    			+ "-constr-config-file %s/%s/default_constr.cfg %s %s", 
+    			FRAMAC_PATH, FRAMAC_CFG_PATH, config, FRAMAC_CFG_PATH, config, 
+    			configurations.get(config), f.getPath());
+    }
+    
+    private int getProcessExitCode(Process pr, String name) throws IOException {
+        ProcessOutputReader outReader = new ProcessOutputReader(pr.getInputStream(), name);
+        outReader.start();
+        int retVal = -1;
+        while (retVal == -1) {
+            try {
+                retVal = pr.waitFor();
+            } catch (Exception ignored) {}
+        }
+        return retVal;
+    }
+    
+    private void processResult(File file) {
+    	
     }
     
 }
