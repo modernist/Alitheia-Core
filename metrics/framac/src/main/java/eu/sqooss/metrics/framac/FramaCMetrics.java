@@ -50,6 +50,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -68,6 +70,7 @@ import eu.sqooss.service.db.Metric;
 import eu.sqooss.service.db.ProjectFile;
 import eu.sqooss.service.db.ProjectFileMeasurement;
 import eu.sqooss.service.fds.FDSService;
+import eu.sqooss.service.util.FileUtils;
 //import eu.sqooss.service.fds.OnDiskCheckout;
 
 /**
@@ -87,6 +90,13 @@ public class FramaCMetrics extends AbstractMetric {
 	static String FRAMAC_CFG_PATH = "";
 	static Map<String, String> configurations; //config -> params
 	// Alternatively we could use the form config -> list<Params<name, value>>
+	
+	//patterns for parsing FRAMA-C output
+	static String splitEntryPatternRegex = ".*\\nEnvironment for function ([^:]+):";
+	static String symnamePatternRegex = "^\\s*Symname: (\\S)+\\s*=\\s*(.*)$";
+	static Pattern splitEntryPattern = Pattern.compile(splitEntryPatternRegex);
+	static Pattern symnamePattern = Pattern.compile(splitEntryPatternRegex);
+	
 	static {
         if (System.getProperty("framac.path") != null)
             FRAMAC_PATH = System.getProperty("framac.path");
@@ -193,6 +203,24 @@ public class FramaCMetrics extends AbstractMetric {
     }
     
     private void processResult(File file) {
+    	String contents = FileUtils.readContents(file);
+    	
+    	if(contents == null)
+    		return;
+    	
+    	String[] entries = contents.split(splitEntryPatternRegex);
+    	for(String entry: entries) {
+    		
+    		Matcher matcher = symnamePattern.matcher(entry);
+    		while(matcher.find()) {
+    			
+    			// get the vulnerability type and location,
+    			//increment the appropriate metrics
+    			String symname = matcher.group(1);
+    			String result = matcher.group(2);
+    			System.out.println(String.format("%s at %s", result, symname));    			
+    		}
+    	}
     	
     }
     
