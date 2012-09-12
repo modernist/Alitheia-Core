@@ -81,7 +81,7 @@ import eu.sqooss.service.util.FileUtils;
 	@MetricDecl(mnemonic="FramaC.DoubleFree", activators={ProjectFile.class}, descr="FramaC: Double Free Vulnerability"),
 	@MetricDecl(mnemonic="FramaC.FormatString", activators={ProjectFile.class}, descr="FramaC: Format String Vulnerability"),
 	@MetricDecl(mnemonic="FramaC.SQLInjection", activators={ProjectFile.class}, descr="FramaC: SQL Injection Vulnerability"),
-	@MetricDecl(mnemonic="FramaC.KernelTrust", activators={ProjectFile.class}, descr="FramaC: User Kernel Trust Error Vulnerability"),
+	@MetricDecl(mnemonic="FramaC.UserKernelTrustError", activators={ProjectFile.class}, descr="FramaC: User Kernel Trust Error Vulnerability"),
 	@MetricDecl(mnemonic="FramaC.XSS", activators={ProjectFile.class}, descr="FramaC: XSS Vulnerability")
 })
 public class FramaCMetrics extends AbstractMetric {
@@ -109,10 +109,10 @@ public class FramaCMetrics extends AbstractMetric {
             FRAMAC_CFG_PATH = "/tmp";
         
         configurations = new HashMap<String, String>();
-        configurations.put("Double_free", "-print-final");
-        configurations.put("Format_string", "-print-final");
-        configurations.put("SQL_Injection", "-print-final");
-        configurations.put("User_kernel_Trust_error", "-print-final");
+        configurations.put("DoubleFree", "-print-final");
+        configurations.put("FormatString", "-print-final");
+        configurations.put("SQLInjection", "-print-final");
+        configurations.put("UserKernelTrustError", "-print-final");
         configurations.put("XSS", "-print-final");
         
         exportConfigurations();
@@ -171,17 +171,20 @@ public class FramaCMetrics extends AbstractMetric {
 	        		continue;
 	        	}
 	        	
-	        	processResult(resultFile);
+	        	List<Vulnerability> results = processResult(resultFile, a);     
 	        	resultFile.delete();
+	        	
+	        	if(results.size() > 0){
+	        		storeResults(Metric.getMetricByMnemonic("FramaC." + config), results);
+	        	}
 	        	
         	} catch(Exception ignored) {
         		continue;
         	}
         }
-        
     }
     
-    //TODO: mark as protected for base plugin
+    //TODO: mark as protected in base plugin class
     private String buildCommand(File f, String config)
     {
     	return String.format("%s -config-file  %s/%s/default.cfg "
@@ -202,11 +205,14 @@ public class FramaCMetrics extends AbstractMetric {
         return retVal;
     }
     
-    private void processResult(File file) {
-    	String contents = FileUtils.readContents(file);
+    /* TODO: mark as protected in base plugin class*/
+    private List<Vulnerability> processResult(File outputFile, ProjectFile pf) {
+    	String contents = FileUtils.readContents(outputFile);
     	
     	if(contents == null)
-    		return;
+    		return null;
+    	
+    	ArrayList<Vulnerability> results = new ArrayList<Vulnerability>();
     	
     	String[] entries = contents.split(splitEntryPatternRegex);
     	for(String entry: entries) {
@@ -218,9 +224,18 @@ public class FramaCMetrics extends AbstractMetric {
     			//increment the appropriate metrics
     			String symname = matcher.group(1);
     			String result = matcher.group(2);
-    			System.out.println(String.format("%s at %s", result, symname));    			
+    			System.out.println(String.format("%s at %s", result, symname));
+    			
+    			Vulnerability v = new Vulnerability(null, symname, result);
+    			results.add(v);
     		}
     	}
+    	
+    	return results;
+    }
+    
+    /* TODO: mark as protected in base plugin class */
+    private void storeResults(Metric m, List<Vulnerability> v){
     	
     }
     
