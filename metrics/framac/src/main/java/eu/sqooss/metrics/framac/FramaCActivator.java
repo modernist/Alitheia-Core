@@ -46,6 +46,7 @@ package eu.sqooss.metrics.framac;
 /*
  * These are standard OSGi imports which we need for an activator.
  */
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -56,15 +57,19 @@ import org.osgi.framework.ServiceRegistration;
 public class FramaCActivator implements BundleActivator {
 
     private ServiceRegistration registration;
+    static Bundle bundle;
 
     public void start(BundleContext bc) throws Exception {
 
         registration = bc.registerService(FramaCMetrics.class.getName(),
                 new FramaCMetrics(bc), null);
+        
+        FramaCActivator.bundle = bc.getBundle();
     }
 
     public void stop(BundleContext context) throws Exception {
-        registration.unregister();
+        FramaCActivator.bundle = null;
+    	registration.unregister();
     }
 }
 

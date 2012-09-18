@@ -51,4 +51,8 @@
       </plugin>
     </plugins>
   </build>
+  <properties>
+  	<framac.path>frama-c</framac.path>
+  	<framac.cfg.path>/tmp</framac.cfg.path>
+  </properties>
 </project>

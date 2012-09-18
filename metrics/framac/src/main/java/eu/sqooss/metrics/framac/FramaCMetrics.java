@@ -45,11 +45,17 @@
 package eu.sqooss.metrics.framac;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -68,6 +74,7 @@ import eu.sqooss.service.db.Metric;
 import eu.sqooss.service.db.ProjectFile;
 import eu.sqooss.service.db.ProjectFileMeasurement;
 import eu.sqooss.service.fds.FDSService;
+import eu.sqooss.service.util.FileUtils;
 //import eu.sqooss.service.fds.OnDiskCheckout;
 
 /**
@@ -78,7 +85,7 @@ import eu.sqooss.service.fds.FDSService;
 	@MetricDecl(mnemonic="FramaC.DoubleFree", activators={ProjectFile.class}, descr="FramaC: Double Free Vulnerability"),
 	@MetricDecl(mnemonic="FramaC.FormatString", activators={ProjectFile.class}, descr="FramaC: Format String Vulnerability"),
 	@MetricDecl(mnemonic="FramaC.SQLInjection", activators={ProjectFile.class}, descr="FramaC: SQL Injection Vulnerability"),
-	@MetricDecl(mnemonic="FramaC.KernelTrust", activators={ProjectFile.class}, descr="FramaC: User Kernel Trust Error Vulnerability"),
+	@MetricDecl(mnemonic="FramaC.UserKernelTrustError", activators={ProjectFile.class}, descr="FramaC: User Kernel Trust Error Vulnerability"),
 	@MetricDecl(mnemonic="FramaC.XSS", activators={ProjectFile.class}, descr="FramaC: XSS Vulnerability")
 })
 public class FramaCMetrics extends AbstractMetric {
@@ -87,6 +94,13 @@ public class FramaCMetrics extends AbstractMetric {
 	static String FRAMAC_CFG_PATH = "";
 	static Map<String, String> configurations; //config -> params
 	// Alternatively we could use the form config -> list<Params<name, value>>
+	
+	//patterns for parsing FRAMA-C output
+	static String splitEntryPatternRegex = ".*\\nEnvironment for function ([^:]+):";
+	static String symnamePatternRegex = "^\\s*Symname: (\\S)+\\s*=\\s*(.*)$";
+	static Pattern splitEntryPattern = Pattern.compile(splitEntryPatternRegex);
+	static Pattern symnamePattern = Pattern.compile(splitEntryPatternRegex);
+	
 	static {
         if (System.getProperty("framac.path") != null)
             FRAMAC_PATH = System.getProperty("framac.path");
@@ -99,18 +113,48 @@ public class FramaCMetrics extends AbstractMetric {
             FRAMAC_CFG_PATH = "/tmp";
         
         configurations = new HashMap<String, String>();
-        configurations.put("Double_free", "-print-final");
-        configurations.put("Format_string", "-print-final");
-        configurations.put("SQL_Injection", "-print-final");
-        configurations.put("User_kernel_Trust_error", "-print-final");
+        configurations.put("DoubleFree", "-print-final");
+        configurations.put("FormatString", "-print-final");
+        configurations.put("SQLInjection", "-print-final");
+        configurations.put("UserKernelTrustError", "-print-final");
         configurations.put("XSS", "-print-final");
         
         exportConfigurations();
     }
 	
-	
+	/**
+	 * Store the configuration files in a folder relative to the working directory so that
+	 * they can be used by the external tool
+	 * @author circular 
+	 */
 	private static void exportConfigurations(){
 		
+		for(String conf: configurations.keySet()) {
+			try {
+				String defCfgUrl = String.format("configurations/%s/default.cfg", conf);
+				String defConstrCfgUrl = String.format("configurations/%s/default_constr.cfg", conf);
+				
+				exportConfigurationResource(defCfgUrl);
+				exportConfigurationResource(defConstrCfgUrl); 
+			} catch(Exception ignore) {
+				continue;
+			}
+		}
+	}
+
+	private static void exportConfigurationResource(String resourceUrl)
+			throws FileNotFoundException, IOException {
+		FileOutputStream out = new FileOutputStream(String.format("%s/%s", FRAMAC_CFG_PATH, resourceUrl));
+		InputStream in = FramaCActivator.bundle.getResource(resourceUrl).openStream();
+		
+		int read;
+		byte[] buff = new byte[1024];
+		while ((read = in.read(buff)) != -1) {
+		    out.write(buff, 0, read);
+		}
+		
+		in.close();
+		out.close();
 	}
 	
 	// Holds the instance of the Alitheia core service
@@ -161,17 +205,20 @@ public class FramaCMetrics extends AbstractMetric {
 	        		continue;
 	        	}
 	        	
-	        	processResult(resultFile);
+	        	List<Vulnerability> results = processResult(resultFile, a);     
 	        	resultFile.delete();
+	        	
+	        	if(results.size() > 0){
+	        		storeResults(Metric.getMetricByMnemonic("FramaC." + config), results);
+	        	}
 	        	
         	} catch(Exception ignored) {
         		continue;
         	}
         }
-        
     }
     
-    //TODO: mark as protected for base plugin
+    //TODO: mark as protected in base plugin class
     private String buildCommand(File f, String config)
     {
     	return String.format("%s -config-file  %s/%s/default.cfg "
@@ -192,7 +239,37 @@ public class FramaCMetrics extends AbstractMetric {
         return retVal;
     }
     
-    private void processResult(File file) {
+    /* TODO: mark as protected in base plugin class*/
+    private List<Vulnerability> processResult(File outputFile, ProjectFile pf) {
+    	String contents = FileUtils.readContents(outputFile);
+    	
+    	if(contents == null)
+    		return null;
+    	
+    	ArrayList<Vulnerability> results = new ArrayList<Vulnerability>();
+    	
+    	String[] entries = contents.split(splitEntryPatternRegex);
+    	for(String entry: entries) {
+    		
+    		Matcher matcher = symnamePattern.matcher(entry);
+    		while(matcher.find()) {
+    			
+    			// get the vulnerability type and location,
+    			//increment the appropriate metrics
+    			String symname = matcher.group(1);
+    			String result = matcher.group(2);
+    			System.out.println(String.format("%s at %s", result, symname));
+    			
+    			Vulnerability v = new Vulnerability(null, symname, result);
+    			results.add(v);
+    		}
+    	}
+    	
+    	return results;
+    }
+    
+    /* TODO: mark as protected in base plugin class */
+    private void storeResults(Metric m, List<Vulnerability> v){
     	
     }
     
