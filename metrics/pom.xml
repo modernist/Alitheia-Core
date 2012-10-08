@@ -27,7 +27,8 @@
     <module>developermetrics</module>
     <module>findbugs</module>
     <module>java</module>
-</modules>
+    <module>framac</module>
+  </modules>
 
   <build>
     <plugins>

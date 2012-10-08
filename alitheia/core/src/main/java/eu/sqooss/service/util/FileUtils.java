@@ -96,6 +96,28 @@ public class FileUtils {
     }
     
     /**
+     * Read the contents of a text file to a String.
+     * 
+     * @param f the file to read
+     * @return File contents as a string, null on error
+     */
+    public static String readContents(File f) {
+    	if(f == null)
+    		return null;
+    	
+    	String result = null;
+    	try {
+    		byte[] contents = fileContents(f);
+    		if(contents != null)
+    			result = new String(contents);
+    	} catch (Exception e) {
+            // Just give up.
+            return null;
+        } 
+    	return result;
+    }
+    
+    /**
      * Return the filename portion of a path. 
      * @param path The path to examine
      * @return The filename or empty string if the path is empty or null
