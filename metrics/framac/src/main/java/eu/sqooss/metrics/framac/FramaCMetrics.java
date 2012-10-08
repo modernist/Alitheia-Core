@@ -172,6 +172,44 @@ public class FramaCMetrics extends AbstractMetric {
         else
         	core = AlitheiaCore.getInstance();
     }
+	
+	@Override
+    /* TODO: move to superclass */
+    public boolean install() {
+   	 boolean result = super.install();
+        if (result) {
+            addConfigEntry("framac.path", 
+            	FRAMAC_PATH , 
+                "Path of the FRAMA-C tool executable", 
+                PluginInfo.ConfigurationType.STRING);
+            
+            addConfigEntry("framac.cfg.path", 
+                	FRAMAC_CFG_PATH , 
+                    "Path of the configurations for the FRAMA-C tool executable", 
+                    PluginInfo.ConfigurationType.STRING);
+        }
+        return result;
+   }
+   
+   @Override
+   /* TODO: move to superclass */
+   public boolean remove() {
+		boolean result = true;
+       
+		String[] tables = {
+			"StoredProjectVulnerability",
+			"ProjectVersionVulnerability",
+			"ProjectFileVulnerability",
+			"VulnerabilityType"};
+       
+       for (String tablename : tables) {
+           result &= db.deleteRecords((List<DAObject>) db.doHQL(
+                   "from " + tablename));
+       }
+       
+       result &= super.remove();
+       return result;
+   }
 
     public List<Result> getResult(ProjectFile a, Metric m) {
     	return getResult(a, ProjectFileMeasurement.class,
@@ -260,7 +298,7 @@ public class FramaCMetrics extends AbstractMetric {
     			String result = matcher.group(2);
     			System.out.println(String.format("%s at %s", result, symname));
     			
-    			Vulnerability v = new Vulnerability(null, symname, result);
+    			Vulnerability v = new ProjectFileVulnerabilty(pf, null, symname, result);
     			results.add(v);
     		}
     	}
