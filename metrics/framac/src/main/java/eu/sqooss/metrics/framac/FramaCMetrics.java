@@ -66,14 +66,18 @@ import org.osgi.framework.ServiceReference;
 ** DAO types from the database service.
 */
 import eu.sqooss.core.AlitheiaCore;
+import eu.sqooss.metrics.framac.db.ProjectFileVulnerabilty;
+import eu.sqooss.metrics.framac.db.Vulnerability;
 import eu.sqooss.service.abstractmetric.AbstractMetric;
 import eu.sqooss.service.abstractmetric.MetricDecl;
 import eu.sqooss.service.abstractmetric.MetricDeclarations;
 import eu.sqooss.service.abstractmetric.Result;
+import eu.sqooss.service.db.DAObject;
 import eu.sqooss.service.db.Metric;
 import eu.sqooss.service.db.ProjectFile;
 import eu.sqooss.service.db.ProjectFileMeasurement;
 import eu.sqooss.service.fds.FDSService;
+import eu.sqooss.service.pa.PluginInfo;
 import eu.sqooss.service.util.FileUtils;
 //import eu.sqooss.service.fds.OnDiskCheckout;
 
