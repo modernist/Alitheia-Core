@@ -66,14 +66,18 @@ import org.osgi.framework.ServiceReference;
 ** DAO types from the database service.
 */
 import eu.sqooss.core.AlitheiaCore;
+import eu.sqooss.metrics.framac.db.ProjectFileVulnerabilty;
+import eu.sqooss.metrics.framac.db.Vulnerability;
 import eu.sqooss.service.abstractmetric.AbstractMetric;
 import eu.sqooss.service.abstractmetric.MetricDecl;
 import eu.sqooss.service.abstractmetric.MetricDeclarations;
 import eu.sqooss.service.abstractmetric.Result;
+import eu.sqooss.service.db.DAObject;
 import eu.sqooss.service.db.Metric;
 import eu.sqooss.service.db.ProjectFile;
 import eu.sqooss.service.db.ProjectFileMeasurement;
 import eu.sqooss.service.fds.FDSService;
+import eu.sqooss.service.pa.PluginInfo;
 import eu.sqooss.service.util.FileUtils;
 //import eu.sqooss.service.fds.OnDiskCheckout;
 
@@ -82,11 +86,11 @@ import eu.sqooss.service.util.FileUtils;
  * ProjectDirectory or Project scope. The implementation currently supports only ProjectFile.  
  */ 
 @MetricDeclarations(metrics= {
-	@MetricDecl(mnemonic="FramaC.DoubleFree", activators={ProjectFile.class}, descr="FramaC: Double Free Vulnerability"),
-	@MetricDecl(mnemonic="FramaC.FormatString", activators={ProjectFile.class}, descr="FramaC: Format String Vulnerability"),
-	@MetricDecl(mnemonic="FramaC.SQLInjection", activators={ProjectFile.class}, descr="FramaC: SQL Injection Vulnerability"),
-	@MetricDecl(mnemonic="FramaC.UserKernelTrustError", activators={ProjectFile.class}, descr="FramaC: User Kernel Trust Error Vulnerability"),
-	@MetricDecl(mnemonic="FramaC.XSS", activators={ProjectFile.class}, descr="FramaC: XSS Vulnerability")
+	@MetricDecl(mnemonic="FC.DBLFREE", activators={ProjectFile.class}, descr="FramaC: Double Free Vulnerability"),
+	@MetricDecl(mnemonic="FC.FMTSTR", activators={ProjectFile.class}, descr="FramaC: Format String Vulnerability"),
+	@MetricDecl(mnemonic="FC.SQLINJ", activators={ProjectFile.class}, descr="FramaC: SQL Injection Vulnerability"),
+	@MetricDecl(mnemonic="FC.UKTERR", activators={ProjectFile.class}, descr="FramaC: User Kernel Trust Error Vulnerability"),
+	@MetricDecl(mnemonic="FC.XSS", activators={ProjectFile.class}, descr="FramaC: XSS Vulnerability")
 })
 public class FramaCMetrics extends AbstractMetric {
     
@@ -94,6 +98,7 @@ public class FramaCMetrics extends AbstractMetric {
 	static String FRAMAC_CFG_PATH = "";
 	static Map<String, String> configurations; //config -> params
 	// Alternatively we could use the form config -> list<Params<name, value>>
+	static Map<String, String> configurationMetrics; // config -> metric mnemonic
 	
 	//patterns for parsing FRAMA-C output
 	static String splitEntryPatternRegex = ".*\\nEnvironment for function ([^:]+):";
@@ -118,6 +123,13 @@ public class FramaCMetrics extends AbstractMetric {
         configurations.put("SQLInjection", "-print-final");
         configurations.put("UserKernelTrustError", "-print-final");
         configurations.put("XSS", "-print-final");
+		
+		configurationMetrics = new HashMap<String, String>();
+		configurationMetrics.put("DoubleFree", "FC.DBLFREE");
+		configurationMetrics.put("FormatString", "FC.FMTSTR");
+		configurationMetrics.put("SQLInjection", "FC.SQLINJ");
+		configurationMetrics.put("UserKernelTrustError", "FC.UKTERR");
+		configurationMetrics.put("XSS", "FC.XSS");
         
         exportConfigurations();
     }
@@ -173,6 +185,44 @@ public class FramaCMetrics extends AbstractMetric {
         	core = AlitheiaCore.getInstance();
     }
 
+    @Override
+    /* TODO: move to superclass */
+    public boolean install() {
+   	 boolean result = super.install();
+        if (result) {
+            addConfigEntry("framac.path", 
+            	FRAMAC_PATH , 
+                "Path of the FRAMA-C tool executable", 
+                PluginInfo.ConfigurationType.STRING);
+            
+            addConfigEntry("framac.cfg.path", 
+                	FRAMAC_CFG_PATH , 
+                    "Path of the configurations for the FRAMA-C tool executable", 
+                    PluginInfo.ConfigurationType.STRING);
+        }
+        return result;
+   }
+   
+   @Override
+   /* TODO: move to superclass */
+   public boolean remove() {
+       boolean result = true;
+       
+       String[] tables = {
+			"StoredProjectVulnerability",
+			"ProjectVersionVulnerability",
+			"ProjectFileVulnerability",
+			"VulnerabilityType"};
+       
+       for (String tablename : tables) {
+           result &= db.deleteRecords((List<DAObject>) db.doHQL(
+                   "from " + tablename));
+       }
+       
+       result &= super.remove();
+       return result;
+   }
+    
     public List<Result> getResult(ProjectFile a, Metric m) {
     	return getResult(a, ProjectFileMeasurement.class,
                 m, Result.ResultType.STRING);
@@ -209,7 +259,7 @@ public class FramaCMetrics extends AbstractMetric {
 	        	resultFile.delete();
 	        	
 	        	if(results.size() > 0){
-	        		storeResults(Metric.getMetricByMnemonic("FramaC." + config), results);
+	        		storeResults(Metric.getMetricByMnemonic(configurationMetrics.get(config)), results);
 	        	}
 	        	
         	} catch(Exception ignored) {
@@ -260,7 +310,7 @@ public class FramaCMetrics extends AbstractMetric {
     			String result = matcher.group(2);
     			System.out.println(String.format("%s at %s", result, symname));
     			
-    			Vulnerability v = new Vulnerability(null, symname, result);
+    			Vulnerability v = new ProjectFileVulnerabilty(pf, null, symname, result);
     			results.add(v);
     		}
     	}
