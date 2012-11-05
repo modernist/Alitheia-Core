@@ -306,12 +306,14 @@ public class FramaCMetrics extends AbstractMetric {
     			
     			// get the vulnerability type and location,
     			//increment the appropriate metrics
-    			String symname = matcher.group(1);
-    			String result = matcher.group(2);
-    			System.out.println(String.format("%s at %s", result, symname));
-    			
-    			Vulnerability v = new ProjectFileVulnerabilty(pf, null, symname, result);
-    			results.add(v);
+    			if (matcher.group(2).equals("Tainted")){
+    				String symname = matcher.group(1);
+    				String result = matcher.group(2);
+    				System.out.println(String.format("%s at %s", result, symname));
+
+    				Vulnerability v = new ProjectFileVulnerabilty(pf, null, symname, result);
+    				results.add(v);
+    			}
     		}
     	}
     	
