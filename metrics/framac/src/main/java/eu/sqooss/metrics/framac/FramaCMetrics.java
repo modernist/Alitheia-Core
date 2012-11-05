@@ -86,11 +86,11 @@ import eu.sqooss.service.util.FileUtils;
  * ProjectDirectory or Project scope. The implementation currently supports only ProjectFile.  
  */ 
 @MetricDeclarations(metrics= {
-	@MetricDecl(mnemonic="FramaC.DoubleFree", activators={ProjectFile.class}, descr="FramaC: Double Free Vulnerability"),
-	@MetricDecl(mnemonic="FramaC.FormatString", activators={ProjectFile.class}, descr="FramaC: Format String Vulnerability"),
-	@MetricDecl(mnemonic="FramaC.SQLInjection", activators={ProjectFile.class}, descr="FramaC: SQL Injection Vulnerability"),
-	@MetricDecl(mnemonic="FramaC.UserKernelTrustError", activators={ProjectFile.class}, descr="FramaC: User Kernel Trust Error Vulnerability"),
-	@MetricDecl(mnemonic="FramaC.XSS", activators={ProjectFile.class}, descr="FramaC: XSS Vulnerability")
+	@MetricDecl(mnemonic="FC.DBLFREE", activators={ProjectFile.class}, descr="FramaC: Double Free Vulnerability"),
+	@MetricDecl(mnemonic="FC.FMTSTR", activators={ProjectFile.class}, descr="FramaC: Format String Vulnerability"),
+	@MetricDecl(mnemonic="FC.SQLINJ", activators={ProjectFile.class}, descr="FramaC: SQL Injection Vulnerability"),
+	@MetricDecl(mnemonic="FC.UKTERR", activators={ProjectFile.class}, descr="FramaC: User Kernel Trust Error Vulnerability"),
+	@MetricDecl(mnemonic="FC.XSS", activators={ProjectFile.class}, descr="FramaC: XSS Vulnerability")
 })
 public class FramaCMetrics extends AbstractMetric {
     
@@ -98,6 +98,7 @@ public class FramaCMetrics extends AbstractMetric {
 	static String FRAMAC_CFG_PATH = "";
 	static Map<String, String> configurations; //config -> params
 	// Alternatively we could use the form config -> list<Params<name, value>>
+	static Map<String, String> configurationMetrics; // config -> metric mnemonic
 	
 	//patterns for parsing FRAMA-C output
 	static String splitEntryPatternRegex = ".*\\nEnvironment for function ([^:]+):";
@@ -122,6 +123,13 @@ public class FramaCMetrics extends AbstractMetric {
         configurations.put("SQLInjection", "-print-final");
         configurations.put("UserKernelTrustError", "-print-final");
         configurations.put("XSS", "-print-final");
+		
+		configurationMetrics = new HashMap<String, String>();
+		configurationMetrics.put("DoubleFree", "FC.DBLFREE");
+		configurationMetrics.put("FormatString", "FC.FMTSTR");
+		configurationMetrics.put("SQLInjection", "FC.SQLINJ");
+		configurationMetrics.put("UserKernelTrustError", "FC.UKTERR");
+		configurationMetrics.put("XSS", "FC.XSS");
         
         exportConfigurations();
     }
@@ -176,8 +184,8 @@ public class FramaCMetrics extends AbstractMetric {
         else
         	core = AlitheiaCore.getInstance();
     }
-	
-	@Override
+
+    @Override
     /* TODO: move to superclass */
     public boolean install() {
    	 boolean result = super.install();
@@ -198,9 +206,9 @@ public class FramaCMetrics extends AbstractMetric {
    @Override
    /* TODO: move to superclass */
    public boolean remove() {
-		boolean result = true;
+       boolean result = true;
        
-		String[] tables = {
+       String[] tables = {
 			"StoredProjectVulnerability",
 			"ProjectVersionVulnerability",
 			"ProjectFileVulnerability",
@@ -214,7 +222,7 @@ public class FramaCMetrics extends AbstractMetric {
        result &= super.remove();
        return result;
    }
-
+    
     public List<Result> getResult(ProjectFile a, Metric m) {
     	return getResult(a, ProjectFileMeasurement.class,
                 m, Result.ResultType.STRING);
@@ -247,11 +255,11 @@ public class FramaCMetrics extends AbstractMetric {
 	        		continue;
 	        	}
 	        	
-	        	List<Vulnerability> results = processResult(resultFile, a);     
+	        	List<Vulnerability> results = processResult(resultFile, a, config);     
 	        	resultFile.delete();
 	        	
 	        	if(results.size() > 0){
-	        		storeResults(Metric.getMetricByMnemonic("FramaC." + config), results);
+	        		storeResults(Metric.getMetricByMnemonic(configurationMetrics.get(config)), results);
 	        	}
 	        	
         	} catch(Exception ignored) {
@@ -304,6 +312,37 @@ public class FramaCMetrics extends AbstractMetric {
     			
     			Vulnerability v = new ProjectFileVulnerabilty(pf, null, symname, result);
     			results.add(v);
+    		}
+    	}
+    	
+    	return results;
+    }
+    
+    /* TODO: mark as protected in base plugin class*/
+    private List<Vulnerability> processResult(File outputFile, ProjectFile pf, String config) {
+    	String contents = FileUtils.readContents(outputFile);
+    	
+    	if(contents == null)
+    		return null;
+    	
+    	ArrayList<Vulnerability> results = new ArrayList<Vulnerability>();
+    	
+    	String[] entries = contents.split(splitEntryPatternRegex);
+    	for(String entry: entries) {
+    		
+    		Matcher matcher = symnamePattern.matcher(entry);
+    		while(matcher.find()) {
+    			
+    			// get the vulnerability type and location,
+    			//increment the appropriate metrics
+    			if (matcher.group(2).equals("Tainted")){
+    				String symname = matcher.group(1);
+    				String result = matcher.group(2);
+    				System.out.println(String.format("Vulnerability %s: %s at %s", config, result, symname));
+
+    				Vulnerability v = new ProjectFileVulnerabilty(pf, null, symname, result);
+    				results.add(v);
+    			}
     		}
     	}
     	
