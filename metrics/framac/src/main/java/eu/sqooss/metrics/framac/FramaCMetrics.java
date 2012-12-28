@@ -101,10 +101,10 @@ public class FramaCMetrics extends AbstractMetric {
 	static Map<String, String> configurationMetrics; // config -> metric mnemonic
 	
 	//patterns for parsing FRAMA-C output
-	static String splitEntryPatternRegex = ".*\\nEnvironment for function ([^:]+):";
-	static String symnamePatternRegex = "^\\s*Symname: (\\S)+\\s*=\\s*(.*)$";
+	static String splitEntryPatternRegex = ".*\\nEnvironment for function\\s*([^:]+):";
+	static String symnamePatternRegex = "\\s*Symname:\\s*([\\S]+)\\s*=\\s*(.*)";
 	static Pattern splitEntryPattern = Pattern.compile(splitEntryPatternRegex);
-	static Pattern symnamePattern = Pattern.compile(splitEntryPatternRegex);
+	static Pattern symnamePattern = Pattern.compile(symnamePatternRegex);
 	
 	static {
         if (System.getProperty("framac.path") != null)
