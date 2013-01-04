@@ -69,6 +69,14 @@
         <mapping class="eu.sqooss.service.db.NameSpaceMeasurement"/>
         <mapping class="eu.sqooss.service.db.ExecutionUnitMeasurement"/>
         <mapping class="eu.sqooss.service.db.EncapsulationUnitMeasurement"/>
+        <mapping class="eu.sqooss.service.db.Privilege"/>        
+        <mapping class="eu.sqooss.service.db.PrivilegeValue"/>        
+        <mapping class="eu.sqooss.service.db.GroupPrivilege"/>
+        <mapping class="eu.sqooss.service.db.ServiceUrl"/>
+        <mapping class="eu.sqooss.service.db.User"/>
+        <mapping class="eu.sqooss.service.db.PendingUser"/>
+        <mapping class="eu.sqooss.service.db.Group"/>
+        <mapping class="eu.sqooss.service.db.GroupUser"/>
     </session-factory>
 
 </hibernate-configuration>

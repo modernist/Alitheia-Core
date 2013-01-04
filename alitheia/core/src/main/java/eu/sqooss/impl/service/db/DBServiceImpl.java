@@ -721,6 +721,27 @@ public class DBServiceImpl implements DBService, AlitheiaCoreService {
             return false;
         }
     }
+    
+    public Session getActiveDBSession()
+    {
+    	if(!isDBSessionActive())
+    		return null;
+
+    	Session s = null;
+        try {
+            s = sessionFactory.getCurrentSession();
+            
+        } catch (HibernateException e) {
+            logger.error("getActiveDBSession() - error while getting active session: " + e.getMessage());
+            if ( s != null ) {
+                try {
+                    s.close();
+                } catch (HibernateException e1) {
+                }
+            }
+        }
+        return s;
+    }
         
     @SuppressWarnings("unchecked")
     public <T extends DAObject> T attachObjectToDBSession(T obj) {

@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.QueryException;
+import org.hibernate.Session;
 
 
 /**
@@ -125,7 +126,7 @@ public interface DBService extends AlitheiaCoreService {
      * and release any lock on the database, even if an error occurs.
      * 
      * @return true if the session was correctly closed,
-     *         false if there was no active session or if an error occured.
+     *         false if there was no active session or if an error occurred.
      */
     public boolean rollbackDBSession();
     
@@ -134,7 +135,7 @@ public interface DBService extends AlitheiaCoreService {
      * Note that the transaction isn't committed though, so changes will only be visible
      * to the current session.
      * @return true if the session was correctly flushed,
-     *         false if there was no active session or if an error occured.
+     *         false if there was no active session or if an error occurred.
      */
     public boolean flushDBSession();
     
@@ -144,6 +145,12 @@ public interface DBService extends AlitheiaCoreService {
      *         false otherwise
      */
     public boolean isDBSessionActive();
+    
+    /**
+     * Returns a reference to the currently active session, if one has been created.
+     * @return the active session
+     */
+    public Session getActiveDBSession();
     
     /**
      * A generic query method to retrieve a single DAObject subclass using its identifier.
