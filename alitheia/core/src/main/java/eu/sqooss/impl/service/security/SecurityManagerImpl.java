@@ -45,10 +45,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpService;
 
-import eu.sqooss.impl.service.security.utils.SecurityManagerDatabase;
+import eu.sqooss.core.AlitheiaCore;
+import eu.sqooss.core.AlitheiaCoreService;
 import eu.sqooss.service.db.DBService;
 import eu.sqooss.service.db.Group;
 import eu.sqooss.service.db.ServiceUrl;
@@ -60,8 +62,14 @@ import eu.sqooss.service.security.SecurityConstants;
 import eu.sqooss.service.security.SecurityManager;
 import eu.sqooss.service.security.ServiceUrlManager;
 import eu.sqooss.service.security.UserManager;
+import eu.sqooss.impl.service.security.GroupManagerImpl;
+import eu.sqooss.impl.service.security.SelfTester;
+import eu.sqooss.impl.service.security.PrivilegeManagerImpl;
+import eu.sqooss.impl.service.security.ServiceUrlManagerImpl;
+import eu.sqooss.impl.service.security.UserManagerImpl;
+import eu.sqooss.impl.service.security.utils.SecurityManagerDatabase;
 
-public class SecurityManagerImpl implements SecurityManager, SecurityConstants {
+public class SecurityManagerImpl implements SecurityManager, SecurityConstants, AlitheiaCoreService {
 
     private static final String PROPERTY_DEFAULT_USER_NAME     = "eu.sqooss.security.user.name";
     private static final String PROPERTY_DEFAULT_USER_PASSWORD = "eu.sqooss.security.user.password";
@@ -70,6 +78,7 @@ public class SecurityManagerImpl implements SecurityManager, SecurityConstants {
     private static final String PROPERTY_ENABLE                = "eu.sqooss.security.enable";
     
     private BundleContext bc;
+    private DBService db;
     private UserManager userManager;
     private GroupManager groupManager;
     private PrivilegeManager privilegeManager;
@@ -78,7 +87,7 @@ public class SecurityManagerImpl implements SecurityManager, SecurityConstants {
     private Logger logger;
     private ServiceReference srefHttpService = null;
     private HttpService sobjHttpService = null;
-    private boolean isEnable;
+    private boolean isEnabled;
     
     private class ConfirmationServlet extends HttpServlet {
         private static final long serialVersionUID = 1L;
@@ -113,47 +122,7 @@ public class SecurityManagerImpl implements SecurityManager, SecurityConstants {
         }
     }
 
-    public SecurityManagerImpl(BundleContext bc, DBService db,
-            Logger logger) {
-        this.bc = bc;
-        this.dbWrapper = new SecurityManagerDatabase(db);
-        this.logger = logger;
-        
-        groupManager = new GroupManagerImpl(db, logger);
-        privilegeManager = new PrivilegeManagerImpl(db, logger);
-        serviceUrlManager = new ServiceUrlManagerImpl(db, logger);
-        userManager = new UserManagerImpl(db, logger,
-                privilegeManager, groupManager, serviceUrlManager);
-        
-        isEnable = Boolean.valueOf(System.getProperty(PROPERTY_ENABLE, "true"));
-        
-        initDefaultUser();
-        
-        // Get a reference to the HTTPService, and its object
-        srefHttpService = bc.getServiceReference(HttpService.class.getName());
-        if (srefHttpService != null) {
-            sobjHttpService = (HttpService) bc.getService(srefHttpService);
-            if (sobjHttpService != null) {
-                try {
-                    sobjHttpService.registerServlet(
-                        "/confirmRegistration",
-                        new ConfirmationServlet(),
-                        new Hashtable<String, String>(),
-                        null);
-                }
-                catch (Exception e) {
-                    logger.error(ConfirmationServlet.class
-                            + " registration has failed with: " + e);
-                }
-            }
-            else {
-                logger.error("Unable to obtain a HttpService object!");
-            }
-        }
-        else {
-            logger.error("Unable to obtain a HttpService reference!");
-        }
-    }
+    public SecurityManagerImpl() { }
 
     /**
      * @see eu.sqooss.service.security.SecurityManager#checkPermission(java.lang.String, java.lang.String, java.lang.String)
@@ -177,7 +146,7 @@ public class SecurityManagerImpl implements SecurityManager, SecurityConstants {
         
         logger.debug("Check Permission! resourceUrl: " + resourceUrl + "; user name: " + userName);
 
-        if (!isEnable) {
+        if (!isEnabled) {
         	return true;
         }
         
@@ -405,6 +374,76 @@ public class SecurityManagerImpl implements SecurityManager, SecurityConstants {
         SelfTester tester = new SelfTester(this);
         return tester.test();
     }
+
+	@Override
+	public boolean startUp() {
+		logger.info("Starting the SecurityManager component.");
+
+        // Get the AlitheiaCore's object
+        AlitheiaCore core = AlitheiaCore.getInstance();
+
+        if (core != null) {
+            // Obtain the required core components
+            db = core.getDBService();
+            if (db == null) {
+                logger.error("Can not obtain the DB object!");
+            }
+            
+            logger.debug("The SecurityManager component was successfully started.");
+        }
+        else {
+            logger.error("Can not obtain the Core object!");
+        }
+				
+		this.dbWrapper = new SecurityManagerDatabase(db);
+        groupManager = new GroupManagerImpl(db, logger);
+        privilegeManager = new PrivilegeManagerImpl(db, logger);
+        serviceUrlManager = new ServiceUrlManagerImpl(db, logger);
+        userManager = new UserManagerImpl(db, logger,
+                privilegeManager, groupManager, serviceUrlManager);
+        
+        isEnabled = Boolean.valueOf(System.getProperty(PROPERTY_ENABLE, "true"));
+        
+        initDefaultUser();
+        
+        // Get a reference to the HTTPService, and its object
+        srefHttpService = bc.getServiceReference(HttpService.class.getName());
+        if (srefHttpService != null) {
+            sobjHttpService = (HttpService) bc.getService(srefHttpService);
+            if (sobjHttpService != null) {
+                try {
+                    sobjHttpService.registerServlet(
+                        "/confirmRegistration",
+                        new ConfirmationServlet(),
+                        new Hashtable<String, String>(),
+                        null);
+                }
+                catch (Exception e) {
+                    logger.error(ConfirmationServlet.class
+                            + " registration has failed with: " + e);
+                }
+            }
+            else {
+                logger.error("Unable to obtain a HttpService object!");
+            }
+        }
+        else {
+            logger.error("Unable to obtain a HttpService reference!");
+        }
+	
+        return true;
+	}
+
+	@Override
+	public void shutDown() {
+		
+	}
+
+	@Override
+	public void setInitParams(BundleContext bc, Logger l) {
+		this.bc = bc;
+        this.logger = l;		
+	}
 
 }
 

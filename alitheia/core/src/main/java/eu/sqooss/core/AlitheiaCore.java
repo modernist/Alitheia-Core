@@ -51,6 +51,7 @@ import eu.sqooss.impl.service.metricactivator.MetricActivatorImpl;
 import eu.sqooss.impl.service.pa.PAServiceImpl;
 import eu.sqooss.impl.service.rest.ResteasyServiceImpl;
 import eu.sqooss.impl.service.scheduler.SchedulerServiceImpl;
+import eu.sqooss.impl.service.security.SecurityManagerImpl;
 import eu.sqooss.impl.service.tds.TDSServiceImpl;
 import eu.sqooss.impl.service.updater.UpdaterServiceImpl;
 import eu.sqooss.impl.service.webadmin.WebadminServiceImpl;
@@ -63,6 +64,7 @@ import eu.sqooss.service.metricactivator.MetricActivator;
 import eu.sqooss.service.pa.PluginAdmin;
 import eu.sqooss.service.rest.RestService;
 import eu.sqooss.service.scheduler.Scheduler;
+import eu.sqooss.service.security.SecurityManager;
 import eu.sqooss.service.tds.TDSService;
 import eu.sqooss.service.updater.UpdaterService;
 import eu.sqooss.service.webadmin.WebadminService;
@@ -114,6 +116,7 @@ public class AlitheiaCore {
     	services.add(WebadminService.class);
     	services.add(RestService.class);
     	services.add(AdminService.class);
+    	services.add(SecurityManager.class);
 
     	implementations.put(LogManager.class, LogManagerImpl.class);
     	implementations.put(DBService.class, DBServiceImpl.class);	 
@@ -127,6 +130,7 @@ public class AlitheiaCore {
     	implementations.put(WebadminService.class, WebadminServiceImpl.class);
         implementations.put(RestService.class, ResteasyServiceImpl.class);
     	implementations.put(AdminService.class, AdminServiceImpl.class);
+    	implementations.put(SecurityManager.class, SecurityManagerImpl.class);
     }
    
     /**

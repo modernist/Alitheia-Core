@@ -56,6 +56,7 @@ import eu.sqooss.service.pa.PluginAdmin;
 import eu.sqooss.service.scheduler.Scheduler;
 import eu.sqooss.service.tds.TDSService;
 import eu.sqooss.service.updater.UpdaterService;
+import eu.sqooss.service.security.SecurityManager;
 
 public abstract class AbstractView {
     // Core components

@@ -34,11 +34,13 @@ package eu.sqooss.service.security;
 
 import java.util.Dictionary;
 
+import eu.sqooss.core.AlitheiaCoreService;
+
 /**
  * The <code>SecurityManager</code> class is used for validating the access to the SQO-OSS resources and
  * their management.
  */
-public interface SecurityManager {
+public interface SecurityManager extends AlitheiaCoreService {
 
     /**
      * Validate the access to the SQO-OSS resource based on the full URL (with privileges), user name and password.
