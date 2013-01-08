@@ -71,12 +71,12 @@
         <mapping class="eu.sqooss.service.db.EncapsulationUnitMeasurement"/>
         <mapping class="eu.sqooss.service.db.Privilege"/>        
         <mapping class="eu.sqooss.service.db.PrivilegeValue"/>        
-        <mapping class="eu.sqooss.service.db.GroupPrivilege"/>
         <mapping class="eu.sqooss.service.db.ServiceUrl"/>
         <mapping class="eu.sqooss.service.db.User"/>
         <mapping class="eu.sqooss.service.db.PendingUser"/>
         <mapping class="eu.sqooss.service.db.Group"/>
-        <mapping class="eu.sqooss.service.db.GroupUser"/>
+        <mapping resource="eu/sqooss/service/db/GroupUser.hbm.xml"/>
+        <mapping resource="eu/sqooss/service/db/GroupPrivilege.hbm.xml"/>
     </session-factory>
 
 </hibernate-configuration>

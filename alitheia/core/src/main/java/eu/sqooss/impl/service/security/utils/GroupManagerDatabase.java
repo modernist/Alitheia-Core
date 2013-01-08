@@ -112,7 +112,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
             if ((group != null) && (privilegeValue != null) && (serviceUrl != null)) {
                 GroupPrivilege newGroupPrivilege = new GroupPrivilege();
                 newGroupPrivilege.setGroup(group);
-                newGroupPrivilege.setPv(privilegeValue);
+                newGroupPrivilege.setPrivilegeValue(privilegeValue);
                 newGroupPrivilege.setUrl(serviceUrl);
                 Transaction transaction = null;
                 try {
@@ -149,7 +149,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
             if ((group != null) && (privilegeValue != null) && (serviceUrl != null)) {
                 GroupPrivilege groupPrivilege = new GroupPrivilege();
                 groupPrivilege.setGroup(group);
-                groupPrivilege.setPv(privilegeValue);
+                groupPrivilege.setPrivilegeValue(privilegeValue);
                 groupPrivilege.setUrl(serviceUrl);
                 Object storedGroupPrivilege =
                     session.get(GroupPrivilege.class, groupPrivilege);

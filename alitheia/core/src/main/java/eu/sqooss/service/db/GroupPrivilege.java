@@ -39,8 +39,10 @@ public class GroupPrivilege implements Serializable {
     private static final long serialVersionUID = 1;
 
     private ServiceUrl url;
+    
     private Group group;
-    private PrivilegeValue pv;
+    
+    private PrivilegeValue privilegeValue;
 
     // Nothing to do here
     public GroupPrivilege(){}
@@ -53,7 +55,7 @@ public class GroupPrivilege implements Serializable {
 			GroupPrivilege groupPrivilege = (GroupPrivilege) obj;
 			return groupPrivilege.group.getId() == this.group.getId()
 				&& groupPrivilege.url.getId() == this.url.getId()
-				&& groupPrivilege.pv.getId() == this.pv.getId();
+				&& groupPrivilege.privilegeValue.getId() == this.privilegeValue.getId();
 		}
 		return false;
 	}
@@ -63,7 +65,7 @@ public class GroupPrivilege implements Serializable {
 	 */
 	public int hashCode() {
 		
-		return (int)(url.getId() * group.getId() * pv.getId());
+		return (int)(url.getId() * group.getId() * privilegeValue.getId());
 	}
 
     public void setUrl(ServiceUrl url) {
@@ -74,8 +76,8 @@ public class GroupPrivilege implements Serializable {
         this.group = group;
     }
 
-    public void setPv(PrivilegeValue pv) {
-        this.pv = pv;
+    public void setPrivilegeValue(PrivilegeValue pv) {
+        this.privilegeValue = pv;
     }
 
     public ServiceUrl getUrl() {
@@ -86,7 +88,7 @@ public class GroupPrivilege implements Serializable {
         return group;
     }
 
-    public PrivilegeValue getPv() {
-        return pv;
+    public PrivilegeValue getPrivilegeValue() {
+        return privilegeValue;
     }
 }

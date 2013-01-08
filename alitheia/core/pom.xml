@@ -16,7 +16,7 @@
 
   <version>0.95-SNAPSHOT</version>
   <build>
-    <!--<resources>
+    <resources>
       <resource>
         <targetPath>eu/sqooss/service/db</targetPath>
         <directory>${basedir}/src/main/java/eu/sqooss/service/db/</directory>
@@ -30,7 +30,7 @@
           <include>**/*</include>
         </includes>
       </resource>
-    </resources>-->
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.felix</groupId>

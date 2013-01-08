@@ -30,6 +30,11 @@
       <version>4.2.0</version>
       <optional>true</optional>
     </dependency>
+    <dependency>
+    	<groupId>gr.tracer</groupId>
+    	<artifactId>common</artifactId>
+    	<version>0.1</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

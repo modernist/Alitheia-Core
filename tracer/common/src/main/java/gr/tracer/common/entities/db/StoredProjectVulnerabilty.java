@@ -1,7 +1,9 @@
-package eu.sqooss.metrics.framac.db;
+package gr.tracer.common.entities.db;
 
 import eu.sqooss.service.db.DAObject;
+import eu.sqooss.service.db.ProjectFile;
 import eu.sqooss.service.db.StoredProject;
+
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -22,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name="STORED_PROJECT_VULNERABILITY")
-@XmlRootElement(name="project-vulnerability")
+@XmlRootElement(name="projectvulnerability")
 public class StoredProjectVulnerabilty extends Vulnerability {
 
 	@Id
@@ -45,10 +47,10 @@ public class StoredProjectVulnerabilty extends Vulnerability {
 	@JoinColumn(name="STORED_PROJECT_ID", referencedColumnName="PROJECT_ID")
 	private StoredProject storedProject;
 	
-	@Column(name="LOCATION")
+	@Column(name="LOCATION", nullable=false)
 	private String location;
 	
-	@Column(name="DESCRIPTION")
+	@Column(name="DESCRIPTION", nullable=false)
 	private String description;
 	
 	@Override
@@ -104,6 +106,13 @@ public class StoredProjectVulnerabilty extends Vulnerability {
 			setStoredProject((StoredProject)o);
 	}
 	
+	public StoredProjectVulnerabilty(StoredProject sp, VulnerabilityType vt,
+			String location, String description) {
+		this.storedProject = sp;
+		this.vulnerabilityType = vt;
+		this.location = location;
+		this.description = description;
+	}
 }
 
 //vi: ai nosi sw=4 ts=4 expandtab

@@ -7,8 +7,8 @@
   </parent>
   <groupId>gr</groupId>
   <artifactId>tracer</artifactId>
-  <name>tracer</name>
-  <description>TRACER project common modules</description>
+  <name>TRACER project modules</name>
+  <description>TRACER project modules</description>
   <packaging>pom</packaging>
   <modules>
   	<module>common</module>

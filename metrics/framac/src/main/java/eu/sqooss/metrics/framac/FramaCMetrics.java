@@ -66,8 +66,6 @@ import org.osgi.framework.ServiceReference;
 ** DAO types from the database service.
 */
 import eu.sqooss.core.AlitheiaCore;
-import eu.sqooss.metrics.framac.db.ProjectFileVulnerabilty;
-import eu.sqooss.metrics.framac.db.Vulnerability;
 import eu.sqooss.service.abstractmetric.AbstractMetric;
 import eu.sqooss.service.abstractmetric.MetricDecl;
 import eu.sqooss.service.abstractmetric.MetricDeclarations;
@@ -80,6 +78,8 @@ import eu.sqooss.service.fds.FDSService;
 import eu.sqooss.service.pa.PluginInfo;
 import eu.sqooss.service.util.FileUtils;
 //import eu.sqooss.service.fds.OnDiskCheckout;
+import gr.tracer.common.entities.db.Vulnerability;
+import gr.tracer.common.entities.db.ProjectFileVulnerabilty;
 
 /**
  * Implementation of the FRAMA-C driver plug-in. It should be activated in ProjectFile, 

@@ -1,7 +1,8 @@
-package eu.sqooss.metrics.framac.db;
+package gr.tracer.common.entities.db;
 
 import eu.sqooss.service.db.DAObject;
-import eu.sqooss.service.db.ProjectVersion;
+import eu.sqooss.service.db.ProjectFile;
+
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,16 +19,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Instances of this class represent a vulnerability detected on
- * a specific stored project, as stored in the database
+ * a specific project file, as stored in the database
  */
 @Entity
-@Table(name="PROJECT_VERSION_VULNERABILITY")
-@XmlRootElement(name="version-vulnerability")
-public class ProjectVersionVulnerabilty extends Vulnerability {
+@Table(name="PROJECT_FILE_VULNERABILITY")
+@XmlRootElement(name="filevulnerability")
+public class ProjectFileVulnerabilty extends Vulnerability {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "PROJECT_VERSION_VULNERABILITY_ID")
+    @Column(name = "PROJECT_FILE_VULNERABILITY_ID")
     @XmlElement(name = "id")
 	private long id;
 	
@@ -39,16 +40,16 @@ public class ProjectVersionVulnerabilty extends Vulnerability {
 	private VulnerabilityType vulnerabilityType;
 	
     /**
-     * The ProjectVersion to which this vulnerability relates
+     * The ProjectFile to which this vulnerability relates
      */
 	@ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name="PROJECT_VERSION_ID", referencedColumnName="PROJECT_VERSION_ID")
-	private ProjectVersion projectVersion;
+	@JoinColumn(name="PROJECT_FILE_ID", referencedColumnName="PROJECT_FILE_ID")
+	private ProjectFile projectFile;
 	
-	@Column(name="LOCATION")
+	@Column(name="LOCATION", nullable=false)
 	private String location;
 	
-	@Column(name="DESCRIPTION")
+	@Column(name="DESCRIPTION", nullable=false)
 	private String description;
 	
 	@Override
@@ -69,12 +70,12 @@ public class ProjectVersionVulnerabilty extends Vulnerability {
 		vulnerabilityType = type;
 	}
 	
-	public void setProjectVersion(ProjectVersion pv) {
-		this.projectVersion = pv;
+	public void setProjectFile(ProjectFile pf) {
+		this.projectFile = pf;
 	}
 
-	public ProjectVersion getProjectVersion() {
-		return projectVersion;
+	public ProjectFile getProjectFile() {
+		return projectFile;
 	}
 
 	public String getLocation() {
@@ -95,13 +96,21 @@ public class ProjectVersionVulnerabilty extends Vulnerability {
 	
 	@Override
 	public DAObject getAssociatedEntity() {
-		return getProjectVersion();
+		return getProjectFile();
 	}
 
 	@Override
 	public void setAssociatedEntity(DAObject o) {
-		if(o instanceof ProjectVersion)
-			setProjectVersion((ProjectVersion)o);
+		if(o instanceof ProjectFile)
+			setProjectFile((ProjectFile)o);
+	}
+	
+	public ProjectFileVulnerabilty(ProjectFile pf, VulnerabilityType vt,
+			String location, String description) {
+		this.projectFile = pf;
+		this.vulnerabilityType = vt;
+		this.location = location;
+		this.description = description;
 	}
 	
 }
