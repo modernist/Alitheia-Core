@@ -32,6 +32,7 @@
 
 package eu.sqooss.impl.service.security.utils;
 
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -64,40 +65,105 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
     }
 
     public List<?> getGroups() {
-        return db.doHQL(GET_GROUPS);
+    	try {
+	    	if(db.startDBSession())
+	    	{
+	    		return db.doHQL(GET_GROUPS);
+	    	}
+	    	else
+	    		return Collections.emptyList();
+    	}
+    	finally {
+    		if(db.isDBSessionActive())
+    			db.commitDBSession();
+    	}
     }
     
     public Set<?> getGroups(long userId) {
-        User user = db.findObjectById(User.class, userId);
-        if (user != null) {
-            return user.getGroups();
-        } else {
-            return null;
-        }
+    	try {
+	    	if(db.startDBSession())
+	    	{
+		        User user = db.findObjectById(User.class, userId);
+		        if (user != null) {
+		            return user.getGroups();
+		        } else {
+		            return null;
+		        }
+	    	}
+	    	else
+	    		return null;
+    	}
+    	finally {
+    		if(db.isDBSessionActive())
+    			db.commitDBSession();
+    	}
     }
     
     public Group getGroup(long groupId) {
-        return db.findObjectById(Group.class, groupId);
+    	try {
+	    	if(db.startDBSession())
+	    	{
+	    		return db.findObjectById(Group.class, groupId);
+	    	}
+	    	else
+	    		return null;
+    	}
+    	finally {
+    		if(db.isDBSessionActive())
+    			db.commitDBSession();
+    	}
     }
     
     public List<Group> getGroup(String description) {
-        synchronized(lockObject) {
-            groupProps.clear();
-            groupProps.put(ATTRIBUTE_GROUP_DESCRIPTION, description);
-            return db.findObjectsByProperties(Group.class, groupProps);
-        }
+    	try {
+	    	if(db.startDBSession())
+	    	{
+	    		synchronized(lockObject) {
+	                groupProps.clear();
+	                groupProps.put(ATTRIBUTE_GROUP_DESCRIPTION, description);
+	                return db.findObjectsByProperties(Group.class, groupProps);
+	            }
+	    	}
+	    	else
+	    		return Collections.emptyList();
+    	}
+    	finally {
+    		if(db.isDBSessionActive())
+    			db.commitDBSession();
+    	}    	
     }
     
     public List<?> getGroupPrivileges() {
-        return db.doHQL(GET_GROUP_PRIVILEGES);
+        try {
+	    	if(db.startDBSession())
+	    	{
+	    		return db.doHQL(GET_GROUP_PRIVILEGES);
+	    	}
+	    	else
+	    		return Collections.emptyList();
+    	}
+    	finally {
+    		if(db.isDBSessionActive())
+    			db.commitDBSession();
+    	}
     }
     
     public boolean create(DAObject dao) {
-        return db.addRecord(dao);
+    	if(db != null && db.startDBSession())
+    	{
+    		if(db.addRecord(dao))
+    			return db.commitDBSession();
+    	}
+    	return false;
     }
     
     public boolean delete(DAObject dao) {
-        return db.deleteRecord(dao);
+    	if(db != null && db.startDBSession())
+    	{
+    		if(db.deleteRecord(dao)) 
+    			return db.commitDBSession();
+    	}
+    	return false;
     }
     
     public boolean addPrivilegeToGroup(long groupId, long urlId,
@@ -133,7 +199,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
                 return false;
             }
         } finally {
-            if(db.flushDBSession())
+            if(db.isDBSessionActive())
             	db.commitDBSession();
         }
     }
@@ -173,7 +239,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
             }
             return false;
         } finally {
-           if(db.flushDBSession())
+           if(db.isDBSessionActive())
         	   db.commitDBSession();
         }
     }
@@ -191,7 +257,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
                 return false;
             }
         } finally {
-            if(db.flushDBSession())
+            if(db.isDBSessionActive())
             	db.commitDBSession();
         }
     }
@@ -208,7 +274,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
                 return false;
             }
         } finally {
-            if(db.flushDBSession())
+            if(db.isDBSessionActive())
             	db.commitDBSession();
         }
     }

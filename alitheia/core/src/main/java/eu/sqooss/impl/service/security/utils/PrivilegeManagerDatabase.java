@@ -32,6 +32,7 @@
 
 package eu.sqooss.impl.service.security.utils;
 
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -58,11 +59,33 @@ public class PrivilegeManagerDatabase implements PrivilegeManagerDBQueries {
     }
 
     public List<?> getPrivileges() {
-        return db.doHQL(GET_PRIVILEGES);
+        try {
+	    	if(db.startDBSession())
+	    	{
+	    		return db.doHQL(GET_PRIVILEGES);
+	    	}
+	    	else
+	    		return Collections.emptyList();
+    	}
+    	finally {
+    		if(db.isDBSessionActive())
+    			db.commitDBSession();
+    	}
     }
     
     public List<?> getPrivilegeValues() {
-        return db.doHQL(GET_PRIVILEGE_VALUES);
+    	try {
+	    	if(db.startDBSession())
+	    	{
+	    		return db.doHQL(GET_PRIVILEGE_VALUES);
+	    	}
+	    	else
+	    		return Collections.emptyList();
+    	}
+    	finally {
+    		if(db.isDBSessionActive())
+    			db.commitDBSession();
+    	}
     }
     
     public List<PrivilegeValue> getPrivilegeValues(long privilegeId) {
@@ -111,11 +134,21 @@ public class PrivilegeManagerDatabase implements PrivilegeManagerDBQueries {
     }
     
     public boolean delete(DAObject dao) {
-        return db.deleteRecord(dao);
+    	if(db != null && db.startDBSession())
+    	{
+    		if(db.deleteRecord(dao)) 
+    			return db.commitDBSession();
+    	}
+    	return false;
     }
     
     public boolean create(DAObject dao) {
-        return db.addRecord(dao);
+    	if(db != null && db.startDBSession())
+    	{
+    		if(db.addRecord(dao))
+    			return db.commitDBSession();
+    	}
+    	return false;
     }
     
 }

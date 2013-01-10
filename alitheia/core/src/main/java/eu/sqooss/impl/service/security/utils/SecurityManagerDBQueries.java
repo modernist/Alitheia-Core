@@ -68,7 +68,7 @@ public interface SecurityManagerDBQueries {
                                                           "where user=groupUser.user " +
                                                           " and group=groupUser.group " +
                                                           " and privilege=privilegeValue.privilege " +
-                                                          " and privilegeValue=groupPrivilege.pv " +
+                                                          " and privilegeValue=groupPrivilege.privilegeValue " +
                                                           " and group=groupPrivilege.group " +
                                                           " and serviceUrl=groupPrivilege.url " +
                                                           " and user.name=:" + CHECK_AUTHORIZATION_RULE_PARAM_USER +

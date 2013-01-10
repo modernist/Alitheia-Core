@@ -36,6 +36,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import eu.sqooss.service.db.DAObject;
 import eu.sqooss.service.db.DBService;
 import eu.sqooss.service.db.ServiceUrl;
 
@@ -70,11 +71,21 @@ public class ServiceUrlManagerDatabase implements ServiceUrlManagerDBQueries {
     }
     
     public boolean deleteServiceUrl(ServiceUrl serviceUrl) {
-        return db.deleteRecord(serviceUrl);
+    	if(db != null && db.startDBSession())
+    	{
+    		if(db.deleteRecord(serviceUrl)) 
+    			return db.commitDBSession();
+    	}
+    	return false;
     }
     
     public boolean createServiceUrl(ServiceUrl newServiceUrl) {
-        return db.addRecord(newServiceUrl);
+    	if(db != null && db.startDBSession())
+    	{
+    		if(db.addRecord(newServiceUrl)) 
+    			return db.commitDBSession();
+    	}
+    	return false;
     }
     
 }

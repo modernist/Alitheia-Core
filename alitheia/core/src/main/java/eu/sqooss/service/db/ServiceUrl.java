@@ -64,7 +64,7 @@ public class ServiceUrl extends DAObject{
 	@XmlElement
 	private String url;
 	
-	@OneToMany(mappedBy="url", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="groupPrivilege.url", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	private Set<GroupPrivilege> groupPrivileges = new HashSet<GroupPrivilege>();
 
     // Nothing to do here

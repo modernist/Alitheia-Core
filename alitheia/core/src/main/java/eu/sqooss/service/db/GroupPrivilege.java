@@ -35,60 +35,52 @@ package eu.sqooss.service.db;
 
 import java.io.Serializable;
 
-public class GroupPrivilege implements Serializable {
-    private static final long serialVersionUID = 1;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-    private ServiceUrl url;
-    
-    private Group group;
-    
-    private PrivilegeValue privilegeValue;
+@Entity
+@Table(name="GROUP_PRIVILEGE")
+public class GroupPrivilege implements Serializable {
+    @EmbeddedId
+    private GroupPrivilegePK groupPrivilege;
 
     // Nothing to do here
-    public GroupPrivilege(){}
+    public GroupPrivilege(){ this(null, null, null); }
 
-    /* Needed by Hibernate to handle the composite key
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	public boolean equals(Object obj) {
-		if (obj instanceof GroupPrivilege) {
-			GroupPrivilege groupPrivilege = (GroupPrivilege) obj;
-			return groupPrivilege.group.getId() == this.group.getId()
-				&& groupPrivilege.url.getId() == this.url.getId()
-				&& groupPrivilege.privilegeValue.getId() == this.privilegeValue.getId();
-		}
-		return false;
-	}
-
-	/* Needed by Hibernate to handle the composite key
-	 * @see java.lang.Object#hashCode()
-	 */
-	public int hashCode() {
-		
-		return (int)(url.getId() * group.getId() * privilegeValue.getId());
-	}
-
-    public void setUrl(ServiceUrl url) {
-        this.url = url;
+    public GroupPrivilege(ServiceUrl url, Group group, PrivilegeValue pv) {
+    	groupPrivilege = new GroupPrivilegePK(url, group, pv);
     }
-
-    public void setGroup(Group group) {
-        this.group = group;
+    
+    public GroupPrivilegePK getGroupPrivilege() {
+    	return groupPrivilege;
     }
-
-    public void setPrivilegeValue(PrivilegeValue pv) {
-        this.privilegeValue = pv;
+    
+    public void setGroupPrivilegePK(GroupPrivilegePK pk) {
+    	groupPrivilege = pk;
     }
-
-    public ServiceUrl getUrl() {
-        return url;
-    }
-
-    public Group getGroup() {
-        return group;
-    }
-
+    
     public PrivilegeValue getPrivilegeValue() {
-        return privilegeValue;
+    	return this.groupPrivilege.getPrivilegeValue();
+    }
+    
+    public ServiceUrl getUrl() {
+    	return this.groupPrivilege.getUrl();
+    }
+    
+    public Group getGroup() {
+    	return this.groupPrivilege.getGroup();
+    }
+    
+    public void setPrivilegeValue(PrivilegeValue pv) {
+    	this.groupPrivilege.setPrivilegeValue(pv);
+    }
+    
+    public void setUrl(ServiceUrl url) {
+    	this.groupPrivilege.setUrl(url);
+    }
+    
+    public void setGroup(Group group) {
+    	this.groupPrivilege.setGroup(group);
     }
 }
