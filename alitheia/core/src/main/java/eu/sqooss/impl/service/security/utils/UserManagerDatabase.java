@@ -61,16 +61,34 @@ public class UserManagerDatabase implements UserManagerDBQueries {
     }
 
     public User getUser(long userId) {
-        return db.findObjectById(User.class, userId);
+    	try {
+	    	if(db.startDBSession()) {
+	    		return db.findObjectById(User.class, userId);
+	    	}
+	    	else
+	    		return null;
+    	}
+    	finally {
+    		if(db.isDBSessionActive())
+    			db.commitDBSession();
+    	}
     }
     
-    public List<User> getUser(String userName) {
-        synchronized (lockObject) {
-            userProps.clear();
-            userProps.put(ATTRIBUTE_USER_NAME, userName);
-            return db.findObjectsByProperties(User.class, userProps);
-        }
-    }
+	public List<User> getUser(String userName) {
+		try {
+			if (db.startDBSession()) {
+				synchronized (lockObject) {
+					userProps.clear();
+					userProps.put(ATTRIBUTE_USER_NAME, userName);
+					return db.findObjectsByProperties(User.class, userProps);
+				}
+			} else
+				return null;
+		} finally {
+			if (db.isDBSessionActive())
+				db.commitDBSession();
+		}
+	}
     
     public List<?> getUsers() {
     	try {
@@ -86,14 +104,22 @@ public class UserManagerDatabase implements UserManagerDBQueries {
     	}
     }
     
-    public Set<?> getUsers(long groupId) {
-        Group group = db.findObjectById(Group.class, groupId);
-        if (group != null) {
-            return group.getUsers();
-        } else {
-            return null;
-        }
-    }
+	public Set<?> getUsers(long groupId) {
+		try {
+			if (db.startDBSession()) {
+				Group group = db.findObjectById(Group.class, groupId);
+				if (group != null) {
+					return group.getUsers();
+				} else {
+					return null;
+				}
+			} else
+				return null;
+		} finally {
+			if (db.isDBSessionActive())
+				db.commitDBSession();
+		}
+	}
     
     public boolean createUser(User newUser) {
         if(db != null && db.startDBSession())
@@ -113,29 +139,37 @@ public class UserManagerDatabase implements UserManagerDBQueries {
     	return false;
     }
     
-    public boolean modifyUser(String userName, String newPasswordHash,
-            String newEmail) {
-        List<User> users = null;
-        boolean isModified = false;
-        
-        synchronized (lockObject) {
-            userProps.clear();
-            userProps.put(ATTRIBUTE_USER_NAME, userName);
-            users = db.findObjectsByProperties(User.class, userProps);
-        }
-        if (users.size() == 1) {
-            User user = users.get(0);
-            if (newPasswordHash != null) {
-                user.setPassword(newPasswordHash);
-                isModified = true;
-            }
-            if (newEmail != null) {
-                user.setEmail(newEmail);
-                isModified = true;
-            }
-        }
-        return isModified;
-    }
+	public boolean modifyUser(String userName, String newPasswordHash,
+			String newEmail) {
+		List<User> users = null;
+		boolean isModified = false;
+		try {
+			if (db != null && db.startDBSession()) {
+
+				synchronized (lockObject) {
+					userProps.clear();
+					userProps.put(ATTRIBUTE_USER_NAME, userName);
+					users = db.findObjectsByProperties(User.class, userProps);
+				}
+				if (users.size() == 1) {
+					User user = users.get(0);
+					if (newPasswordHash != null) {
+						user.setPassword(newPasswordHash);
+						isModified = true;
+					}
+					if (newEmail != null) {
+						user.setEmail(newEmail);
+						isModified = true;
+					}
+				}
+			} else
+				isModified = false;
+		} finally {
+			if (db.isDBSessionActive())
+				db.commitDBSession();
+		}
+		return isModified;
+	}
     
     public boolean deleteUser(User user) {
     	if(db != null && db.startDBSession())
@@ -156,21 +190,39 @@ public class UserManagerDatabase implements UserManagerDBQueries {
         return false;
     }
 
-    public PendingUser getPendingUser (String field, String value) {
-        // Search for a matching pending user's record
-        HashMap<String, Object> filter = new HashMap<String, Object>();
-        filter.put(field, value);
-        List<PendingUser> pending =
-            db.findObjectsByProperties(PendingUser.class, filter);
+	public PendingUser getPendingUser(String field, String value) {
+		try {
+			if (db.startDBSession()) {
+				// Search for a matching pending user's record
+				HashMap<String, Object> filter = new HashMap<String, Object>();
+				filter.put(field, value);
+				List<PendingUser> pending = db.findObjectsByProperties(
+						PendingUser.class, filter);
 
-        if (! pending.isEmpty()) {
-            return pending.get(0);
-        }
-        return null;
-    }
+				if (!pending.isEmpty()) {
+					return pending.get(0);
+				}
+				return null;
+			} else
+				return null;
+		} finally {
+			if (db.isDBSessionActive())
+				db.commitDBSession();
+		}
+	}
 
     public List<?> getFirstPendingUser() {
-        return db.doHQL(GET_FIRST_PENDING_USER);
+        try {
+	    	if(db.startDBSession()) {
+	    		return db.doHQL(GET_FIRST_PENDING_USER);
+	    	}
+	    	else
+	    		return Collections.emptyList();
+    	}
+    	finally {
+    		if(db.isDBSessionActive())
+    			db.commitDBSession();
+    	}
     }
     
     public boolean deletePendingUser (PendingUser pending) {

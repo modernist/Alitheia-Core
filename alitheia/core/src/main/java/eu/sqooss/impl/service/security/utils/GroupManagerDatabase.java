@@ -66,8 +66,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
 
     public List<?> getGroups() {
     	try {
-	    	if(db.startDBSession())
-	    	{
+	    	if(db.startDBSession()) {
 	    		return db.doHQL(GET_GROUPS);
 	    	}
 	    	else
@@ -81,8 +80,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
     
     public Set<?> getGroups(long userId) {
     	try {
-	    	if(db.startDBSession())
-	    	{
+	    	if(db.startDBSession()) {
 		        User user = db.findObjectById(User.class, userId);
 		        if (user != null) {
 		            return user.getGroups();
@@ -101,8 +99,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
     
     public Group getGroup(long groupId) {
     	try {
-	    	if(db.startDBSession())
-	    	{
+	    	if(db.startDBSession()) {
 	    		return db.findObjectById(Group.class, groupId);
 	    	}
 	    	else
@@ -116,8 +113,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
     
     public List<Group> getGroup(String description) {
     	try {
-	    	if(db.startDBSession())
-	    	{
+	    	if(db.startDBSession()) {
 	    		synchronized(lockObject) {
 	                groupProps.clear();
 	                groupProps.put(ATTRIBUTE_GROUP_DESCRIPTION, description);
@@ -135,8 +131,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
     
     public List<?> getGroupPrivileges() {
         try {
-	    	if(db.startDBSession())
-	    	{
+	    	if(db.startDBSession()) {
 	    		return db.doHQL(GET_GROUP_PRIVILEGES);
 	    	}
 	    	else
@@ -149,8 +144,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
     }
     
     public boolean create(DAObject dao) {
-    	if(db != null && db.startDBSession())
-    	{
+    	if(db != null && db.startDBSession()) {
     		if(db.addRecord(dao))
     			return db.commitDBSession();
     	}
@@ -158,8 +152,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
     }
     
     public boolean delete(DAObject dao) {
-    	if(db != null && db.startDBSession())
-    	{
+    	if(db != null && db.startDBSession()) {
     		if(db.deleteRecord(dao)) 
     			return db.commitDBSession();
     	}
