@@ -32,6 +32,7 @@
 
 package eu.sqooss.impl.service.security.utils;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -72,7 +73,17 @@ public class UserManagerDatabase implements UserManagerDBQueries {
     }
     
     public List<?> getUsers() {
-        return db.doHQL(GET_USERS);
+    	try {
+	    	if(db.startDBSession()) {
+	    		return db.doHQL(GET_USERS);
+	    	}
+	    	else
+	    		return Collections.emptyList();
+    	}
+    	finally {
+    		if(db.isDBSessionActive())
+    			db.commitDBSession();
+    	}
     }
     
     public Set<?> getUsers(long groupId) {
@@ -85,11 +96,21 @@ public class UserManagerDatabase implements UserManagerDBQueries {
     }
     
     public boolean createUser(User newUser) {
-        return db.addRecord(newUser);
+        if(db != null && db.startDBSession())
+    	{
+    		if(db.addRecord(newUser)) 
+    			return db.commitDBSession();
+    	}
+    	return false;
     }
 
     public boolean createPendingUser(PendingUser newPendingUser) {
-        return db.addRecord(newPendingUser);
+    	if(db != null && db.startDBSession())
+    	{
+    		if(db.addRecord(newPendingUser)) 
+    			return db.commitDBSession();
+    	}
+    	return false;
     }
     
     public boolean modifyUser(String userName, String newPasswordHash,
@@ -117,7 +138,12 @@ public class UserManagerDatabase implements UserManagerDBQueries {
     }
     
     public boolean deleteUser(User user) {
-        return db.deleteRecord(user);
+    	if(db != null && db.startDBSession())
+    	{
+    		if(db.deleteRecord(user)) 
+    			return db.commitDBSession();
+    	}
+    	return false;
     }
 
     public boolean hasPendingUserHash (String hashValue) {
@@ -148,8 +174,12 @@ public class UserManagerDatabase implements UserManagerDBQueries {
     }
     
     public boolean deletePendingUser (PendingUser pending) {
-       boolean result = db.deleteRecord(pending);
-       return result;
+    	if(db != null && db.startDBSession())
+    	{
+    		if(db.deleteRecord(pending)) 
+    			return db.commitDBSession();
+    	}
+    	return false;
     }
 
 }

@@ -60,8 +60,7 @@ public class PrivilegeManagerDatabase implements PrivilegeManagerDBQueries {
 
     public List<?> getPrivileges() {
         try {
-	    	if(db.startDBSession())
-	    	{
+	    	if(db.startDBSession()) {
 	    		return db.doHQL(GET_PRIVILEGES);
 	    	}
 	    	else
@@ -75,8 +74,7 @@ public class PrivilegeManagerDatabase implements PrivilegeManagerDBQueries {
     
     public List<?> getPrivilegeValues() {
     	try {
-	    	if(db.startDBSession())
-	    	{
+	    	if(db.startDBSession()) {
 	    		return db.doHQL(GET_PRIVILEGE_VALUES);
 	    	}
 	    	else
@@ -88,51 +86,97 @@ public class PrivilegeManagerDatabase implements PrivilegeManagerDBQueries {
     	}
     }
     
-    public List<PrivilegeValue> getPrivilegeValues(long privilegeId) {
-        Privilege privilege = db.findObjectById(Privilege.class, privilegeId);
-        if (privilege != null) {
-            synchronized (lockObject) {
-                privilegeProps.clear();
-                privilegeProps.put(ATTRIBUTE_PRIVILEGE, privilege);
-                return db.findObjectsByProperties(PrivilegeValue.class, privilegeProps);
-            }
-        } else {
-            return null;
-        }
-    }
+	public List<PrivilegeValue> getPrivilegeValues(long privilegeId) {
+		try {
+			if (db.startDBSession()) {
+
+				Privilege privilege = db.findObjectById(Privilege.class, privilegeId);
+				if (privilege != null) {
+					synchronized (lockObject) {
+						privilegeProps.clear();
+						privilegeProps.put(ATTRIBUTE_PRIVILEGE, privilege);
+						return db.findObjectsByProperties(PrivilegeValue.class,
+								privilegeProps);
+					}
+				} else {
+					return null;
+				}
+			} else
+				return null;
+		} finally {
+			if (db.isDBSessionActive())
+				db.commitDBSession();
+		}
+	}
     
     public PrivilegeValue getPrivilegeValue(long privilegeValueId) {
-        return db.findObjectById(PrivilegeValue.class, privilegeValueId);
+    	try {
+			if (db.startDBSession()) {
+				return db.findObjectById(PrivilegeValue.class, privilegeValueId);
+			} else
+				return null;
+		} finally {
+			if (db.isDBSessionActive())
+				db.commitDBSession();
+		}
     }
     
-    public List<PrivilegeValue> getPrivilegeValue(long privilegeId,
-            String privilegeValue) {
-        Privilege privilege = db.findObjectById(Privilege.class, privilegeId);
-        if (privilege != null) {
-            synchronized (lockObject) {
-                privilegeProps.clear();
-                privilegeProps.put(ATTRIBUTE_PRIVILEGE, privilege);
-                privilegeProps.put(ATTRIBUTE_PRIVILEGE_VALUE, privilegeValue);
-                return db.findObjectsByProperties(PrivilegeValue.class,
-                        privilegeProps);
-            }
-        } else {
-            return null;
-        }
-    }
-    
+	public List<PrivilegeValue> getPrivilegeValue(long privilegeId,
+			String privilegeValue) {
+		try {
+			if (db.startDBSession()) {
+				Privilege privilege = db.findObjectById(Privilege.class,
+						privilegeId);
+				if (privilege != null) {
+					synchronized (lockObject) {
+						privilegeProps.clear();
+						privilegeProps.put(ATTRIBUTE_PRIVILEGE, privilege);
+						privilegeProps.put(ATTRIBUTE_PRIVILEGE_VALUE,
+								privilegeValue);
+						return db.findObjectsByProperties(PrivilegeValue.class,
+								privilegeProps);
+					}
+				} else {
+					return null;
+				}
+			} else
+				return null;
+		} finally {
+			if (db.isDBSessionActive())
+				db.commitDBSession();
+		}
+	}
+
     public Privilege getPrivilege(long privilegeId) {
-        return db.findObjectById(Privilege.class, privilegeId);
+    	try {
+			if (db.startDBSession()) {
+				return db.findObjectById(Privilege.class, privilegeId);
+			} else
+				return null;
+		} finally {
+			if (db.isDBSessionActive())
+				db.commitDBSession();
+		}
     }
     
-    public List<Privilege> getPrivilege(String description) {
-        synchronized (lockObject) {
-            privilegeProps.clear();
-            privilegeProps.put(ATTRIBUTE_PRIVILEGE_DESCRIPTION, description);
-            return db.findObjectsByProperties(Privilege.class, privilegeProps);
-        }
-    }
-    
+	public List<Privilege> getPrivilege(String description) {
+		try {
+			if (db.startDBSession()) {
+				synchronized (lockObject) {
+					privilegeProps.clear();
+					privilegeProps.put(ATTRIBUTE_PRIVILEGE_DESCRIPTION,
+							description);
+					return db.findObjectsByProperties(Privilege.class,
+							privilegeProps);
+				}
+			} else
+				return null;
+		} finally {
+			if (db.isDBSessionActive())
+				db.commitDBSession();
+		}
+	}
+  
     public boolean delete(DAObject dao) {
     	if(db != null && db.startDBSession())
     	{

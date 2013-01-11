@@ -32,6 +32,7 @@
 
 package eu.sqooss.impl.service.security.utils;
 
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -45,32 +46,52 @@ public class SecurityManagerDatabase implements SecurityManagerDBQueries {
         this.db = db;
     }
     
-    public boolean isExistentResourceUrl(String resourceUrl, String userName, String password) {
-        Map<String, Object> queryParameters = new Hashtable<String, Object>(3);
-        queryParameters.put(IS_EXISTENT_RESOURCE_PARAM_URL, resourceUrl);
-        queryParameters.put(IS_EXISTENT_RESOURCE_PARAM_USER, userName);
-        queryParameters.put(IS_EXISTENT_RESOURCE_PARAM_PASS, password);
-        if (db.doHQL(IS_EXISTENT_RESOURCE_URL, queryParameters).size() != 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+	public boolean isExistentResourceUrl(String resourceUrl, String userName,
+			String password) {
+		try {
+			if (db.startDBSession()) {
 
-    public boolean checkAuthorizationRule(String resourceUrl, String privilegeName,
-            String privilegeValue, String userName, String password) {
-        Map<String, Object> queryParameters = new Hashtable<String, Object>(5);
-        queryParameters.put(CHECK_AUTHORIZATION_RULE_PARAM_URL, resourceUrl);
-        queryParameters.put(CHECK_AUTHORIZATION_RULE_PARAM_PR_NAME, privilegeName);
-        queryParameters.put(CHECK_AUTHORIZATION_RULE_PARAM_PR_VALUE, privilegeValue);
-        queryParameters.put(CHECK_AUTHORIZATION_RULE_PARAM_USER, userName);
-        queryParameters.put(CHECK_AUTHORIZATION_RULE_PARAM_PASS, password);
-        if (db.doHQL(CHECK_AUTHORIZATION_RULE, queryParameters).size() != 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+				Map<String, Object> queryParameters = new Hashtable<String, Object>(
+						3);
+				queryParameters.put(IS_EXISTENT_RESOURCE_PARAM_URL, resourceUrl);
+				queryParameters.put(IS_EXISTENT_RESOURCE_PARAM_USER, userName);
+				queryParameters.put(IS_EXISTENT_RESOURCE_PARAM_PASS, password);
+				if (db.doHQL(IS_EXISTENT_RESOURCE_URL, queryParameters).size() != 0) {
+					return true;
+				} else {
+					return false;
+				}
+			} else
+				return false;
+		} finally {
+			if (db.isDBSessionActive())
+				db.commitDBSession();
+		}
+	}
+
+	public boolean checkAuthorizationRule(String resourceUrl,
+			String privilegeName, String privilegeValue, String userName,
+			String password) {
+		try {
+			if (db.startDBSession()) {
+				Map<String, Object> queryParameters = new Hashtable<String, Object>(5);
+				queryParameters.put(CHECK_AUTHORIZATION_RULE_PARAM_URL,	resourceUrl);
+				queryParameters.put(CHECK_AUTHORIZATION_RULE_PARAM_PR_NAME,	privilegeName);
+				queryParameters.put(CHECK_AUTHORIZATION_RULE_PARAM_PR_VALUE, privilegeValue);
+				queryParameters.put(CHECK_AUTHORIZATION_RULE_PARAM_USER, userName);
+				queryParameters.put(CHECK_AUTHORIZATION_RULE_PARAM_PASS, password);
+				if (db.doHQL(CHECK_AUTHORIZATION_RULE, queryParameters).size() != 0) {
+					return true;
+				} else {
+					return false;
+				}
+			} else
+				return false;
+		} finally {
+			if (db.isDBSessionActive())
+				db.commitDBSession();
+		}
+	}
 
 }
 
