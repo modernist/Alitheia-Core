@@ -32,6 +32,7 @@
 
 package eu.sqooss.impl.service.security.utils;
 
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -55,19 +56,48 @@ public class ServiceUrlManagerDatabase implements ServiceUrlManagerDBQueries {
     }
 
     public ServiceUrl getServiceUrl(long serviceUrlId) {
-        return db.findObjectById(ServiceUrl.class, serviceUrlId);
+    	try {
+	    	if(db.startDBSession()) {
+	    		return db.findObjectById(ServiceUrl.class, serviceUrlId);
+	    	}
+	    	else
+	    		return null;
+    	}
+    	finally {
+    		if(db.isDBSessionActive())
+    			db.commitDBSession();
+    	}
     }
     
-    public List<ServiceUrl> getServiceUrl(String serviceUrl) {
-        synchronized (lockObject) {
-            serviceUrlProps.clear();
-            serviceUrlProps.put(ATTRIBUTE_SERVICE_URL, serviceUrl);
-            return db.findObjectsByProperties(ServiceUrl.class, serviceUrlProps);
-        }
-    }
+	public List<ServiceUrl> getServiceUrl(String serviceUrl) {
+		try {
+			if (db.startDBSession()) {
+				synchronized (lockObject) {
+					serviceUrlProps.clear();
+					serviceUrlProps.put(ATTRIBUTE_SERVICE_URL, serviceUrl);
+					return db.findObjectsByProperties(ServiceUrl.class,
+							serviceUrlProps);
+				}
+			} else
+				return null;
+		} finally {
+			if (db.isDBSessionActive())
+				db.commitDBSession();
+		}
+	}
     
     public List<?> getServiceUrls() {
-        return db.doHQL(GET_SERVICE_URLS);
+    	try {
+	    	if(db.startDBSession()) {
+	    		 return db.doHQL(GET_SERVICE_URLS);
+	    	}
+	    	else
+	    		return Collections.emptyList();
+    	}
+    	finally {
+    		if(db.isDBSessionActive())
+    			db.commitDBSession();
+    	}
     }
     
     public boolean deleteServiceUrl(ServiceUrl serviceUrl) {
