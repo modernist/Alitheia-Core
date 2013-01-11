@@ -81,6 +81,22 @@
     <eu.sqooss.service.cache.impl>eu.sqooss.service.cache.OnDiskCache</eu.sqooss.service.cache.impl>
     <!--Location of the cache dir to use-->
     <eu.sqooss.service.cache.dir>tmp</eu.sqooss.service.cache.dir>
+	
+	<!-- security service config -->		
+	<!-- This property enables the security control. -->
+	<eu.sqooss.security.enable>true</eu.sqooss.security.enable>
+	<!-- This property configures the public address of the server. -->
+	<!-- <eu.sqooss.security.server.url></eu.sqooss.security.server.url> -->
+	<!-- This property configures the default user's name.
+		This user have write permission to the security service
+		(i.e. can create new accounts)  -->
+	<eu.sqooss.security.user.name>alitheia</eu.sqooss.security.user.name>
+	<!-- This property configures the default user's password. -->
+	<eu.sqooss.security.user.password>alitheia</eu.sqooss.security.user.password>
+	<!-- This property configures the default user's e-mail -->
+	<eu.sqooss.security.user.email>NA</eu.sqooss.security.user.email>
+	<!-- This property configures the default user's group -->
+	<eu.sqooss.security.user.group>alitheia</eu.sqooss.security.user.group>
   </properties>
   
   <packaging>pom</packaging>
