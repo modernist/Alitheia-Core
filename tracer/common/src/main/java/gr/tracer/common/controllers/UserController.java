@@ -1,6 +1,6 @@
 package gr.tracer.common.controllers;
 
-public class UserListController {
+public class UserController {
 
 	public void createUser(String aAUsername, String aAPassword, String aAType, String aAName, String aAEmail) {
 		throw new UnsupportedOperationException();

@@ -1,5 +1,7 @@
 package gr.tracer.common.entities;
 
+import gr.tracer.common.entities.db.SecurityLibrary;
+
 import java.util.ArrayList;
 
 public class ObservedProjectList {
