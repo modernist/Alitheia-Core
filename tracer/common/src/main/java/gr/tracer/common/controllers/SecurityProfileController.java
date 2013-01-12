@@ -1,8 +1,7 @@
 package gr.tracer.common.controllers;
 
-import gr.tracer.common.entities.SecurityProfile;
-import gr.tracer.common.entities.Vulnerability;
-import gr.tracer.common.entities.VulnerabilityDetector;
+import gr.tracer.common.entities.db.SecurityProfile;
+import gr.tracer.common.entities.db.Vulnerability;
 import gr.tracer.common.entities.VulnerabilityDetectorList;
 
 public class SecurityProfileController {

@@ -87,7 +87,7 @@ public class SecurityLibrary extends DAObject {
 	
 	 /**
      * Get a list of distinct Security Libraries that have been stored in the system
-     * @return List of all Vulnerability types
+     * @return List of all Security Libraries
      */
     public static List<SecurityLibrary> getSecurityLibraries() {
         DBService dbs = AlitheiaCore.getInstance().getDBService();
