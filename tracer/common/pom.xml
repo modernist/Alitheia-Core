@@ -31,6 +31,14 @@
   	</dependency>
   </dependencies>
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.felix</groupId>
@@ -50,7 +58,7 @@
           </instructions>
         </configuration>
         </plugin>
-        <plugin>
+      <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <source>1.6</source>
