@@ -52,9 +52,13 @@
             </Embed-Dependency>
             <Export-Package>gr.tracer.common,gr.tracer.common.entities,gr.tracer.common.entities.db</Export-Package>
             <Bundle-SymbolicName>gr.tracer.common</Bundle-SymbolicName>
+            <Bundle-Activator>gr.tracer.common.Activator</Bundle-Activator>
             <Bundle-Version>0.1</Bundle-Version>
-            <Bundle-Vendor>AUEB</Bundle-Vendor>
+            <Bundle-Vendor>Athens University of Economics and Business</Bundle-Vendor>
             <Bundle-Description>TRACER project common library</Bundle-Description>
+            <Eclipse-RegisterBuddy>org.hibernate.core, eu.sqooss.alitheia.core</Eclipse-RegisterBuddy>
+            <Import-Package>*, eu.sqooss.service.db, org.apache.commons.codec.digest,
+                org.hibernate, org.hibernate.proxy, javassist.util, javassist.util.proxy</Import-Package>
           </instructions>
         </configuration>
         </plugin>

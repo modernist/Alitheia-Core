@@ -255,7 +255,8 @@ public class DBServiceImpl implements DBService, AlitheiaCoreService {
                 if ( searchDir.exists() && searchDir.isDirectory() ) {
                     File[] metricsJars = searchDir.listFiles(new FilenameFilter() {
                         public boolean accept(File dir, String name) {
-                            return name.startsWith("eu.sqooss.metrics")  && name.endsWith(".jar");
+                            return (name.endsWith(".jar") && 
+                            		(name.startsWith("eu.sqooss.metrics") || name.startsWith("gr.tracer")));
                         }
                     });
                     for( File jarFile: metricsJars ) {
@@ -271,6 +272,7 @@ public class DBServiceImpl implements DBService, AlitheiaCoreService {
                     }
                 } 
             }
+            
             sessionFactory = c.buildSessionFactory();
             
             if (sessionFactory == null)
