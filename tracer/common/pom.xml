@@ -33,6 +33,13 @@
   <build>
     <resources>
       <resource>
+        <targetPath>eu/sqooss/service/db</targetPath>
+        <directory>src/main/java/gr/tracer/common/entities/db</directory>
+        <includes>
+          <include>**/*.xml</include>
+        </includes>
+      </resource>
+      <resource>
         <directory>src/main/resources</directory>
         <includes>
           <include>**/*</include>
@@ -58,7 +65,7 @@
             <Bundle-Description>TRACER project common library</Bundle-Description>
             <Eclipse-RegisterBuddy>org.hibernate.core, eu.sqooss.alitheia.core</Eclipse-RegisterBuddy>
             <Import-Package>*, eu.sqooss.service.db, org.apache.commons.codec.digest,
-                org.hibernate, org.hibernate.proxy, javassist.util, javassist.util.proxy</Import-Package>
+                org.hibernate, org.hibernate.proxy, org.hibernate.annotations, javassist.util, javassist.util.proxy</Import-Package>
           </instructions>
         </configuration>
         </plugin>
