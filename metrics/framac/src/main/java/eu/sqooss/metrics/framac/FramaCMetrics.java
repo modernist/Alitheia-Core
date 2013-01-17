@@ -79,7 +79,7 @@ import eu.sqooss.service.pa.PluginInfo;
 import eu.sqooss.service.util.FileUtils;
 //import eu.sqooss.service.fds.OnDiskCheckout;
 import gr.tracer.common.entities.db.Vulnerability;
-import gr.tracer.common.entities.db.ProjectFileVulnerabilty;
+import gr.tracer.common.entities.db.ProjectFileVulnerability;
 
 /**
  * Implementation of the FRAMA-C driver plug-in. It should be activated in ProjectFile, 
@@ -311,7 +311,7 @@ public class FramaCMetrics extends AbstractMetric {
     				String result = matcher.group(2);
     				System.out.println(String.format("%s at %s", result, symname));
 
-    				Vulnerability v = new ProjectFileVulnerabilty(pf, null, symname, result);
+    				Vulnerability v = new ProjectFileVulnerability(pf, null, symname, result);
     				results.add(v);
     			}
     		}
@@ -342,7 +342,7 @@ public class FramaCMetrics extends AbstractMetric {
     				String result = matcher.group(2);
     				System.out.println(String.format("Vulnerability %s: %s at %s", config, result, symname));
 
-    				Vulnerability v = new ProjectFileVulnerabilty(pf, null, symname, result);
+    				Vulnerability v = new ProjectFileVulnerability(pf, null, symname, result);
     				results.add(v);
     			}
     		}

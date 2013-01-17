@@ -62,6 +62,7 @@
             <Bundle-Vendor>Athens University Of Economics and Business</Bundle-Vendor>
             <Bundle-Description>The Alitheia Core Platform</Bundle-Description>
             <Eclipse-RegisterBuddy>org.hibernate.core, org.apache.velocity</Eclipse-RegisterBuddy>
+            <Eclipse-BuddyPolicy>registered</Eclipse-BuddyPolicy>
           </instructions>
         </configuration>
       </plugin>
