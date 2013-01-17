@@ -103,6 +103,11 @@
 
   <repositories>
     <repository>
+      <name>Maven Central</name>
+      <id>central</id>
+      <url>http://repo1.maven.org/maven2/</url>
+    </repository>
+    <repository>
       <name>JBoss</name>
       <id>jboss</id>
       <url>http://repository.jboss.org/nexus/content/groups/public/</url>

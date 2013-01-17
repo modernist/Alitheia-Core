@@ -13,13 +13,13 @@
     <bundle.symbolicName>mysql-connector-java</bundle.symbolicName>
     <wrapped.groupId>mysql</wrapped.groupId>
     <wrapped.artifactId>mysql-connector-java</wrapped.artifactId>
-    <wrapped.version>5.1.6</wrapped.version>
+    <wrapped.version>5.1.22</wrapped.version>
   </properties>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>eu.sqooss.external</groupId>
   <artifactId>mysql-connector-java</artifactId>
-  <version>5.1.6</version>
+  <version>5.1.22</version>
 
   <name>${bundle.symbolicName} ${wrapped.version} [osgi]</name>
 
