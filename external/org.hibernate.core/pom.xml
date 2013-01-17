@@ -12,13 +12,13 @@
     <bundle.symbolicName>org.hibernate.core</bundle.symbolicName>
     <wrapped.groupId>org.hibernate</wrapped.groupId>
     <wrapped.artifactId>hibernate-core</wrapped.artifactId>
-    <wrapped.version>3.6.10.Final</wrapped.version>
+    <wrapped.version>3.5.6-Final</wrapped.version>
   </properties>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>eu.sqooss.external</groupId>
   <artifactId>org.hibernate</artifactId>
-  <version>3.6.10-Final</version>
+  <version>3.5.6-Final</version>
 
   <name>${bundle.symbolicName} ${project.version} [osgi]</name>
 
@@ -30,6 +30,11 @@
       <artifactId>${wrapped.artifactId}</artifactId>
       <version>${wrapped.version}</version>
       <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-annotations</artifactId>
+      <version>3.5.6-Final</version>
     </dependency>
     <dependency>
     	<groupId>antlr</groupId>
@@ -65,7 +70,7 @@
     <dependency>
     	<groupId>org.hibernate</groupId>
     	<artifactId>hibernate-c3p0</artifactId>
-    	<version>3.6.10.Final</version>
+    	<version>3.5.6-Final</version>
     </dependency>
     <dependency>
       <groupId>c3p0</groupId>
@@ -76,7 +81,7 @@
     <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-ehcache</artifactId>
-        <version>3.5.1-Final</version>
+        <version>3.5.6-Final</version>
     </dependency>
     <dependency>
     	<groupId>net.sf.ehcache</groupId>

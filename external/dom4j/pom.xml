@@ -12,13 +12,13 @@
     <bundle.symbolicName>dom4j</bundle.symbolicName>
     <wrapped.groupId>dom4j</wrapped.groupId>
     <wrapped.artifactId>dom4j</wrapped.artifactId>
-    <wrapped.version>1.6</wrapped.version>
+    <wrapped.version>1.6.1</wrapped.version>
   </properties>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>eu.sqooss.external</groupId>
   <artifactId>dom4j</artifactId>
-  <version>1.6</version>
+  <version>1.6.1</version>
 
   <name>${bundle.symbolicName} ${wrapped.version} [osgi]</name>
 
