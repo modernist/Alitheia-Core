@@ -69,13 +69,11 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
 	    	if(db.startDBSession()) {
 	    		return db.doHQL(GET_GROUPS);
 	    	}
-	    	else
-	    		return Collections.emptyList();
     	}
     	finally {
-    		if(db.isDBSessionActive())
-    			db.commitDBSession();
+    		db.commitDBSession();
     	}
+    	return Collections.emptyList();
     }
     
     public Set<?> getGroups(long userId) {
@@ -92,8 +90,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
 	    		return null;
     	}
     	finally {
-    		if(db.isDBSessionActive())
-    			db.commitDBSession();
+    		db.commitDBSession();
     	}
     }
     
@@ -106,8 +103,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
 	    		return null;
     	}
     	finally {
-    		if(db.isDBSessionActive())
-    			db.commitDBSession();
+    		db.commitDBSession();
     	}
     }
     
@@ -124,8 +120,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
 	    		return Collections.emptyList();
     	}
     	finally {
-    		if(db.isDBSessionActive())
-    			db.commitDBSession();
+    		db.commitDBSession();
     	}    	
     }
     
@@ -138,8 +133,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
 	    		return Collections.emptyList();
     	}
     	finally {
-    		if(db.isDBSessionActive())
-    			db.commitDBSession();
+    		db.commitDBSession();
     	}
     }
     
@@ -232,8 +226,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
             }
             return false;
         } finally {
-           if(db.isDBSessionActive())
-        	   db.commitDBSession();
+        	db.commitDBSession();
         }
     }
     
@@ -250,8 +243,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
                 return false;
             }
         } finally {
-            if(db.isDBSessionActive())
-            	db.commitDBSession();
+            db.commitDBSession();
         }
     }
     
@@ -267,8 +259,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
                 return false;
             }
         } finally {
-            if(db.isDBSessionActive())
-            	db.commitDBSession();
+            db.commitDBSession();
         }
     }
     

@@ -159,7 +159,7 @@ public class GroupManagerImpl implements GroupManager {
      * @see eu.sqooss.service.security.GroupManager#getGroups(long)
      */
     public Group[] getGroups(long userId) {
-        logger.debug("Get groups! userId: " + userId);
+        System.err.println("Get groups! userId: " + userId);
         return convertGroups(dbWrapper.getGroups(userId));
     }
     

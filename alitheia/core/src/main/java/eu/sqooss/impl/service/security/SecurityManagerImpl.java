@@ -388,8 +388,6 @@ public class SecurityManagerImpl implements SecurityManager, SecurityConstants, 
             if (db == null) {
                 logger.error("Can not obtain the DB object!");
             }
-            
-            logger.debug("The SecurityManager component was successfully started.");
         }
         else {
             logger.error("Can not obtain the Core object!");
@@ -404,7 +402,11 @@ public class SecurityManagerImpl implements SecurityManager, SecurityConstants, 
         
         isEnabled = Boolean.valueOf(System.getProperty(PROPERTY_ENABLE, "true"));
         
-        initDefaultUser();
+        try {
+	        initDefaultUser();
+        } catch(Exception ie) {
+        	logger.warn("Failed to initialize the security permissions for the default user", ie);
+        }
         
         // Get a reference to the HTTPService, and its object
         srefHttpService = bc.getServiceReference(HttpService.class.getName());
@@ -431,6 +433,7 @@ public class SecurityManagerImpl implements SecurityManager, SecurityConstants, 
             logger.error("Unable to obtain a HttpService reference!");
         }
 	
+        logger.info("The SecurityManager component was successfully started.");
         return true;
 	}
 

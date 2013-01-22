@@ -174,6 +174,7 @@ public interface UserManager {
      * found
      */
     public boolean hasPendingUserName(String userName);
+    
 }
 
 //vi: ai nosi sw=4 ts=4 expandtab

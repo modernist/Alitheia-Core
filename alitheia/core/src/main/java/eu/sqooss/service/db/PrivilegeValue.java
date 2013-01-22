@@ -73,7 +73,7 @@ public class PrivilegeValue extends DAObject {
 	@XmlElement
     private String value;
 	
-	@OneToMany(mappedBy="groupPrivilege.privilegeValue", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="groupPrivilege.privilegeValue", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<GroupPrivilege> groupPrivileges = new HashSet<GroupPrivilege>();
     
     public PrivilegeValue() {}

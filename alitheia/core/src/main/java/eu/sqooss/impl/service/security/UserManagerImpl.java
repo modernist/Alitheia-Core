@@ -89,12 +89,16 @@ public class UserManagerImpl implements UserManager {
         this.dbWrapper = new UserManagerDatabase(db);
         this.logger = logger;
         
-        initNewUserPermission();
-        
         try {
         	messageDigest = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException e) {
         	messageDigest = null;
+        }
+        
+        try {
+        	initNewUserPermission();
+        } catch(Exception e) {
+        	logger.warn("Failed to initialize new user permissions", e);
         }
     }
 

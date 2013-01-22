@@ -64,8 +64,7 @@ public class ServiceUrlManagerDatabase implements ServiceUrlManagerDBQueries {
 	    		return null;
     	}
     	finally {
-    		if(db.isDBSessionActive())
-    			db.commitDBSession();
+    		db.commitDBSession();
     	}
     }
     
@@ -81,8 +80,7 @@ public class ServiceUrlManagerDatabase implements ServiceUrlManagerDBQueries {
 			} else
 				return null;
 		} finally {
-			if (db.isDBSessionActive())
-				db.commitDBSession();
+			db.commitDBSession();
 		}
 	}
     
@@ -91,13 +89,11 @@ public class ServiceUrlManagerDatabase implements ServiceUrlManagerDBQueries {
 	    	if(db.startDBSession()) {
 	    		 return db.doHQL(GET_SERVICE_URLS);
 	    	}
-	    	else
-	    		return Collections.emptyList();
     	}
     	finally {
-    		if(db.isDBSessionActive())
-    			db.commitDBSession();
+    		db.commitDBSession();
     	}
+    	return Collections.emptyList();
     }
     
     public boolean deleteServiceUrl(ServiceUrl serviceUrl) {
