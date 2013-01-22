@@ -75,7 +75,6 @@
         <mapping class="eu.sqooss.service.db.User"/>
         <mapping class="eu.sqooss.service.db.PendingUser"/>
         <mapping class="eu.sqooss.service.db.Group"/>
-        <mapping resource="eu/sqooss/service/db/GroupUser.hbm.xml"/>
         <mapping class="eu.sqooss.service.db.GroupPrivilege"/>
         <mapping class="eu.sqooss.service.db.GroupPrivilegePK"/>
     </session-factory>
