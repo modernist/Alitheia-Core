@@ -109,12 +109,16 @@ public class ClusterNode extends DAObject {
     }
     
     public static ClusterNode getClusteNodeByName(String name) {
-        DBService dbs = AlitheiaCore.getInstance().getDBService();
-        
-        Map<String,Object> parameterMap = new HashMap<String,Object>();
-        parameterMap.put("name",name);
-        List<ClusterNode> cnList = dbs.findObjectsByProperties(ClusterNode.class, parameterMap);
-        return (cnList == null || cnList.isEmpty()) ? null : cnList.get(0);
+        try {
+	    	DBService dbs = AlitheiaCore.getInstance().getDBService();
+	        dbs.startDBSession();
+	        Map<String,Object> parameterMap = new HashMap<String,Object>();
+	        parameterMap.put("name",name);
+	        List<ClusterNode> cnList = dbs.findObjectsByProperties(ClusterNode.class, parameterMap);
+	        return (cnList == null || cnList.isEmpty()) ? null : cnList.get(0);
+        } catch(Exception e) {
+        	return null;
+        }
     }
     
     public static ClusterNode thisNode() {

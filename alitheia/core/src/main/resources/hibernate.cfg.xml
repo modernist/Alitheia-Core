@@ -15,6 +15,9 @@
         <property name="hibernate.c3p0.timeout">100</property> <!-- seconds -->
         
         <property name="hibernate.connection.isolation">2</property>
+        
+        <property name="hibernate.mapping.precedence">CLASS, HBM</property>
+        <!-- <property name="javax.persistence.validation.mode">none</property> -->
 
         <!-- Read ahead size for JDBC connection -->
         <property name="default_batch_fetch_size">30</property>
