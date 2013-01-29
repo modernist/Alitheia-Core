@@ -13,7 +13,7 @@ with Eclipse Ganymede (3.5) on Linux and MacOSX. The steps are:
 3. Do the following 
     mvn clean install
     mvn -DdownloadJavadoc eclipse:eclipse
-    mvn -Ddownloadsources eclipse:eclipse
+    mvn -DdownloadSources eclipse:eclipse
     mvn eclipse:clean
 
     The commands above will download sources and Javadocs for some (in fact

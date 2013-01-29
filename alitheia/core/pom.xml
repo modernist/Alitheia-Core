@@ -36,7 +36,7 @@
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
         <version>2.3.7</version>
-	<extensions>true</extensions>
+        <extensions>true</extensions>
         <configuration>
           <instructions>
             <Embed-Dependency> 
@@ -49,6 +49,7 @@
             <Import-Package>
               com.mysql.jdbc;resolution:=optional, org.h2;resolution:=optional, 
               javassist.util, javassist.util.proxy,
+              javax.persistence,
               org.hibernate, org.hibernate.cfg, org.hibernate.classic, org.hibernate.exception,
               org.hibernate.proxy, org.hibernate.type, org.hibernate.connection,
               org.hibernate.cache, org.hibernate.annotations,
@@ -61,7 +62,7 @@
             <Bundle-Version>1.0</Bundle-Version>
             <Bundle-Vendor>Athens University Of Economics and Business</Bundle-Vendor>
             <Bundle-Description>The Alitheia Core Platform</Bundle-Description>
-            <Eclipse-RegisterBuddy>org.hibernate.core, org.apache.velocity</Eclipse-RegisterBuddy>
+            <Eclipse-RegisterBuddy>org.hibernate.core, org.apache.velocity, org.hibernate.hibernate-core</Eclipse-RegisterBuddy>
             <Eclipse-BuddyPolicy>registered</Eclipse-BuddyPolicy>
           </instructions>
         </configuration>
@@ -114,10 +115,15 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-annotations</artifactId>
-      <version>3.5.6-Final</version>
+      <groupId>eu.sqooss.external</groupId>
+      <artifactId>org.hibernate</artifactId>
+      <version>3.6.10.Final</version>
     </dependency>
+    <dependency>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-commons-annotations</artifactId>
+		<version>3.2.0.Final</version>
+	</dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
@@ -151,7 +157,7 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
-      <version>1.6.1</version>
+      <version>1.7.2</version>
       <type>jar</type>
       <scope>compile</scope>
     </dependency>

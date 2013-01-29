@@ -42,7 +42,7 @@
             <Bundle-Description>Developer Contribution</Bundle-Description>
             <Import-Package>*, eu.sqooss.service.db, org.apache.commons.codec.digest,
                 org.hibernate, org.hibernate.proxy, javassist.util, javassist.util.proxy</Import-Package>
-            <Eclipse-RegisterBuddy>org.hibernate.core</Eclipse-RegisterBuddy>
+            <Eclipse-RegisterBuddy>org.hibernate.core, org.hibernate.hibernate-core</Eclipse-RegisterBuddy>
           </instructions>
         </configuration>
       </plugin>
