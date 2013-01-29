@@ -204,6 +204,25 @@
           <tagBase>https://svn.sqo-oss.org/tags</tagBase>
         </configuration>
       </plugin>
+      <plugin>
+      <groupId>org.jboss.tattletale</groupId>
+      <artifactId>tattletale-maven</artifactId>
+      <version>1.1.2.Final</version>
+      <executions>
+        <execution>
+          <goals>
+            <goal>report</goal>
+          </goals>
+        </execution>
+      </executions>
+      <configuration>
+       <source>.</source>
+        <destination>target/reports/tattletale</destination>
+        <reports>
+          <report>*</report>
+        </reports>
+      </configuration>
+    </plugin>
     </plugins>
     <extensions>
         <extension>
