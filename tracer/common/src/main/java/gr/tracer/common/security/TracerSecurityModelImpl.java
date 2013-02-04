@@ -1,11 +1,6 @@
 package gr.tracer.common.security;
 
-import org.osgi.framework.BundleContext;
 
-import eu.sqooss.core.AlitheiaCore;
-import eu.sqooss.core.AlitheiaCoreService;
-import eu.sqooss.impl.service.security.SecurityManagerImpl;
-import eu.sqooss.service.db.DBService;
 import eu.sqooss.service.db.Group;
 import eu.sqooss.service.db.Privilege;
 import eu.sqooss.service.db.PrivilegeValue;
@@ -18,15 +13,15 @@ import eu.sqooss.service.security.SecurityManager;
 import eu.sqooss.service.security.ServiceUrlManager;
 import eu.sqooss.service.security.UserManager;
 
-public class TracerSecurityModelImpl implements TracerSecurityModel, AlitheiaCoreService {
-	//TODO: Implement as an AlitheiaCoreService
+public class TracerSecurityModelImpl implements TracerSecurityModel {
 	
-	private AlitheiaCore core;
-	private DBService db;
-    private Logger logger;
-	private BundleContext bc;
-    private static SecurityManager sm;
+	private Logger logger;
+	private SecurityManager sm;
 	
+	public TracerSecurityModelImpl(SecurityManager sm, Logger logger) {
+		this.sm = sm;
+		this.logger = logger;
+	}
 	
 	public void initSecurityModel() {
 		User user = null;
@@ -248,46 +243,5 @@ public class TracerSecurityModelImpl implements TracerSecurityModel, AlitheiaCor
 		if ((privilegeValue != null) && (group != null))
 			groupManager.addPrivilegeToGroup(group.getId(), serviceUrl.getId(), privilegeValue.getId());
 	}
-
-	@Override
-	public boolean startUp() {
-		// TODO Auto-generated method stub
-		logger.info("Starting the Tracer component.");
-
-        // Get the AlitheiaCore's object
-        core = AlitheiaCore.getInstance();
-
-        if (core != null) {
-            // Obtain the required core components
-            db = core.getDBService();
-            if (db == null) {
-                logger.error("Can not obtain the DB object!");
-            }
-        }
-        else {
-            logger.error("Can not obtain the Core object!");
-        }
-	
-        sm = new SecurityManagerImpl(db, logger);
-        
-        logger.info("The Tracer component was successfully started.");
-        return true;
-	}
-
-	@Override
-	public void shutDown() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setInitParams(BundleContext bc, Logger l) {
-		// TODO Auto-generated method stub
-		
-		this.bc = bc;
-		this.logger = l;
-		
-	}
-
 	
 }
