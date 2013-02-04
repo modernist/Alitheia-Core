@@ -18,16 +18,6 @@ public class TracerPlatformServiceImpl implements TracerPlatformService {
 	//and add accessors for the tracer components to TracerPlatform
 	
 	public TracerPlatformServiceImpl() {
-		try {
-			AlitheiaCore core = AlitheiaCore.getInstance();
-			
-			if(core != null) {
-				core.registerService(TracerPlatformService.class, getClass());
-			}
-			
-		} catch(Exception e) {
-			System.err.println(e);
-		}
 	}
 	
 	@Override
