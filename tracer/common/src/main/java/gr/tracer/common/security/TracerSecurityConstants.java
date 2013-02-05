@@ -97,7 +97,7 @@ public static final char URL_DELIMITER_RESOURCE  = '?';
     
     public static enum GroupName {
         PROGRAMMER,
-        ADMINSTRATOR,
+        ADMINISTRATOR,
         VULNERABILITY_MANAGER,
         ALL;
         public String toString() {

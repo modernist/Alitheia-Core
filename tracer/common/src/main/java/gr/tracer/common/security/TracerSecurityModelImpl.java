@@ -144,12 +144,12 @@ public class TracerSecurityModelImpl implements TracerSecurityModel {
 		if (user == null)
 			user = userManager.createUser("admin", "admin", "admin@tracer.gr");
 		
-		group = groupManager.getGroup(TracerSecurityConstants.GroupName.ADMINSTRATOR.toString());
+		group = groupManager.getGroup(TracerSecurityConstants.GroupName.ADMINISTRATOR.toString());
 		if (group == null)
-			group = groupManager.createGroup(TracerSecurityConstants.GroupName.ADMINSTRATOR.toString());
+			group = groupManager.createGroup(TracerSecurityConstants.GroupName.ADMINISTRATOR.toString());
 		
 		if (group != null) {
-			System.out.println(groupManager.addUserToGroup(group.getId(), user.getId()));
+			groupManager.addUserToGroup(group.getId(), user.getId());
 		}
 		
 		privilegeValue = privilegeManager.getPrivilegeValue(privilege.getId(), TracerSecurityConstants.PrivilegeValue.CREATE_USER.toString());
@@ -224,6 +224,10 @@ public class TracerSecurityModelImpl implements TracerSecurityModel {
 		group = groupManager.getGroup(TracerSecurityConstants.GroupName.VULNERABILITY_MANAGER.toString());
 		if (group == null)
 			group = groupManager.createGroup(TracerSecurityConstants.GroupName.VULNERABILITY_MANAGER.toString());
+		
+		if (group != null) {
+			groupManager.addUserToGroup(group.getId(), user.getId());
+		}
 		
 		privilegeValue = privilegeManager.getPrivilegeValue(privilege.getId(), TracerSecurityConstants.PrivilegeValue.DETECT_CODE_FOR_BUGS.toString());
 		serviceUrl = serviceUrlManager.getServiceUrl(TracerSecurityConstants.URL_TRACER_SECURITY + TracerSecurityConstants.URL_DELIMITER_RESOURCE + 
