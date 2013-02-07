@@ -5,6 +5,7 @@ import org.osgi.framework.BundleContext;
 import eu.sqooss.core.AlitheiaCore;
 import eu.sqooss.service.logging.Logger;
 import eu.sqooss.service.security.SecurityManager;
+import gr.tracer.common.controllers.UserController;
 import gr.tracer.common.security.TracerSecurityModel;
 import gr.tracer.common.security.TracerSecurityModelImpl;
 
@@ -27,6 +28,7 @@ public class TracerPlatformServiceImpl implements TracerPlatformService {
 		if(sm != null) {
 			TracerSecurityModel tsm = new TracerSecurityModelImpl(sm, logger);
 			tsm.initSecurityModel();
+			UserController userController = new UserController((TracerSecurityModelImpl) tsm);
 		}
 		return true;
 	}
