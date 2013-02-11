@@ -4,6 +4,7 @@ import eu.sqooss.core.AlitheiaCoreService;
 
 public interface TracerPlatformService extends AlitheiaCoreService{
 
-	//TODO: Add methods for accessing TRACER-related components
+	/* Returns a reference to the single instance of TracerPlatform */
+	public TracerPlatform getPlatform();
 	
 }

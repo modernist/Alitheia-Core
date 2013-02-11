@@ -193,6 +193,18 @@ public class AlitheiaCore {
         implementations.remove(service);
     }
 
+//    public Class<? extends AlitheiaCoreService> getAlitheiaCoreService(Class<? extends AlitheiaCoreService> clazz) {
+//    	try {
+//    		Object o = instances.get(clazz);
+//    		return (Class<? extends AlitheiaCoreService>)o;
+//    		
+//    	} catch(Exception e) {
+//    		err("Unable to retrieve AlitheiaCore service of type " + clazz);
+//    		e.printStackTrace();
+//    		return null;
+//    	}
+//    }
+    
     /**
      * This method performs initialization of the <code>AlitheiaCore</code>
      * object by instantiating the core components, by calling the 
