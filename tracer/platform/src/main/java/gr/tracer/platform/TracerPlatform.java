@@ -92,14 +92,14 @@ public class TracerPlatform {
         implementations.remove(component);
     }
     
-//    public Class<? extends AlitheiaCoreService> getAlitheiaCoreService(Class<? extends AlitheiaCoreService> clazz) {
-//    	try {
-//    		return core.getAlitheiaCoreService(clazz);
-//    	} catch(Exception e) {
-//    		logger.error("Unable to retrieve AlitheiaCore service of type " + clazz, e);
-//    		return null;
-//    	}
-//    }
+    public <T extends AlitheiaCoreService> T getAlitheiaCoreService(Class<? extends AlitheiaCoreService> clazz) {
+    	try {
+    		return core.getAlitheiaCoreService(clazz);
+    	} catch(Exception e) {
+    		logger.error("Unable to retrieve AlitheiaCore service of type " + clazz, e);
+    		return null;
+    	}
+    }
 	
     /**
      * Shuts down the platform by shutting down all components.

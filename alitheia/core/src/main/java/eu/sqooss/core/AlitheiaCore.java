@@ -193,23 +193,27 @@ public class AlitheiaCore {
         implementations.remove(service);
     }
 
-//    public Class<? extends AlitheiaCoreService> getAlitheiaCoreService(Class<? extends AlitheiaCoreService> clazz) {
-//    	try {
-//    		Object o = instances.get(clazz);
-//    		return (Class<? extends AlitheiaCoreService>)o;
-//    		
-//    	} catch(Exception e) {
-//    		err("Unable to retrieve AlitheiaCore service of type " + clazz);
-//    		e.printStackTrace();
-//    		return null;
-//    	}
-//    }
+    /**
+     * Generic method to retrieve the instance of a service interface implementation
+     * @param clazz The type of service to retrieve
+     * @return The instance implementing the requested service interface
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends AlitheiaCoreService> T getAlitheiaCoreService(Class<? extends AlitheiaCoreService> clazz) {
+    	try {
+    		return (T)instances.get(clazz);
+    	} catch(Exception e) {
+    		err("Unable to retrieve AlitheiaCore service of type " + clazz);
+    		e.printStackTrace();
+    		return null;
+    	}
+    }
     
     /**
      * This method performs initialization of the <code>AlitheiaCore</code>
      * object by instantiating the core components, by calling the 
      * method on their service interface. Failures are reported but do not 
-     * block the instatiation process).
+     * block the instantiation process).
      */
     private void init() {
 

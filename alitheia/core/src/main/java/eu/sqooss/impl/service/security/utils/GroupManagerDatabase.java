@@ -186,8 +186,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
                 return false;
             }
         } finally {
-            if(db.isDBSessionActive())
-            	db.commitDBSession();
+            db.commitDBSession();
         }
     }
     
