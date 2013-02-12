@@ -11,6 +11,8 @@ import eu.sqooss.core.AlitheiaCore;
 import eu.sqooss.core.AlitheiaCoreService;
 import eu.sqooss.service.logging.LogManager;
 import eu.sqooss.service.logging.Logger;
+import gr.tracer.platform.security.TracerSecurityModel;
+import gr.tracer.platform.security.TracerSecurityModelImpl;
 
 /**
  * 
@@ -37,6 +39,10 @@ public class TracerPlatform {
     	/* 
     	 * Components are initialized in the order they appear in this list
     	 */
+        
+        components.add(TracerSecurityModel.class);
+        
+        implementations.put(TracerSecurityModel.class, TracerSecurityModelImpl.class);
     }
     
     private AlitheiaCore core;
