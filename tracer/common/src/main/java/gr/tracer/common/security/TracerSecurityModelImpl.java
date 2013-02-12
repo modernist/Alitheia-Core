@@ -1,6 +1,6 @@
 package gr.tracer.common.security;
 
-
+import eu.sqooss.core.AlitheiaCore;
 import eu.sqooss.service.db.Group;
 import eu.sqooss.service.db.User;
 import eu.sqooss.service.logging.Logger;
@@ -13,9 +13,8 @@ public class TracerSecurityModelImpl implements TracerSecurityModel {
 	private Logger logger;
 	private SecurityManager sm;
 	
-	public TracerSecurityModelImpl(SecurityManager sm, Logger logger) {
-		this.sm = sm;
-		this.logger = logger;
+	public TracerSecurityModelImpl() {
+		
 	}
 	
 	public void initSecurityModel() {

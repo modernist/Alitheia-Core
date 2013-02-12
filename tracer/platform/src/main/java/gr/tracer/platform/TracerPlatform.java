@@ -37,13 +37,6 @@ public class TracerPlatform {
     	/* 
     	 * Components are initialized in the order they appear in this list
     	 */
-        //components.add(TracerSecurityModel.class);
-
-        //implementations.put(TracerSecurityModel.class, TracerSecurityModelImpl.class);
-        
-        //SimpleTracerComponent<TracerSecurityModel> sc = new SimpleTracerComponentImpl<TracerSecurityModel, TracerSecurityModelImpl>(TracerSecurityModelImpl.class);
-        //components.add(sc.getInterfaceClass());
-        //implementations.put(sc.getInterfaceClass(), sc.getImplClass());
     }
     
     private AlitheiaCore core;
