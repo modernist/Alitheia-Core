@@ -39,7 +39,11 @@ public class TracerPlatform {
     	 */
         //components.add(TracerSecurityModel.class);
 
-        //implementations.put(TracerSecurityModel.class, TracerSecurityModelImpl.class);		 
+        //implementations.put(TracerSecurityModel.class, TracerSecurityModelImpl.class);
+        
+        //SimpleTracerComponent<TracerSecurityModel> sc = new SimpleTracerComponentImpl<TracerSecurityModel, TracerSecurityModelImpl>(TracerSecurityModelImpl.class);
+        //components.add(sc.getInterfaceClass());
+        //implementations.put(sc.getInterfaceClass(), sc.getImplClass());
     }
     
     private AlitheiaCore core;
@@ -70,15 +74,15 @@ public class TracerPlatform {
      * will override any internally defined implementation.
      *
      * @param component The component interface to register an implementation for
-     * @param clazz The class that implements the registered component interface
+     * @param impl The class that implements the registered component interface
      */
     public synchronized void registerComponent(
             Class<? extends TracerComponent> component,
-            Class<?> clazz) {
+            Class<?> impl) {
 
         if (!components.contains(component))
             components.add(component);
-        implementations.put(component, clazz);
+        implementations.put(component, impl);
         initComponent(component);
     }
 
@@ -92,6 +96,11 @@ public class TracerPlatform {
         implementations.remove(component);
     }
     
+    /**
+     * Utility method to retrieve the instance of an Alitheia Core Service
+     * @param clazz The type of service to retrieve
+     * @return The instance implementing the requested service interface
+     */
     public <T extends AlitheiaCoreService> T getAlitheiaCoreService(Class<? extends AlitheiaCoreService> clazz) {
     	try {
     		return core.getAlitheiaCoreService(clazz);

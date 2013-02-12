@@ -117,13 +117,11 @@ public class TracerSecurityModelImpl implements TracerSecurityModel {
 	public boolean userLoginAttempt(String aAUsername, String aAPassword) {
 		
 		User user = null;       
-		GroupManager groupManager;
 		UserManager userManager;
-		
-		userManager = sm.getUserManager();
-		groupManager = sm.getGroupManager();
-		
+
+		userManager = sm.getUserManager();		
 		user = userManager.getUser(aAUsername);
+		
 		if (user != null) {
 			if (user.getPassword().equals(aAPassword))
 				logger.info("Authenticated user with username " + aAUsername);
