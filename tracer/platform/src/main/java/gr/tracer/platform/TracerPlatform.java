@@ -8,9 +8,10 @@ import java.util.Map;
 import java.util.Vector;
 
 import eu.sqooss.core.AlitheiaCore;
-import eu.sqooss.core.AlitheiaCoreService;
 import eu.sqooss.service.logging.LogManager;
 import eu.sqooss.service.logging.Logger;
+import gr.tracer.common.security.TracerSecurityModel;
+import gr.tracer.common.security.TracerSecurityModelImpl;
 
 /**
  * 
@@ -37,9 +38,9 @@ public class TracerPlatform {
     	/* 
     	 * Components are initialized in the order they appear in this list
     	 */
-        //components.add(TracerSecurityModel.class);
+        components.add(TracerSecurityModel.class);
 
-        //implementations.put(TracerSecurityModel.class, TracerSecurityModelImpl.class);		 
+        implementations.put(TracerSecurityModel.class, TracerSecurityModelImpl.class);		 
     }
     
     private AlitheiaCore core;

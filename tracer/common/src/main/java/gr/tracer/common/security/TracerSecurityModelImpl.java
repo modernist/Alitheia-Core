@@ -1,21 +1,23 @@
 package gr.tracer.common.security;
 
-
+import eu.sqooss.core.AlitheiaCore;
 import eu.sqooss.service.db.Group;
 import eu.sqooss.service.db.User;
 import eu.sqooss.service.logging.Logger;
 import eu.sqooss.service.security.GroupManager;
 import eu.sqooss.service.security.SecurityManager;
 import eu.sqooss.service.security.UserManager;
+import gr.tracer.platform.TracerComponent;
+import gr.tracer.platform.TracerPlatform;
 
-public class TracerSecurityModelImpl implements TracerSecurityModel {
+public class TracerSecurityModelImpl implements TracerSecurityModel, TracerComponent {
 	
+	private TracerPlatform tp;
 	private Logger logger;
 	private SecurityManager sm;
 	
-	public TracerSecurityModelImpl(SecurityManager sm, Logger logger) {
-		this.sm = sm;
-		this.logger = logger;
+	public TracerSecurityModelImpl() {
+		
 	}
 	
 	public void initSecurityModel() {
@@ -137,6 +139,28 @@ public class TracerSecurityModelImpl implements TracerSecurityModel {
 		}
 		
 		return true;
+	}
+
+	@Override
+	public void initComponent(TracerPlatform tp, Logger logger) {
+		// TODO Auto-generated method stub
+		this.logger = logger;
+		this.tp = tp;
+		this.sm = AlitheiaCore.getInstance().getSecurityManager();
+		startUp();
+	}
+
+	@Override
+	public boolean shutDown() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean startUp() {
+		// TODO Auto-generated method stub
+		initSecurityModel();
+		return false;
 	}
 	
 }

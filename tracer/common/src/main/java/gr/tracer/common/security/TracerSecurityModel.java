@@ -1,7 +1,8 @@
 package gr.tracer.common.security;
 
+import gr.tracer.platform.TracerComponent;
 
-public interface TracerSecurityModel {
+public interface TracerSecurityModel extends TracerComponent {
 	
 	public void initSecurityModel();
 	
