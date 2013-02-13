@@ -9,8 +9,21 @@ import java.util.Vector;
 
 import eu.sqooss.core.AlitheiaCore;
 import eu.sqooss.core.AlitheiaCoreService;
+import eu.sqooss.service.db.DBService;
 import eu.sqooss.service.logging.LogManager;
 import eu.sqooss.service.logging.Logger;
+import gr.tracer.platform.components.MonitoredProjectListComponent;
+import gr.tracer.platform.components.MonitoredProjectListComponentImpl;
+import gr.tracer.platform.components.SecurityLibraryComponent;
+import gr.tracer.platform.components.SecurityLibraryComponentImpl;
+import gr.tracer.platform.components.SecurityProfileComponent;
+import gr.tracer.platform.components.SecurityProfileComponentImpl;
+import gr.tracer.platform.components.UserComponent;
+import gr.tracer.platform.components.UserComponentImpl;
+import gr.tracer.platform.components.VulnerabilityComponent;
+import gr.tracer.platform.components.VulnerabilityComponentImpl;
+import gr.tracer.platform.components.VulnerabilityDetectorComponent;
+import gr.tracer.platform.components.VulnerabilityDetectorComponentImpl;
 import gr.tracer.platform.security.TracerSecurityModel;
 import gr.tracer.platform.security.TracerSecurityModelImpl;
 
@@ -41,13 +54,26 @@ public class TracerPlatform {
     	 */
         
         components.add(TracerSecurityModel.class);
-        
+        components.add(UserComponent.class);
+        components.add(SecurityProfileComponent.class);
+        components.add(MonitoredProjectListComponent.class);
+        components.add(SecurityLibraryComponent.class);
+        components.add(VulnerabilityComponent.class);
+        components.add(VulnerabilityDetectorComponent.class);
+
         implementations.put(TracerSecurityModel.class, TracerSecurityModelImpl.class);
+        implementations.put(UserComponent.class, UserComponentImpl.class);
+        implementations.put(SecurityProfileComponent.class, SecurityProfileComponentImpl.class);
+        implementations.put(MonitoredProjectListComponent.class, MonitoredProjectListComponentImpl.class);
+        implementations.put(SecurityLibraryComponent.class, SecurityLibraryComponentImpl.class);
+        implementations.put(VulnerabilityComponent.class, VulnerabilityComponentImpl.class);
+        implementations.put(VulnerabilityDetectorComponent.class, VulnerabilityDetectorComponentImpl.class);
     }
     
     private AlitheiaCore core;
     private LogManager logManager;
     private Logger logger;
+    private DBService dbs;
 	
 	/* Private constructor to ensure single instance creation */
 	private TracerPlatform() {
@@ -56,8 +82,12 @@ public class TracerPlatform {
 		core = AlitheiaCore.getInstance();
 		logManager = core.getLogManager();
 		logger = logManager.createLogger("tracer");
-		
+		dbs = core.getDBService();
 		init();
+	}
+	
+	public DBService getDB() {
+		return this.dbs;
 	}
 	
 	/* Returns the single instance of the Platform */

@@ -1,7 +1,5 @@
 package gr.tracer.platform.security;
 
-import eu.sqooss.service.security.SecurityConstants;
-
 public class TracerSecurityConstants {
 	/**
      * Represents some of the privileges.

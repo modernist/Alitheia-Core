@@ -1,46 +1,52 @@
 package gr.tracer.platform.controllers;
 
+import java.util.List;
+
 import gr.tracer.common.entities.db.SecurityProfile;
-import gr.tracer.common.entities.db.Vulnerability;
-import gr.tracer.common.entities.VulnerabilityDetectorList;
+import gr.tracer.common.entities.db.VulnerabilityType;
+import gr.tracer.platform.components.SecurityProfileComponent;
+import gr.tracer.platform.components.VulnerabilityComponent;
 
 public class SecurityProfileController {
+	
+	private SecurityProfileComponent spc;
+	private VulnerabilityComponent vc;
 	public VulnerabilityDetectorController _getAvailableVulnerabilityDetectors;
 	public ObservedProjectListController _getSecurityProfile;
 
-	public SecurityProfile getSecurityProfiles() {
-		throw new UnsupportedOperationException();
+	public List<SecurityProfile> getSecurityProfiles() {
+		return spc.getSecurityProfiles();	
 	}
 
-	public boolean addVulnerabilityToSecurityProfile(Vulnerability aAVd) {
-		throw new UnsupportedOperationException();
+	public boolean addVulnerabilityToSecurityProfile(String vtName, String spName) {
+		VulnerabilityType vt = (VulnerabilityType) vc.searchVulnerability(vtName);
+		SecurityProfile sp = (SecurityProfile) spc.searchSecurityProfile(spName);
+		if ((vt != null) && (sp != null))
+			return spc.addVulnerabilityToSecurityProfile(vt.getId(), sp.getId());
+		return false;
 	}
 
-	public VulnerabilityDetectorList createSecurityProfile(String aAName, String aAType) {
-		throw new UnsupportedOperationException();
+	public boolean createSecurityProfile(String aAName, String aAType) {
+		return spc.createSecurityProfile(aAName, aAType);
 	}
 
-	public boolean searchSecurityProfile(String aAName) {
-		throw new UnsupportedOperationException();
+	public List<SecurityProfile> searchSecurityProfile(String aAName) {
+		return spc.searchSecurityProfile(aAName);
 	}
 
 	public boolean addSecurityProfileToList(SecurityProfile aASp) {
-		throw new UnsupportedOperationException();
+		return spc.addSecurityProfileToList(aASp);
 	}
 
 	public SecurityProfile getSecurityProfile(int aAProfile_index) {
-		throw new UnsupportedOperationException();
+		return spc.getSecurityProfile(aAProfile_index);
 	}
 
-	public boolean removeVulnerabilityFromSecurityProfile(Vulnerability aAVd) {
-		throw new UnsupportedOperationException();
-	}
-
-	public SecurityProfile getSecurityProfile() {
-		throw new UnsupportedOperationException();
-	}
-
-	public boolean addVulnerabilityDetectorToSecurityProfile(int aAVul_id) {
-		throw new UnsupportedOperationException();
+	public boolean removeVulnerabilityFromSecurityProfile(String vtName, String spName) {
+		VulnerabilityType vt = (VulnerabilityType) vc.searchVulnerability(vtName);
+		SecurityProfile sp = (SecurityProfile) spc.searchSecurityProfile(spName);
+		if ((vt != null) && (sp != null))
+			return spc.removeVulnerabilityFromSecurityProfile(vt.getId(), sp.getId());
+		return false;
 	}
 }
