@@ -1,29 +1,29 @@
-package gr.tracer.common.controllers;
+package gr.tracer.platform.controllers;
 
 import eu.sqooss.service.security.GroupManager;
 import eu.sqooss.service.security.UserManager;
 import eu.sqooss.service.db.Group;
-import gr.tracer.common.security.TracerSecurityModel;
+import gr.tracer.platform.components.UserComponent;
 
 public class UserController {
-	private TracerSecurityModel tsm;
+	private UserComponent uc;
 	UserManager userManager;
 	GroupManager groupManager;
 	
 	eu.sqooss.service.db.User user;
 	Group group;
 	
-	public UserController(TracerSecurityModel tsm) {
-		this.tsm = tsm;
+	public UserController(UserComponent uc) {
+		this.uc = uc;
 	}
 
 	public boolean createTracerUser(String aAUsername, String aAPassword, String aAType, String aAName, String aAEmail) {
 		
-		return tsm.createNewUser(aAUsername, aAPassword, aAType, aAName, aAEmail);
+		return uc.createNewUser(aAUsername, aAPassword, aAType, aAName, aAEmail);
 	}
 
 	public boolean loginAttempt(String aAUsername, String aAPassword) {
 		
-		return tsm.userLoginAttempt(aAUsername, aAPassword);
+		return uc.userLoginAttempt(aAUsername, aAPassword);
 	}
 }

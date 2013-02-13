@@ -1,4 +1,4 @@
-package gr.tracer.common.controllers;
+package gr.tracer.platform.controllers;
 
 import java.util.ArrayList;
 

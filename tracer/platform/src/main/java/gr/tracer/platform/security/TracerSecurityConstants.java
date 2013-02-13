@@ -1,6 +1,4 @@
-package gr.tracer.common.security;
-
-import eu.sqooss.service.security.SecurityConstants;
+package gr.tracer.platform.security;
 
 public class TracerSecurityConstants {
 	/**
