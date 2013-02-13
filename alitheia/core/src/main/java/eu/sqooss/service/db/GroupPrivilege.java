@@ -33,56 +33,77 @@
 
 package eu.sqooss.service.db;
 
-import java.io.Serializable;
-
-import javax.persistence.EmbeddedId;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name="GROUP_PRIVILEGE")
-public class GroupPrivilege implements Serializable {
-	private static final long serialVersionUID = 1;
+@Table(name="GROUP_PRIVILEGE", uniqueConstraints=@UniqueConstraint(columnNames = {"PRIVILEGE_VALUE_ID", "SERVICE_URL_ID", "GROUP_ID"}))
+public class GroupPrivilege extends DAObject {
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="GROUP_PRIVILEGE_ID")
+	private long id;
 	
-    @EmbeddedId
-    private GroupPrivilegePK groupPrivilege;
+	@ManyToOne
+    @JoinColumn(name="SERVICE_URL_ID")
+    private ServiceUrl url;
+    
+    @ManyToOne
+    @JoinColumn(name="GROUP_ID")
+    private Group group;
+    
+    @ManyToOne
+    @JoinColumn(name="PRIVILEGE_VALUE_ID")
+    private PrivilegeValue privilegeValue;
 
     // Nothing to do here
     public GroupPrivilege(){ this(null, null, null); }
 
     public GroupPrivilege(ServiceUrl url, Group group, PrivilegeValue pv) {
-    	groupPrivilege = new GroupPrivilegePK(url, group, pv);
-    }
-    
-    public GroupPrivilegePK getGroupPrivilege() {
-    	return groupPrivilege;
-    }
-    
-    public void setGroupPrivilegePK(GroupPrivilegePK pk) {
-    	groupPrivilege = pk;
+    	this.url = url;
+    	this.group = group;
+    	this.privilegeValue = pv;
     }
     
     public PrivilegeValue getPrivilegeValue() {
-    	return this.groupPrivilege.getPrivilegeValue();
+    	return this.privilegeValue;
     }
     
     public ServiceUrl getUrl() {
-    	return this.groupPrivilege.getUrl();
+    	return this.url;
     }
     
     public Group getGroup() {
-    	return this.groupPrivilege.getGroup();
+    	return this.group;
     }
     
     public void setPrivilegeValue(PrivilegeValue pv) {
-    	this.groupPrivilege.setPrivilegeValue(pv);
+    	this.privilegeValue = pv;
     }
     
     public void setUrl(ServiceUrl url) {
-    	this.groupPrivilege.setUrl(url);
+    	this.url = url;
     }
     
     public void setGroup(Group group) {
-    	this.groupPrivilege.setGroup(group);
+    	this.group = group;
     }
+
+	@Override
+	public long getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(long id) {
+		this.id = id;
+	}
 }

@@ -74,7 +74,7 @@ public class Group extends DAObject {
 		inverseJoinColumns={@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")})
     private Set<User> users = new HashSet<User>();
     
-	@OneToMany(mappedBy="groupPrivilege.group", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="group", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private Set<GroupPrivilege> groupPrivileges = new HashSet<GroupPrivilege>();
 
     // Nothing to do here

@@ -167,13 +167,15 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
                 newGroupPrivilege.setGroup(group);
                 newGroupPrivilege.setPrivilegeValue(privilegeValue);
                 newGroupPrivilege.setUrl(serviceUrl);
-                Transaction transaction = null;
+                return db.addRecord(newGroupPrivilege);
+                /*Transaction transaction = null;
                 try {
                     transaction = session.beginTransaction();
                     session.persist(newGroupPrivilege);
-                    session.refresh(group);
+                    session.flush();
                     session.refresh(privilegeValue);
                     session.refresh(serviceUrl);
+                    session.refresh(group);
                     transaction.commit();
                 } catch (HibernateException he) {
                     if (transaction != null) {
@@ -182,6 +184,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
                     return false;
                 }
                 return true;
+                */
             } else {
                 return false;
             }
@@ -199,7 +202,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
                     privilegeValueId);
             ServiceUrl serviceUrl = db.findObjectById(ServiceUrl.class, urlId);
             if ((group != null) && (privilegeValue != null) && (serviceUrl != null)) {
-                GroupPrivilege groupPrivilege = new GroupPrivilege();
+            	/*    GroupPrivilege groupPrivilege = new GroupPrivilege();
                 groupPrivilege.setGroup(group);
                 groupPrivilege.setPrivilegeValue(privilegeValue);
                 groupPrivilege.setUrl(serviceUrl);
@@ -221,7 +224,7 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
                         return false;
                     }
                     return true;
-                }
+                }*/
             }
             return false;
         } finally {

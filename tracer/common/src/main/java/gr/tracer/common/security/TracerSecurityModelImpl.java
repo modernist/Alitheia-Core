@@ -14,7 +14,7 @@ public class TracerSecurityModelImpl implements TracerSecurityModel {
 	private SecurityManager sm;
 	
 	public TracerSecurityModelImpl() {
-		
+		sm = AlitheiaCore.getInstance().getSecurityManager();
 	}
 	
 	public void initSecurityModel() {
