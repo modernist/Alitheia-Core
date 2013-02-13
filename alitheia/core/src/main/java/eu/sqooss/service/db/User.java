@@ -38,6 +38,7 @@ import java.util.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -81,11 +82,12 @@ public class User extends DAObject {
 	@XmlElement
     private String email;
 	
-	@ManyToMany(cascade = {CascadeType.ALL})
+	/*@ManyToMany(cascade = {CascadeType.ALL})
 	@JoinTable(
 		name="GROUP_USER",
 		joinColumns={@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")},
-		inverseJoinColumns={@JoinColumn(name="GROUP_ID", referencedColumnName="GROUP_ID")})
+		inverseJoinColumns={@JoinColumn(name="GROUP_ID", referencedColumnName="GROUP_ID")})*/
+	@ManyToMany(mappedBy="users",targetEntity=Group.class, cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
     private Set<Group> groups = new HashSet<Group>();
     
     public User() {};

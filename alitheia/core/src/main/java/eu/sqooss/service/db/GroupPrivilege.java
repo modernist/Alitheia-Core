@@ -42,6 +42,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name="GROUP_PRIVILEGE")
 public class GroupPrivilege implements Serializable {
+	private static final long serialVersionUID = 1;
+	
     @EmbeddedId
     private GroupPrivilegePK groupPrivilege;
 

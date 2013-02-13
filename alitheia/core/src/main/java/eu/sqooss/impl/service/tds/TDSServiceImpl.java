@@ -147,12 +147,16 @@ public class TDSServiceImpl implements TDSService, AlitheiaCoreService {
         DBService db = AlitheiaCore.getInstance().getDBService();
         
         if (db != null && db.startDBSession()) {
-            
-            for (StoredProject p : ClusterNode.thisNode().getProjects()) {
-                addAccessor(p.getId(), p.getName(), p.getBtsUrl(), 
-                        p.getMailUrl(), p.getScmUrl());
+            try {
+            	for (StoredProject p : ClusterNode.thisNode().getProjects()) {
+                    addAccessor(p.getId(), p.getName(), p.getBtsUrl(), 
+                            p.getMailUrl(), p.getScmUrl());
+                }
+            } catch (Exception e) {
+            	logger.warn("TDS could not create ProjectDataAccessors", e);
+            } finally {
+            	db.commitDBSession();
             }
-            db.commitDBSession();
         }
 
         logger.info("TDS Stuffer is finished.");
