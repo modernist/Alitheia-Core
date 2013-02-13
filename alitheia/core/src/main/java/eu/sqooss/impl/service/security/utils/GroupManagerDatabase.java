@@ -53,15 +53,20 @@ import eu.sqooss.service.db.User;
 public class GroupManagerDatabase implements GroupManagerDBQueries {
 
     private static final String ATTRIBUTE_GROUP_DESCRIPTION = "description";
+    private static final String ATTRIBUTE_GROUP_PRIVILEGE_URL = "url";
+    private static final String ATTRIBUTE_GROUP_PRIVILEGE_GROUP = "group";
+    private static final String ATTRIBUTE_GROUP_PRIVILEGE_PRIVILEGEVALUE = "privilegeValue";
     
     private DBService db;
     private Map<String, Object> groupProps;
+    private Map<String, Object> privilegeProps;
     private Object lockObject = new Object();
     
     public GroupManagerDatabase(DBService db) {
         super();
         this.db = db;
         groupProps = new Hashtable<String, Object>(1);
+        privilegeProps = new Hashtable<String, Object>(3);
     }
 
     public List<?> getGroups() {
@@ -202,6 +207,20 @@ public class GroupManagerDatabase implements GroupManagerDBQueries {
                     privilegeValueId);
             ServiceUrl serviceUrl = db.findObjectById(ServiceUrl.class, urlId);
             if ((group != null) && (privilegeValue != null) && (serviceUrl != null)) {
+            	
+            	List<GroupPrivilege> items = null;
+            	
+            	synchronized(lockObject) {
+	                privilegeProps.clear();
+	                privilegeProps.put(ATTRIBUTE_GROUP_PRIVILEGE_GROUP, groupId);
+	                privilegeProps.put(ATTRIBUTE_GROUP_PRIVILEGE_URL, urlId);
+	                privilegeProps.put(ATTRIBUTE_GROUP_PRIVILEGE_PRIVILEGEVALUE, privilegeValueId);
+	                items = db.findObjectsByProperties(GroupPrivilege.class, privilegeProps);
+            	}
+            	
+            	if(items != null && items.size() > 0) {
+            		return db.deleteRecords(items);
+            	}
             	/*    GroupPrivilege groupPrivilege = new GroupPrivilege();
                 groupPrivilege.setGroup(group);
                 groupPrivilege.setPrivilegeValue(privilegeValue);
