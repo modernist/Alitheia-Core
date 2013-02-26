@@ -16,7 +16,7 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	private TracerPlatform platform;
 	private Logger logger;
 	private DBService dbs;
-	private Map<String, Object> userProps;
+	private Map<String, Object> secProfProps;
     private Object lockObject = new Object();
 	
 	public SecurityProfileComponentImpl() {
@@ -34,7 +34,7 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	public boolean startUp() {
 		// TODO Auto-generated method stub
 		this.dbs = platform.getDB();
-		userProps = new Hashtable<String, Object>(1);
+		secProfProps = new Hashtable<String, Object>(1);
 		return true;
 	}
 
@@ -87,9 +87,9 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 		try {
 			if (dbs.startDBSession()) {
 				synchronized (lockObject) {
-					userProps.clear();
-					userProps.put("security_profile_name", aAName);
-					return dbs.findObjectsByProperties(SecurityProfile.class, userProps);
+					secProfProps.clear();
+					secProfProps.put("name", aAName);
+					return dbs.findObjectsByProperties(SecurityProfile.class, secProfProps);
 					}
 			} else {
 				logger.info("Failed to start DBSession");

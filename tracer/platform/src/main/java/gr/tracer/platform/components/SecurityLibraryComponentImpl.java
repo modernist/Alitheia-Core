@@ -16,7 +16,7 @@ public class SecurityLibraryComponentImpl implements SecurityLibraryComponent {
 	private TracerPlatform platform;
 	private Logger logger;
 	private DBService dbs;
-	private Map<String, Object> userProps;
+	private Map<String, Object> seLibProps;
     private Object lockObject = new Object();
 	
 	@Override
@@ -30,7 +30,10 @@ public class SecurityLibraryComponentImpl implements SecurityLibraryComponent {
 	public boolean startUp() {
 		// TODO Auto-generated method stub
 		this.dbs = platform.getDB();
-		userProps = new Hashtable<String, Object>(1);
+		seLibProps = new Hashtable<String, Object>(1);
+		createSecurityLibrary("Sql","Sql type");
+		if (searchSecurityLibrary("sql") != null)
+			System.out.println("Found Security Library");
 		return true;
 	}
 
@@ -78,22 +81,26 @@ public class SecurityLibraryComponentImpl implements SecurityLibraryComponent {
 	}
 
 	@Override
-	public List<SecurityLibrary> searchSecurityLibrary(String slName) {
+	public SecurityLibrary searchSecurityLibrary(String slName) {
 		// TODO Auto-generated method stub
+		List<SecurityLibrary> secLibs = null;
 		try {
 			if (dbs.startDBSession()) {
 				synchronized (lockObject) {
-					userProps.clear();
-					userProps.put("security_library_name", slName);
-					return dbs.findObjectsByProperties(SecurityLibrary.class, userProps);
+					seLibProps.clear();
+					seLibProps.put("name", slName);
+					secLibs = dbs.findObjectsByProperties(SecurityLibrary.class, seLibProps);
 				}
 			} else {
 				logger.info("Failed to start DBSession");
 			}
+			 if (secLibs.size() != 0) {
+				 return secLibs.get(0);
+				 }
 		} finally {
 			if (dbs.isDBSessionActive())
 				dbs.commitDBSession();
 		}
-		return Collections.emptyList();
+		return null;
 	}
 }
