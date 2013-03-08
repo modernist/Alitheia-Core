@@ -94,7 +94,7 @@ public class TracerSecurityModelImpl implements TracerSecurityModel {
 	public boolean startUp() {
 		// TODO Auto-generated method stub
 		sm = AlitheiaCore.getInstance().getSecurityManager();
-		if (sm.getGroupManager().getGroups() == null)
+		if (sm.getGroupManager().getGroup(TracerSecurityConstants.GroupName.VULNERABILITY_MANAGER.toString()) == null)
 			initSecurityModel();
 		return true;
 	}

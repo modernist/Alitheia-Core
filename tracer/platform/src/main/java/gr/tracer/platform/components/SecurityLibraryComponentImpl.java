@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import eu.sqooss.service.db.DBService;
+import eu.sqooss.service.db.Group;
+import eu.sqooss.service.db.User;
 import eu.sqooss.service.logging.Logger;
 import gr.tracer.common.entities.db.SecurityLibrary;
 import gr.tracer.common.entities.db.VulnerabilityType;
