@@ -9,4 +9,9 @@ public class ConfirmSecurityLibraryController {
 	public boolean setLibraryApplication(boolean aATreatVulnerability) {
 		throw new UnsupportedOperationException();
 	}
+	
+	public boolean addToDetectedVulnerabilities(){
+		
+		return false;		
+	}
 }

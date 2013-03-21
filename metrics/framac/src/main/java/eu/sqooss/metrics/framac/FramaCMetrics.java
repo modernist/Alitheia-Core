@@ -45,7 +45,6 @@
 package eu.sqooss.metrics.framac;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -77,9 +76,9 @@ import eu.sqooss.service.db.ProjectFileMeasurement;
 import eu.sqooss.service.fds.FDSService;
 import eu.sqooss.service.pa.PluginInfo;
 import eu.sqooss.service.util.FileUtils;
-//import eu.sqooss.service.fds.OnDiskCheckout;
 import gr.tracer.common.entities.db.Vulnerability;
 import gr.tracer.common.entities.db.ProjectFileVulnerability;
+import gr.tracer.common.entities.db.VulnerabilityType;
 
 /**
  * Implementation of the FRAMA-C driver plug-in. It should be activated in ProjectFile, 
@@ -240,7 +239,11 @@ public class FramaCMetrics extends AbstractMetric {
         	String cmd = buildCommand(file, config);
         	
         	try {
-        	
+        		
+        		VulnerabilityType vt = new VulnerabilityType();
+        		vt.setName(config);
+        		vt.setDescription(config);
+        		       	
 	        	ProcessBuilder framacProcessBuilder = new ProcessBuilder(cmd);
 	        	framacProcessBuilder.redirectErrorStream(true);
 	        	framacProcessBuilder.directory(file.getParentFile());
@@ -255,7 +258,7 @@ public class FramaCMetrics extends AbstractMetric {
 	        		continue;
 	        	}
 	        	
-	        	List<Vulnerability> results = processResult(resultFile, a, config);     
+	        	List<ProjectFileVulnerability> results = processResult(resultFile, a, config, vt);     
 	        	resultFile.delete();
 	        	
 	        	if(results.size() > 0){
@@ -321,18 +324,20 @@ public class FramaCMetrics extends AbstractMetric {
     }
     
     /* TODO: mark as protected in base plugin class*/
-    private List<Vulnerability> processResult(File outputFile, ProjectFile pf, String config) {
+    private List<ProjectFileVulnerability> processResult(File outputFile, ProjectFile pf, String config, VulnerabilityType vt) {
     	String contents = FileUtils.readContents(outputFile);
+    	String locationAttack = "Location of " + config + " Attack: ";
+    	String descriptionAttack = "Description of " + config + " Attack: ";
     	
     	if(contents == null)
     		return null;
     	
-    	ArrayList<Vulnerability> results = new ArrayList<Vulnerability>();
+    	ArrayList<ProjectFileVulnerability> results = new ArrayList<ProjectFileVulnerability>();
     	
     	String[] entries = contents.split(splitEntryPatternRegex);
-    	for(String entry: entries) {
+    	//for(String entry: entries) {
     		
-    		Matcher matcher = symnamePattern.matcher(entry);
+    		Matcher matcher = symnamePattern.matcher(entries[entries.length-1]);
     		while(matcher.find()) {
     			
     			// get the vulnerability type and location,
@@ -340,19 +345,26 @@ public class FramaCMetrics extends AbstractMetric {
     			if (matcher.group(2).equals("Tainted")){
     				String symname = matcher.group(1);
     				String result = matcher.group(2);
+    				locationAttack = locationAttack + symname + "    ";
+    				descriptionAttack = descriptionAttack + result + " at  " + symname + "    ";
     				System.out.println(String.format("Vulnerability %s: %s at %s", config, result, symname));
-
-    				Vulnerability v = new ProjectFileVulnerability(pf, null, symname, result);
-    				results.add(v);
     			}
     		}
-    	}
+    		
+    		ProjectFileVulnerability pfv = new ProjectFileVulnerability();
+    		pfv.setDescription(config);
+			pfv.setLocation(locationAttack);
+			pfv.setDescription(descriptionAttack);
+			pfv.setProjectFile(pf);
+			pfv.setVulnerabilityType(vt);
+			results.add(pfv);
+    	//}
     	
     	return results;
     }
     
     /* TODO: mark as protected in base plugin class */
-    private void storeResults(Metric m, List<Vulnerability> v){
+    private void storeResults(Metric m, List<ProjectFileVulnerability> results){
     	
     }
     
