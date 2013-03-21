@@ -1,7 +1,5 @@
 package gr.tracer.platform.components;
 
-import java.util.Iterator;
-
 import eu.sqooss.core.AlitheiaCore;
 import eu.sqooss.service.db.Group;
 import eu.sqooss.service.db.User;
@@ -18,7 +16,7 @@ public class UserComponentImpl implements UserComponent {
 	private Logger logger;
 	private SecurityManager sm;
 
-	public boolean createNewUser(String aAUsername, String aAPassword, String aAType, String aAName, String aAEmail) {
+	public User createNewUser(String aAUsername, String aAPassword, String aAType, String aAName, String aAEmail) {
 		
 		User user = null;
         Group group = null;
@@ -34,7 +32,7 @@ public class UserComponentImpl implements UserComponent {
 			user = userManager.createUser(aAUsername, aAPassword, aAEmail);
 		} else {
 			logger.info("User already exists"); 
-			return false;
+			return null;
 		}
 		
 		if (aAType.toLowerCase().equals(TracerSecurityConstants.GroupName.ADMINISTRATOR.toString()))
@@ -48,14 +46,14 @@ public class UserComponentImpl implements UserComponent {
 			groupManager.addUserToGroup(group.getId(), user.getId());
 		} else {
 			logger.info("Group does not exist"); 
-			return false;
+			return null;
 		}
 		
 		logger.info("Created user with the name " + aAUsername + " as " + aAType);
-		return true;
+		return user;
 	}
 	
-	public boolean userLoginAttempt(String aAUsername, String aAPassword) {
+	public User userLoginAttempt(String aAUsername, String aAPassword) {
 		
 		User user = null;       
 		UserManager userManager;
@@ -68,14 +66,14 @@ public class UserComponentImpl implements UserComponent {
 				logger.info("Authenticated user with username " + aAUsername);
 			else {
 				logger.info("Wrong password for user with username " + aAUsername);
-				return false;
+				return null;
 			}
 		} else {
 			logger.info("There is no user with username " + aAUsername);
-			return false;
+			return null;
 		}
 		
-		return true;
+		return user;
 	}
 
 	@Override
