@@ -19,8 +19,6 @@ public class ConfirmSecurityLibraryComponentImpl implements
 	private TracerPlatform platform;
 	private Logger logger;
 	private DBService dbs;
-	private Map<String, Object> vulProps;
-    private Object lockObject = new Object();
     private VulnerabilityComponent vc;
 
 	@Override
@@ -62,14 +60,29 @@ public class ConfirmSecurityLibraryComponentImpl implements
 	public boolean startUp() {
 		// TODO Auto-generated method stub
 		this.dbs = platform.getDB();
-		vulProps = new Hashtable<String, Object>(1);
+		ProjectFile pf = new ProjectFile();
+		VulnerabilityType vt = new VulnerabilityType();
+		ProjectFileVulnerability pvf = new ProjectFileVulnerability();
+		List<ProjectFileVulnerability> sProjVul = new ArrayList<ProjectFileVulnerability>();
+		pf.setName("Project1");
+		dbs.startDBSession();
+		dbs.addRecord(pf);
+		dbs.commitDBSession();
+		vt.setName("Sql name");
+		vt.setDescription("Sql description");
+		pvf.setDescription("Sql attack desc");
+		pvf.setLocation("Sql attack loc");
+		pvf.setProjectFile(pf);
+		pvf.setVulnerabilityType(vt);
+		sProjVul.add(pvf);
+		addToDetectedVulnerabilities(sProjVul);
 		return true;
 	}
 
 	@Override
 	public boolean shutDown() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 }
