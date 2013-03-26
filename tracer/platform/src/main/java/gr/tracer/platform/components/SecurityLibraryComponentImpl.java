@@ -33,9 +33,6 @@ public class SecurityLibraryComponentImpl implements SecurityLibraryComponent {
 		// TODO Auto-generated method stub
 		this.dbs = platform.getDB();
 		seLibProps = new Hashtable<String, Object>(1);
-		createSecurityLibrary("Sql","Sql type");
-		if (searchSecurityLibrary("sql") != null)
-			System.out.println("Found Security Library");
 		return true;
 	}
 

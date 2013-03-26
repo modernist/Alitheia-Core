@@ -12,6 +12,8 @@ import eu.sqooss.core.AlitheiaCoreService;
 import eu.sqooss.service.db.DBService;
 import eu.sqooss.service.logging.LogManager;
 import eu.sqooss.service.logging.Logger;
+import gr.tracer.platform.components.ConfirmSecurityLibraryComponent;
+import gr.tracer.platform.components.ConfirmSecurityLibraryComponentImpl;
 import gr.tracer.platform.components.MonitoredProjectListComponent;
 import gr.tracer.platform.components.MonitoredProjectListComponentImpl;
 import gr.tracer.platform.components.SecurityLibraryComponent;
@@ -60,6 +62,7 @@ public class TracerPlatform {
         components.add(SecurityLibraryComponent.class);
         components.add(VulnerabilityComponent.class);
         components.add(VulnerabilityDetectorComponent.class);
+        components.add(ConfirmSecurityLibraryComponent.class);
 
         implementations.put(TracerSecurityModel.class, TracerSecurityModelImpl.class);
         implementations.put(UserComponent.class, UserComponentImpl.class);
@@ -68,6 +71,7 @@ public class TracerPlatform {
         implementations.put(SecurityLibraryComponent.class, SecurityLibraryComponentImpl.class);
         implementations.put(VulnerabilityComponent.class, VulnerabilityComponentImpl.class);
         implementations.put(VulnerabilityDetectorComponent.class, VulnerabilityDetectorComponentImpl.class);
+        implementations.put(ConfirmSecurityLibraryComponent.class, ConfirmSecurityLibraryComponentImpl.class);
     }
     
     private AlitheiaCore core;

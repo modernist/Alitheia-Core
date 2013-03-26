@@ -1,11 +1,13 @@
 package gr.tracer.platform.components;
 
 import eu.sqooss.service.db.DBService;
+import eu.sqooss.service.db.ProjectFile;
 import eu.sqooss.service.logging.Logger;
 import gr.tracer.common.entities.db.ProjectFileVulnerability;
 import gr.tracer.common.entities.db.VulnerabilityType;
 import gr.tracer.platform.TracerPlatform;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -19,7 +21,7 @@ public class ConfirmSecurityLibraryComponentImpl implements
 	private DBService dbs;
 	private Map<String, Object> vulProps;
     private Object lockObject = new Object();
-    VulnerabilityComponent vc;
+    private VulnerabilityComponent vc;
 
 	@Override
 	public boolean setLibraryApplication(boolean aATreatVulnerability) {
