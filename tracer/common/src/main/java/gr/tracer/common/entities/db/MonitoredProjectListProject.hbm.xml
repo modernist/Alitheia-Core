@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="gr.tracer.common.entities.db.MonitoredProjectListProject" table="MONITORED_PROJECT_LIST_PROJECT" lazy="false">
+        <id name="id" type="long" column="MONITORED_PROJECT_LIST_PROJECT_ID">
+            <generator class="native" />
+        </id>
+        <many-to-one name="monitoredProjectList" class="gr.tracer.common.entities.db.MonitoredProjectList" cascade="all" column="MONITORED_PROJECT_LIST_ID" />
+        <many-to-one name="project" class="eu.sqooss.service.db.StoredProject" cascade="all" column="PROJECT_ID" />
+    </class>
+</hibernate-mapping>

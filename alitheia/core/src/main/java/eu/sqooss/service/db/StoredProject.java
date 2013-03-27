@@ -115,10 +115,7 @@ public class StoredProject extends DAObject {
 	
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="project")
 	private Set<Branch> branches;
-
-    @ManyToMany(mappedBy="projects",targetEntity=MonitoredProjectList.class, cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
-    private Set<MonitoredProjectList> associatedMonitoringLists = new HashSet<MonitoredProjectList>();
-    
+  
     public StoredProject() {}
     
     public StoredProject(String name) {
@@ -248,15 +245,6 @@ public class StoredProject extends DAObject {
     public void setBugs(Set<Bug> bugs) {
         this.bugs = bugs;
     }
-    
-    public Set<MonitoredProjectList> getAssociatedMonitoringLists() {
-		return associatedMonitoringLists;
-	}
-
-	public void setAssociatedMonitoringLists(
-			Set<MonitoredProjectList> associatedMonitoringLists) {
-		this.associatedMonitoringLists = associatedMonitoringLists;
-	}
     
     /**
      * Get the first (in an arbitrary definition of order) value for

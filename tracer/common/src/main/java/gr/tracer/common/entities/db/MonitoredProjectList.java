@@ -1,4 +1,4 @@
-package eu.sqooss.service.db;
+package gr.tracer.common.entities.db;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,15 +11,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import eu.sqooss.service.db.DAObject;
-import eu.sqooss.service.db.StoredProject;
 import eu.sqooss.service.db.User;
 
 @XmlRootElement(name="monitoredProjectList")
@@ -28,8 +26,6 @@ import eu.sqooss.service.db.User;
 /**
  * Represents a list of monitored projects owned by a user
  * @author circular
- * TODO: Should be in gr.tracer.common.entities.db but the many-to-many 
- * relationship with StoredProject would have to be implemented by hand
  */
 public class MonitoredProjectList extends DAObject {
 
@@ -73,6 +69,13 @@ public class MonitoredProjectList extends DAObject {
 		return description;
 	}
 	
+	/**
+     * The User owning this list
+     */
+	@ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
+	private User user;
+
 	public User getUser() {
 		return user;
 	}
@@ -80,32 +83,28 @@ public class MonitoredProjectList extends DAObject {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	/**
-     * The User owning this list
-     */
-	@ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
-	private User user;
-	
-	@ManyToMany
-    @JoinTable(
-            name="MONITORED_PROJECT_LIST_PROJECT",
-            joinColumns={@JoinColumn(name="MONITORED_PROJECT_LIST_ID", referencedColumnName="MONITORED_PROJECT_LIST_ID")},
-            inverseJoinColumns={@JoinColumn(name="PROJECT_ID", referencedColumnName="PROJECT_ID")})
-    private Set<StoredProject> projects = new HashSet<StoredProject>();
+
+	@OneToMany(mappedBy="monitoredProjectList", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private Set<MonitoredProjectListProject> projects = new HashSet<MonitoredProjectListProject>();
 	
 	/**
      * Get a set of distinct Stored Projects that should be contained in the list
      * @return Set of Stored Projects included in the monitoring list
      */
-	public Set<StoredProject> getProjects() {
-		return projects;
+	
+	/**
+	 * The security profile associated to the monitored project list
+	 */
+	@ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name="SECURITY_PROFILE_ID", referencedColumnName="SECURITY_PROFILE_ID")
+	private SecurityProfile securityProfile;
+	
+	public SecurityProfile getSecurityProfile() {
+		return securityProfile;
 	}
 
-	public void setProjects(
-			Set<StoredProject> monitoredProjects) {
-		this.projects = monitoredProjects;
+	public void setSecurityProfile(SecurityProfile securityProfile) {
+		this.securityProfile = securityProfile;
 	}
 	
 	//TODO: Add Add/Remove project methods

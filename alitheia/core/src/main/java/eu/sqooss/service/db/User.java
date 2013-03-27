@@ -90,9 +90,6 @@ public class User extends DAObject {
 		inverseJoinColumns={@JoinColumn(name="GROUP_ID", referencedColumnName="GROUP_ID")})*/
 	@ManyToMany(mappedBy="users",targetEntity=Group.class, cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
     private Set<Group> groups = new HashSet<Group>();
-    
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="user", cascade=CascadeType.ALL)
-    private Set<MonitoredProjectList> monitoredProjectLists;
 	
     public User() {};
 
@@ -154,13 +151,6 @@ public class User extends DAObject {
 		this.id = id;
 	}
 
-	public Set<MonitoredProjectList> getMonitoredProjectLists() {
-		return monitoredProjectLists;
-	}
-
-	public void setMonitoredProjectLists(Set<MonitoredProjectList> monitoredProjectLists) {
-		this.monitoredProjectLists = monitoredProjectLists;
-	}
 }
 
 // vi: ai nosi sw=4 ts=4 expandtab

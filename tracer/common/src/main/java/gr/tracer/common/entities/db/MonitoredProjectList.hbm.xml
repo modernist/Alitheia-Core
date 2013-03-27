@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="gr.tracer.common.entities.db.MonitoredProjectList" table="MONITORED_PROJECT_LIST" lazy="false">
+        <id name="id" type="long" column="MONITORED_PROJECT_LIST_ID">
+            <generator class="native" />
+        </id>
+        <property name="name" type="java.lang.String" column="MONITORED_PROJECT_LIST_NAME" not-null="true" unique="true" />
+        <property name="description" type="java.lang.String" column="MONITORED_PROJECT_LIST_DESCRIPTION" not-null="true" />
+        <many-to-one name="user" class="eu.sqooss.service.db.User" column="USER_ID" cascade="all" />
+        <set name="projects" table="MONITORED_PROJECT_LIST_PROJECT" inverse="false" lazy="true" access="field">
+            <key column="MONITORED_PROJECT_LIST_ID" />
+            <one-to-many class="gr.tracer.common.entities.db.MonitoredProjectListProject" />
+        </set>
+        <many-to-one name="securityProfile" class="gr.tracer.common.entities.db.SecurityProfile" fetch="join" cascade="all" column="SECURITY_PROFILE_ID" />
+    </class>
+</hibernate-mapping>

@@ -60,7 +60,7 @@
 						</Embed-Dependency>
 						<Export-Package>gr.tracer.common,gr.tracer.common.entities,gr.tracer.common.entities.db</Export-Package>
 						<Bundle-SymbolicName>gr.tracer.common</Bundle-SymbolicName>
-						<Bundle-Activator>gr.tracer.common.Activator</Bundle-Activator>
+						<!--  <Bundle-Activator>gr.tracer.common.Activator</Bundle-Activator>  -->
 						<Bundle-Version>0.1</Bundle-Version>
 						<Bundle-Vendor>Athens University of Economics and Business</Bundle-Vendor>
 						<Bundle-Description>TRACER project common library</Bundle-Description>

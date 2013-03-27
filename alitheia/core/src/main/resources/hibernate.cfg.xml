@@ -79,7 +79,6 @@
         <mapping class="eu.sqooss.service.db.PendingUser"/>
         <mapping class="eu.sqooss.service.db.Group"/>
         <mapping class="eu.sqooss.service.db.GroupPrivilege"/>
-        <mapping class="eu.sqooss.service.db.MonitoredProjectList"/>
     </session-factory>
 
 </hibernate-configuration>
