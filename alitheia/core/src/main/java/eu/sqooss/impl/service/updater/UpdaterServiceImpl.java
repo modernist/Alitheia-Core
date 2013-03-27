@@ -362,7 +362,7 @@ public class UpdaterServiceImpl implements UpdaterService, JobStateListener {
         try {
             for (UpdaterStage us : stages) {
                 
-                // Topologically sort updaters within the same stage
+                
                 List<Updater> updForStage = new ArrayList<Updater>();
                 updForStage.addAll(getUpdaters(project, us));
                 GraphTS<Updater> graph = 

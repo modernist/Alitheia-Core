@@ -35,7 +35,7 @@ import eu.sqooss.service.logging.Logger;
 
 /**
  * Interface that all jobs managed by the updater service must implement.
- * Classes implementing this interface much include a no parameter constructor.
+ * Classes implementing this interface must include a no parameter constructor.
  * 
  * @author Georgios Gousios <gousiosg@gmail.com>
  */
@@ -47,13 +47,13 @@ public interface MetadataUpdater {
     public void setUpdateParams(StoredProject sp, Logger l);
 
     /** 
-     * Excecute the update method to perform metadata synchronisation.
+     * Execute the update method to perform metadata synchronisation.
      */
     public void update() throws Exception;
     
     /**
      * Return a number, where 0 <= number < 100, to indicate progress.
-     * The granuarity of progress is up to the updater to assess. 
+     * The granularity of progress is up to the updater to assess. 
      */
     public int progress();
 }
