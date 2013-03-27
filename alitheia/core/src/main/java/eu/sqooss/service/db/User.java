@@ -45,6 +45,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -90,6 +91,9 @@ public class User extends DAObject {
 	@ManyToMany(mappedBy="users",targetEntity=Group.class, cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
     private Set<Group> groups = new HashSet<Group>();
     
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="user", cascade=CascadeType.ALL)
+    private Set<MonitoredProjectList> monitoredProjectLists;
+	
     public User() {};
 
     public String getName() {
@@ -148,6 +152,14 @@ public class User extends DAObject {
 	@Override
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public Set<MonitoredProjectList> getMonitoredProjectLists() {
+		return monitoredProjectLists;
+	}
+
+	public void setMonitoredProjectLists(Set<MonitoredProjectList> monitoredProjectLists) {
+		this.monitoredProjectLists = monitoredProjectLists;
 	}
 }
 
