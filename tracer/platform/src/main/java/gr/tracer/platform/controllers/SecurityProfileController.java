@@ -12,7 +12,7 @@ public class SecurityProfileController {
 	private SecurityProfileComponent spc;
 	private VulnerabilityComponent vc;
 	public VulnerabilityDetectorController _getAvailableVulnerabilityDetectors;
-	public ObservedProjectListController _getSecurityProfile;
+	public MonitoredProjectListController _getSecurityProfile;
 
 	public List<SecurityProfile> getSecurityProfiles() {
 		return spc.getSecurityProfiles();	
@@ -26,7 +26,7 @@ public class SecurityProfileController {
 		return false;
 	}
 
-	public boolean createSecurityProfile(String aAName, String aAType) {
+	public SecurityProfile createSecurityProfile(String aAName, String aAType) {
 		return spc.createSecurityProfile(aAName, aAType);
 	}
 

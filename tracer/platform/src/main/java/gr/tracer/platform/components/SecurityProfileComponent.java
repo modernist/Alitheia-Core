@@ -2,9 +2,7 @@ package gr.tracer.platform.components;
 
 import java.util.List;
 
-import gr.tracer.common.entities.VulnerabilityDetectorList;
 import gr.tracer.common.entities.db.SecurityProfile;
-import gr.tracer.common.entities.db.Vulnerability;
 import gr.tracer.platform.TracerComponent;
 
 public interface SecurityProfileComponent extends TracerComponent {
@@ -13,7 +11,7 @@ public interface SecurityProfileComponent extends TracerComponent {
 
 	public boolean addVulnerabilityToSecurityProfile(long vtId, long spId);
 
-	public boolean createSecurityProfile(String aAName, String aAType);
+	public SecurityProfile createSecurityProfile(String aAName, String aAType);
 
 	public List<SecurityProfile> searchSecurityProfile(String aAName);
 

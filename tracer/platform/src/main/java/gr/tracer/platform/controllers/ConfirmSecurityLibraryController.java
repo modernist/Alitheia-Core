@@ -1,17 +1,24 @@
 package gr.tracer.platform.controllers;
 
-import gr.tracer.common.entities.ObservedProjectList;
+import java.util.List;
+
+import gr.tracer.common.entities.db.ProjectFileVulnerability;
+import gr.tracer.platform.components.ConfirmSecurityLibraryComponent;
 
 public class ConfirmSecurityLibraryController {
 
-	private ObservedProjectList opl;
+	private ConfirmSecurityLibraryComponent cslc;
+	
+	public ConfirmSecurityLibraryController(ConfirmSecurityLibraryComponent cslc){
+		this.cslc = cslc;
+	}
 
 	public boolean setLibraryApplication(boolean aATreatVulnerability) {
 		throw new UnsupportedOperationException();
 	}
 	
-	public boolean addToDetectedVulnerabilities(){
+	public boolean addToDetectedVulnerabilities(List<ProjectFileVulnerability> sProjVul){
 		
-		return false;		
+		return cslc.addToDetectedVulnerabilities(sProjVul);		
 	}
 }

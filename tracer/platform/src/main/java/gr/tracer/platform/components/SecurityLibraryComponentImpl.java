@@ -39,7 +39,7 @@ public class SecurityLibraryComponentImpl implements SecurityLibraryComponent {
 	@Override
 	public boolean shutDown() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class SecurityLibraryComponentImpl implements SecurityLibraryComponent {
 	}
 
 	@Override
-	public boolean createSecurityLibrary(String slName, String slDescription) {
+	public SecurityLibrary createSecurityLibrary(String slName, String slDescription) {
 		// TODO Auto-generated method stub
 		SecurityLibrary sl = new SecurityLibrary();
 		sl.setName(slName);
@@ -74,9 +74,9 @@ public class SecurityLibraryComponentImpl implements SecurityLibraryComponent {
 		if(dbs != null && dbs.startDBSession())
     	{
     		if(dbs.addRecord(sl)) 
-    			return dbs.commitDBSession();
+    			return dbs.commitDBSession() ? sl : null;
     	}
-    	return false;
+    	return null;
 	}
 
 	@Override

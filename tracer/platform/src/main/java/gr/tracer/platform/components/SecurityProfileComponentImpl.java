@@ -69,7 +69,7 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	}
 
 	@Override
-	public boolean createSecurityProfile(String aAName,
+	public SecurityProfile createSecurityProfile(String aAName,
 			String aAType) {
 		SecurityProfile sp = new SecurityProfile();
 		sp.setName(aAName);
@@ -77,9 +77,9 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 		if(dbs != null && dbs.startDBSession())
     	{
     		if(dbs.addRecord(sp)) 
-    			return dbs.commitDBSession();
+    			return dbs.commitDBSession() ? sp : null;
     	}
-    	return false;
+    	return null;
 	}
 
 	@Override

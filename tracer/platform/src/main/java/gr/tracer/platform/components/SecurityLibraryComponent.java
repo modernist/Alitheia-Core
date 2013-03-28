@@ -11,7 +11,7 @@ public interface SecurityLibraryComponent extends TracerComponent {
 
 	public SecurityLibrary getSecurityLibrary(int slId);
 		
-	public boolean createSecurityLibrary(String slName, String slDescription);
+	public SecurityLibrary createSecurityLibrary(String slName, String slDescription);
 
 	public SecurityLibrary searchSecurityLibrary(String slName);
 }
