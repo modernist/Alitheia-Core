@@ -92,9 +92,17 @@ public class MonitoredProjectList extends DAObject {
      * @return Set of Stored Projects included in the monitoring list
      */
 	
+	public Set<MonitoredProjectListProject> getIncludedStoredProject(){
+		return this.projects;
+	}
+	
+	public void setIncludedStoredProject(Set<MonitoredProjectListProject> projects){
+		this.projects = projects;
+	}
+	
 	/**
 	 * The security profile associated to the monitored project list
-	 */
+	 */	
 	@ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name="SECURITY_PROFILE_ID", referencedColumnName="SECURITY_PROFILE_ID")
 	private SecurityProfile securityProfile;

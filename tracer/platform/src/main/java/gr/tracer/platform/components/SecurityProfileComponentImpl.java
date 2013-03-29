@@ -1,6 +1,5 @@
 package gr.tracer.platform.components;
 
-import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +51,7 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
         return (List<SecurityProfile>) dbs.doHQL(q.toString());
 	}
 
+	@SuppressWarnings("finally")
 	@Override
 	public boolean addVulnerabilityToSecurityProfile(long vtId, long spId) {
 		dbs.startDBSession();
@@ -59,12 +59,10 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
         	VulnerabilityType vt = dbs.findObjectById(VulnerabilityType.class, vtId);
             SecurityProfile sp = dbs.findObjectById(SecurityProfile.class, spId);
             if ((vt!=null) && (sp != null)) {
-                return sp.getDetectedVulnerabilityTypes().add(vt);
-            } else {
-                return false;
+                sp.getDetectedVulnerabilityTypes().add(vt);
             }
         } finally {
-            dbs.commitDBSession();
+            return dbs.commitDBSession();
         }
 	}
 
@@ -83,22 +81,28 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	}
 
 	@Override
-	public List<SecurityProfile> searchSecurityProfile(String aAName) {
+	public SecurityProfile searchSecurityProfile(String aAName) {
+		List<SecurityProfile> secProfs;
 		try {
 			if (dbs.startDBSession()) {
 				synchronized (lockObject) {
 					secProfProps.clear();
 					secProfProps.put("name", aAName);
-					return dbs.findObjectsByProperties(SecurityProfile.class, secProfProps);
+					secProfs = dbs.findObjectsByProperties(SecurityProfile.class, secProfProps);
+					if (secProfs.size() != 0)
+						return secProfs.get(0);
+					else {
+						logger.info("SecurityProfile with this name does not exist");
+						return null;
 					}
+				}
 			} else {
-				logger.info("Failed to start DBSession");
+				return null;
 			}
 		} finally {
 			if (dbs.isDBSessionActive())
 				dbs.commitDBSession();
 		}
-		return Collections.emptyList();
 	}
 
 	@Override
@@ -124,15 +128,17 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 
 	@Override
 	public boolean removeVulnerabilityFromSecurityProfile(long vtId, long spId) {
-		dbs.startDBSession();
-        try {
-        	VulnerabilityType vt = dbs.findObjectById(VulnerabilityType.class, vtId);
-            SecurityProfile sp = dbs.findObjectById(SecurityProfile.class, spId);
-            if ((vt!=null) && (sp != null)) {
-                return sp.getDetectedVulnerabilityTypes().remove(vt);
-            } else {
-                return false;
-            }
+		try {
+			if (dbs.startDBSession()) {
+				VulnerabilityType vt = dbs.findObjectById(VulnerabilityType.class, vtId);
+				SecurityProfile sp = dbs.findObjectById(SecurityProfile.class, spId);
+				if ((vt!=null) && (sp != null)) {
+					sp.getDetectedVulnerabilityTypes().remove(vt);
+					return true;
+				} else
+					return false;
+			} else
+				return false;
         } finally {
             dbs.commitDBSession();
         }

@@ -16,5 +16,9 @@ public interface MonitoredProjectListComponent extends TracerComponent {
 	public MonitoredProjectList searchMonitoredProjectList(String mplName);
 	
 	public boolean setSecurityProfileToList(int spId, int mplId);
+	
+	public boolean addProjectFromMonitoredProjectList(String monProjList, String projName);
+	
+	public boolean removeProjectFromMonitoredProjectList(String monProjList, String projName);
 
 }

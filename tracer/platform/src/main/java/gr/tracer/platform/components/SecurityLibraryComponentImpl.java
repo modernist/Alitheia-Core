@@ -1,16 +1,11 @@
 package gr.tracer.platform.components;
 
-import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-
 import eu.sqooss.service.db.DBService;
-import eu.sqooss.service.db.Group;
-import eu.sqooss.service.db.User;
 import eu.sqooss.service.logging.Logger;
 import gr.tracer.common.entities.db.SecurityLibrary;
-import gr.tracer.common.entities.db.VulnerabilityType;
 import gr.tracer.platform.TracerPlatform;
 
 public class SecurityLibraryComponentImpl implements SecurityLibraryComponent {
@@ -82,24 +77,26 @@ public class SecurityLibraryComponentImpl implements SecurityLibraryComponent {
 	@Override
 	public SecurityLibrary searchSecurityLibrary(String slName) {
 		// TODO Auto-generated method stub
-		List<SecurityLibrary> secLibs = null;
+		List<SecurityLibrary> secLibs;
 		try {
 			if (dbs.startDBSession()) {
 				synchronized (lockObject) {
 					seLibProps.clear();
 					seLibProps.put("name", slName);
 					secLibs = dbs.findObjectsByProperties(SecurityLibrary.class, seLibProps);
+					if (secLibs.size() != 0) 
+						return secLibs.get(0);
+					else {
+						logger.info("SecurityLibrary with this name does not exist");
+						return null;
+					}
 				}
 			} else {
-				logger.info("Failed to start DBSession");
+				return null;
 			}
-			 if (secLibs.size() != 0) {
-				 return secLibs.get(0);
-				 }
 		} finally {
 			if (dbs.isDBSessionActive())
 				dbs.commitDBSession();
 		}
-		return null;
 	}
 }

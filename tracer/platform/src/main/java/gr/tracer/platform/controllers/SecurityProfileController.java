@@ -11,9 +11,7 @@ public class SecurityProfileController {
 	
 	private SecurityProfileComponent spc;
 	private VulnerabilityComponent vc;
-	public VulnerabilityDetectorController _getAvailableVulnerabilityDetectors;
-	public MonitoredProjectListController _getSecurityProfile;
-
+	
 	public List<SecurityProfile> getSecurityProfiles() {
 		return spc.getSecurityProfiles();	
 	}
@@ -26,20 +24,20 @@ public class SecurityProfileController {
 		return false;
 	}
 
-	public SecurityProfile createSecurityProfile(String aAName, String aAType) {
-		return spc.createSecurityProfile(aAName, aAType);
+	public SecurityProfile createSecurityProfile(String spName, String spType) {
+		return spc.createSecurityProfile(spName, spType);
 	}
 
-	public List<SecurityProfile> searchSecurityProfile(String aAName) {
-		return spc.searchSecurityProfile(aAName);
+	public SecurityProfile searchSecurityProfile(String spName) {
+		return spc.searchSecurityProfile(spName);
 	}
 
-	public boolean addSecurityProfileToList(SecurityProfile aASp) {
-		return spc.addSecurityProfileToList(aASp);
+	public boolean addSecurityProfileToList(SecurityProfile sp) {
+		return spc.addSecurityProfileToList(sp);
 	}
 
-	public SecurityProfile getSecurityProfile(int aAProfile_index) {
-		return spc.getSecurityProfile(aAProfile_index);
+	public SecurityProfile getSecurityProfile(int spId) {
+		return spc.getSecurityProfile(spId);
 	}
 
 	public boolean removeVulnerabilityFromSecurityProfile(String vtName, String spName) {

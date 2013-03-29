@@ -12,10 +12,6 @@ public class ConfirmSecurityLibraryController {
 	public ConfirmSecurityLibraryController(ConfirmSecurityLibraryComponent cslc){
 		this.cslc = cslc;
 	}
-
-	public boolean setLibraryApplication(boolean aATreatVulnerability) {
-		throw new UnsupportedOperationException();
-	}
 	
 	public boolean addToDetectedVulnerabilities(List<ProjectFileVulnerability> sProjVul){
 		

@@ -13,7 +13,7 @@ public interface SecurityProfileComponent extends TracerComponent {
 
 	public SecurityProfile createSecurityProfile(String aAName, String aAType);
 
-	public List<SecurityProfile> searchSecurityProfile(String aAName);
+	public SecurityProfile searchSecurityProfile(String aAName);
 
 	public boolean addSecurityProfileToList(SecurityProfile aASp);
 
