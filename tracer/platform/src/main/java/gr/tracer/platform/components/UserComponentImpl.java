@@ -16,7 +16,7 @@ public class UserComponentImpl implements UserComponent {
 	private Logger logger;
 	private SecurityManager sm;
 
-	public User createNewUser(String aAUsername, String aAPassword, String aAType, String aAName, String aAEmail) {
+	public User createNewUser(String userName, String userPassword, String userType, String userEmail) {
 		
 		User user = null;
         Group group = null;
@@ -27,19 +27,19 @@ public class UserComponentImpl implements UserComponent {
 		userManager = sm.getUserManager();
 		groupManager = sm.getGroupManager();
 		
-		user = userManager.getUser(aAUsername);
+		user = userManager.getUser(userName);
 		if ( user == null) {
-			user = userManager.createUser(aAUsername, aAPassword, aAEmail);
+			user = userManager.createUser(userName, userPassword, userEmail);
 		} else {
 			logger.info("User already exists"); 
 			return null;
 		}
 		
-		if (aAType.toLowerCase().equals(TracerSecurityConstants.GroupName.ADMINISTRATOR.toString()))
+		if (userType.toLowerCase().equals(TracerSecurityConstants.GroupName.ADMINISTRATOR.toString()))
 			group = groupManager.getGroup(TracerSecurityConstants.GroupName.ADMINISTRATOR.toString());
-		else if (aAType.toLowerCase().equals(TracerSecurityConstants.GroupName.PROGRAMMER.toString()))
+		else if (userType.toLowerCase().equals(TracerSecurityConstants.GroupName.PROGRAMMER.toString()))
 			group = groupManager.getGroup(TracerSecurityConstants.GroupName.PROGRAMMER.toString());
-		else if (aAType.toLowerCase().equals(TracerSecurityConstants.GroupName.VULNERABILITY_MANAGER.toString()))
+		else if (userType.toLowerCase().equals(TracerSecurityConstants.GroupName.VULNERABILITY_MANAGER.toString()))
 			group = groupManager.getGroup(TracerSecurityConstants.GroupName.VULNERABILITY_MANAGER.toString());
 		group = groupManager.getGroup(TracerSecurityConstants.GroupName.PROGRAMMER.toString());
 		if (group != null) {
@@ -49,27 +49,27 @@ public class UserComponentImpl implements UserComponent {
 			return null;
 		}
 		
-		logger.info("Created user with the name " + aAUsername + " as " + aAType);
+		logger.info("Created user with the name " + userName + " as " + userType);
 		return user;
 	}
 	
-	public User userLoginAttempt(String aAUsername, String aAPassword) {
+	public User userLoginAttempt(String userName, String userPassword) {
 		
 		User user = null;       
 		UserManager userManager;
 
 		userManager = sm.getUserManager();		
-		user = userManager.getUser(aAUsername);
+		user = userManager.getUser(userName);
 		
 		if (user != null) {
-			if (user.getPassword().equals(userManager.getHash(aAPassword)))
-				logger.info("Authenticated user with username " + aAUsername);
+			if (user.getPassword().equals(userManager.getHash(userPassword)))
+				logger.info("Authenticated user with username " + userName);
 			else {
-				logger.info("Wrong password for user with username " + aAUsername);
+				logger.info("Wrong password for user with username " + userName);
 				return null;
 			}
 		} else {
-			logger.info("There is no user with username " + aAUsername);
+			logger.info("There is no user with username " + userName);
 			return null;
 		}
 		
@@ -88,7 +88,7 @@ public class UserComponentImpl implements UserComponent {
 		// TODO Auto-generated method stub
 		sm = AlitheiaCore.getInstance().getSecurityManager();
 		userLoginAttempt("admin","admin");
-		createNewUser("fotis","fotis","programmer","kostas","kostas@tracer.gr");
+		createNewUser("fotis","fotis","programmer","kostas@tracer.gr");
 		return true;
 	}
 

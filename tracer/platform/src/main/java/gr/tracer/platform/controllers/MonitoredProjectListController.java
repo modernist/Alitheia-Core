@@ -19,8 +19,8 @@ public class MonitoredProjectListController {
 		return mplc.createMonitoredProjectList(mplName, mplDescription, userName);
 	}
 
-	public boolean setSecurityProfileToList(int aAProfile_index, int mplId) {
-		return mplc.setSecurityProfileToList(aAProfile_index, mplId);
+	public boolean setSecurityProfileToList(String spName, String mplName) {
+		return mplc.setSecurityProfileToList(spName, mplName);
 	}
 
 	public MonitoredProjectList searchMonitoredProjectList(String mplName) {

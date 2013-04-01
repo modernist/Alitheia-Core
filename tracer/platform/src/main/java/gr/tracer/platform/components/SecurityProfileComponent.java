@@ -9,15 +9,13 @@ public interface SecurityProfileComponent extends TracerComponent {
 	
 	public List<SecurityProfile> getSecurityProfiles();
 
-	public boolean addVulnerabilityToSecurityProfile(long vtId, long spId);
+	public boolean addVulnerabilityTypeToSecurityProfile(String vtName, String spName);
 
-	public SecurityProfile createSecurityProfile(String aAName, String aAType);
+	public SecurityProfile createSecurityProfile(String spName, String spDescription);
 
-	public SecurityProfile searchSecurityProfile(String aAName);
+	public SecurityProfile searchSecurityProfile(String spName);
 
-	public boolean addSecurityProfileToList(SecurityProfile aASp);
+	public SecurityProfile getSecurityProfile(int spId);
 
-	public SecurityProfile getSecurityProfile(int aAProfile_index);
-
-	public boolean removeVulnerabilityFromSecurityProfile(long vtId, long spId);
+	public boolean removeVulnerabilityTypeFromSecurityProfile(String vtName, String spName);
 }

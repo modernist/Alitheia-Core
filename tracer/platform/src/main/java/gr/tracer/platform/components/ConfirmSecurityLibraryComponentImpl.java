@@ -19,7 +19,7 @@ public class ConfirmSecurityLibraryComponentImpl implements
 	private TracerPlatform platform;
 	private Logger logger;
 	private DBService dbs;
-    private VulnerabilityComponent vc;
+    private VulnerabilityTypeComponent vc;
 
 	@Override
 	public boolean setLibraryApplication(boolean aATreatVulnerability) {
@@ -36,12 +36,12 @@ public class ConfirmSecurityLibraryComponentImpl implements
 		if (dbs.startDBSession()) {
 			while(it.hasNext()){
 				pvf = it.next();
-				VulnerabilityType vt = vc.searchVulnerability(pvf.getVulnerabilityType().getName());
+				VulnerabilityType vt = vc.searchVulnerabilityType(pvf.getVulnerabilityType().getName());
 				if (vt == null) {
-					vt = vc.createVulnerability(pvf.getVulnerabilityType().getName(), pvf.getVulnerabilityType().getName());
+					vt = vc.createVulnerabilityType(pvf.getVulnerabilityType().getName(), pvf.getVulnerabilityType().getName());
 					pvf.setVulnerabilityType(vt);
-					} else
-						pvf.setVulnerabilityType(vt);
+				} else
+					pvf.setVulnerabilityType(vt);
 				dbs.addRecord(pvf);
 			}
 			return dbs.commitDBSession();

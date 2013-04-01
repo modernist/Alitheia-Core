@@ -120,12 +120,12 @@ public class MonitoredProjectListComponentImpl implements
 	}
 
 	@Override
-	public boolean setSecurityProfileToList(int spId, int mplId) {
+	public boolean setSecurityProfileToList(String spName, String mplName) {
 		// TODO Auto-generated method stub
 		try {
 			SecurityProfileComponent spm = new SecurityProfileComponentImpl();
-			SecurityProfile sp = spm.getSecurityProfile(spId);
-			MonitoredProjectList mpl = getMonitoredProjectList(mplId);
+			SecurityProfile sp = spm.searchSecurityProfile(spName);
+			MonitoredProjectList mpl = searchMonitoredProjectList(mplName);
 			if (dbs.startDBSession() && (sp != null) && (mpl != null)) {
 				mpl.setSecurityProfile(sp);
 				return true;

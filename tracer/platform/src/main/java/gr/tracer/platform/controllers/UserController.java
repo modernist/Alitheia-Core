@@ -18,13 +18,13 @@ public class UserController {
 		this.uc = uc;
 	}
 
-	public User createTracerUser(String aAUsername, String aAPassword, String aAType, String aAName, String aAEmail) {
+	public User createTracerUser(String userName, String userPassword, String userType, String userEmail) {
 		
-		return uc.createNewUser(aAUsername, aAPassword, aAType, aAName, aAEmail);
+		return uc.createNewUser(userName, userPassword, userType, userEmail);
 	}
 
-	public User loginAttempt(String aAUsername, String aAPassword) {
+	public User loginAttempt(String userName, String userPassword) {
 		
-		return uc.userLoginAttempt(aAUsername, aAPassword);
+		return uc.userLoginAttempt(userName, userPassword);
 	}
 }

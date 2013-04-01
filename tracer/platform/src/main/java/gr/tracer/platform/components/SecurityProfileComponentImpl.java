@@ -51,27 +51,29 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
         return (List<SecurityProfile>) dbs.doHQL(q.toString());
 	}
 
-	@SuppressWarnings("finally")
 	@Override
-	public boolean addVulnerabilityToSecurityProfile(long vtId, long spId) {
-		dbs.startDBSession();
+	public boolean addVulnerabilityTypeToSecurityProfile(String vtName, String spName) {
         try {
-        	VulnerabilityType vt = dbs.findObjectById(VulnerabilityType.class, vtId);
-            SecurityProfile sp = dbs.findObjectById(SecurityProfile.class, spId);
-            if ((vt!=null) && (sp != null)) {
+        	VulnerabilityTypeComponent vtc = new VulnerabilityTypeComponentImpl();
+        	VulnerabilityType vt = vtc.searchVulnerabilityType(vtName);
+            SecurityProfile sp = searchSecurityProfile(spName);
+            if ((dbs.startDBSession()) && (vt!=null) && (sp != null)) {
                 sp.getDetectedVulnerabilityTypes().add(vt);
-            }
+                return true;
+            } else
+            	return false;
         } finally {
-            return dbs.commitDBSession();
+        	if (dbs.isDBSessionActive())
+				dbs.commitDBSession();
         }
 	}
 
 	@Override
-	public SecurityProfile createSecurityProfile(String aAName,
-			String aAType) {
+	public SecurityProfile createSecurityProfile(String spName,
+			String spDescription) {
 		SecurityProfile sp = new SecurityProfile();
-		sp.setName(aAName);
-		sp.setDescription(aAType);
+		sp.setName(spName);
+		sp.setDescription(spDescription);
 		if(dbs != null && dbs.startDBSession())
     	{
     		if(dbs.addRecord(sp)) 
@@ -81,13 +83,13 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	}
 
 	@Override
-	public SecurityProfile searchSecurityProfile(String aAName) {
+	public SecurityProfile searchSecurityProfile(String spName) {
 		List<SecurityProfile> secProfs;
 		try {
 			if (dbs.startDBSession()) {
 				synchronized (lockObject) {
 					secProfProps.clear();
-					secProfProps.put("name", aAName);
+					secProfProps.put("name", spName);
 					secProfs = dbs.findObjectsByProperties(SecurityProfile.class, secProfProps);
 					if (secProfs.size() != 0)
 						return secProfs.get(0);
@@ -106,16 +108,10 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	}
 
 	@Override
-	public boolean addSecurityProfileToList(SecurityProfile aASp) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public SecurityProfile getSecurityProfile(int aAProfile_index) {
+	public SecurityProfile getSecurityProfile(int spId) {
 		try {
 	    	if(dbs.startDBSession()) {
-	    		return dbs.findObjectById(SecurityProfile.class, aAProfile_index);
+	    		return dbs.findObjectById(SecurityProfile.class, spId);
 	    	}
 	    	else
 	    		return null;
@@ -127,20 +123,19 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	}
 
 	@Override
-	public boolean removeVulnerabilityFromSecurityProfile(long vtId, long spId) {
+	public boolean removeVulnerabilityTypeFromSecurityProfile(String vtName, String spName) {
 		try {
-			if (dbs.startDBSession()) {
-				VulnerabilityType vt = dbs.findObjectById(VulnerabilityType.class, vtId);
-				SecurityProfile sp = dbs.findObjectById(SecurityProfile.class, spId);
-				if ((vt!=null) && (sp != null)) {
-					sp.getDetectedVulnerabilityTypes().remove(vt);
-					return true;
-				} else
-					return false;
-			} else
-				return false;
+        	VulnerabilityTypeComponent vtc = new VulnerabilityTypeComponentImpl();
+        	VulnerabilityType vt = vtc.searchVulnerabilityType(vtName);
+            SecurityProfile sp = searchSecurityProfile(spName);
+            if ((dbs.startDBSession()) && (vt!=null) && (sp != null)) {
+                sp.getDetectedVulnerabilityTypes().remove(vt);
+                return true;
+            } else
+            	return false;
         } finally {
-            dbs.commitDBSession();
+        	if (dbs.isDBSessionActive())
+				dbs.commitDBSession();
         }
 	}
 }

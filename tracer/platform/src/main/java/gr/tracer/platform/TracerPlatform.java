@@ -22,8 +22,8 @@ import gr.tracer.platform.components.SecurityProfileComponent;
 import gr.tracer.platform.components.SecurityProfileComponentImpl;
 import gr.tracer.platform.components.UserComponent;
 import gr.tracer.platform.components.UserComponentImpl;
-import gr.tracer.platform.components.VulnerabilityComponent;
-import gr.tracer.platform.components.VulnerabilityComponentImpl;
+import gr.tracer.platform.components.VulnerabilityTypeComponent;
+import gr.tracer.platform.components.VulnerabilityTypeComponentImpl;
 import gr.tracer.platform.components.VulnerabilityDetectorComponent;
 import gr.tracer.platform.components.VulnerabilityDetectorComponentImpl;
 import gr.tracer.platform.security.TracerSecurityModel;
@@ -60,7 +60,7 @@ public class TracerPlatform {
         components.add(SecurityProfileComponent.class);
         components.add(MonitoredProjectListComponent.class);
         components.add(SecurityLibraryComponent.class);
-        components.add(VulnerabilityComponent.class);
+        components.add(VulnerabilityTypeComponent.class);
         components.add(VulnerabilityDetectorComponent.class);
         components.add(ConfirmSecurityLibraryComponent.class);
 
@@ -69,7 +69,7 @@ public class TracerPlatform {
         implementations.put(SecurityProfileComponent.class, SecurityProfileComponentImpl.class);
         implementations.put(MonitoredProjectListComponent.class, MonitoredProjectListComponentImpl.class);
         implementations.put(SecurityLibraryComponent.class, SecurityLibraryComponentImpl.class);
-        implementations.put(VulnerabilityComponent.class, VulnerabilityComponentImpl.class);
+        implementations.put(VulnerabilityTypeComponent.class, VulnerabilityTypeComponentImpl.class);
         implementations.put(VulnerabilityDetectorComponent.class, VulnerabilityDetectorComponentImpl.class);
         implementations.put(ConfirmSecurityLibraryComponent.class, ConfirmSecurityLibraryComponentImpl.class);
     }
