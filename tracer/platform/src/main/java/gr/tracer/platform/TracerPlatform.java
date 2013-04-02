@@ -94,6 +94,24 @@ public class TracerPlatform {
 		return this.dbs;
 	}
 	
+	/**
+	 * Retrieves a reference to the instance of the class implementing the requested
+	 * component inteface
+	 * @param component The component interface requested
+	 * @return A reference to the class that implements the component interface
+	 */
+	@SuppressWarnings("unchecked")
+	public synchronized <T extends TracerComponent> T getComponent(Class<? extends TracerComponent> component) {
+		try {
+			if(components.contains(component)){
+				return (T) instances.get(component);
+			}
+		} catch(Exception e) {
+			logger.error("Unable to retrieve Component of type " + component, e);
+		}
+		return null;
+	}
+	
 	/* Returns the single instance of the Platform */
 	public synchronized static TracerPlatform getInstance() {
 		if(instance == null) {
