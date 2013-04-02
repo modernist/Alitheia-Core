@@ -25,7 +25,7 @@ public class TracerPlatformServiceImpl implements TracerPlatformService {
 	
 	@Override
 	public boolean startUp() {
-		logger.info("TracerPlatformSeervice starting up");
+		logger.info("TracerPlatformService starting up");
 		platform = TracerPlatform.getInstance();
 		return true;
 	}

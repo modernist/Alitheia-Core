@@ -1,5 +1,6 @@
 package gr.tracer.platform.components;
 
+import eu.sqooss.core.AlitheiaCoreService;
 import eu.sqooss.service.db.DBService;
 import eu.sqooss.service.db.ProjectFile;
 import eu.sqooss.service.logging.Logger;
@@ -8,10 +9,8 @@ import gr.tracer.common.entities.db.VulnerabilityType;
 import gr.tracer.platform.TracerPlatform;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public class ConfirmSecurityLibraryComponentImpl implements
 		ConfirmSecurityLibraryComponent {
@@ -19,7 +18,7 @@ public class ConfirmSecurityLibraryComponentImpl implements
 	private TracerPlatform platform;
 	private Logger logger;
 	private DBService dbs;
-    private VulnerabilityTypeComponent vc;
+    private VulnerabilityTypeComponent vtc;
 
 	@Override
 	public boolean setLibraryApplication(boolean aATreatVulnerability) {
@@ -36,9 +35,9 @@ public class ConfirmSecurityLibraryComponentImpl implements
 		if (dbs.startDBSession()) {
 			while(it.hasNext()){
 				pvf = it.next();
-				VulnerabilityType vt = vc.searchVulnerabilityType(pvf.getVulnerabilityType().getName());
+				VulnerabilityType vt = vtc.searchVulnerabilityType(pvf.getVulnerabilityType().getName());
 				if (vt == null) {
-					vt = vc.createVulnerabilityType(pvf.getVulnerabilityType().getName(), pvf.getVulnerabilityType().getName());
+					vt = vtc.createVulnerabilityType(pvf.getVulnerabilityType().getName(), pvf.getVulnerabilityType().getName());
 					pvf.setVulnerabilityType(vt);
 				} else
 					pvf.setVulnerabilityType(vt);
@@ -54,11 +53,14 @@ public class ConfirmSecurityLibraryComponentImpl implements
 		// TODO Auto-generated method stub
 		this.platform = platform;
 		this.logger = logger;
+		this.vtc = new VulnerabilityTypeComponentImpl();
 	}
 
 	@Override
 	public boolean startUp() {
 		// TODO Auto-generated method stub
+		if (platform != null)
+			platform.registerComponent(ConfirmSecurityLibraryComponent.class, ConfirmSecurityLibraryComponentImpl.class);
 		this.dbs = platform.getDB();
 		ProjectFile pf = new ProjectFile();
 		VulnerabilityType vt = new VulnerabilityType();

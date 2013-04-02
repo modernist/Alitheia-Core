@@ -16,6 +16,9 @@ public class UserComponentImpl implements UserComponent {
 	private Logger logger;
 	private SecurityManager sm;
 
+	/**
+     * @see gr.tracer.platform.components.UserComponent#createNewUser(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+     */
 	public User createNewUser(String userName, String userPassword, String userType, String userEmail) {
 		
 		User user = null;
@@ -53,6 +56,9 @@ public class UserComponentImpl implements UserComponent {
 		return user;
 	}
 	
+	/**
+     * @see gr.tracer.platform.components.UserComponent#userLoginAttempt(java.lang.String, java.lang.String)
+     */
 	public User userLoginAttempt(String userName, String userPassword) {
 		
 		User user = null;       
