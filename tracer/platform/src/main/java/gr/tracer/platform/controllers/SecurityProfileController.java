@@ -6,15 +6,14 @@ import gr.tracer.common.entities.db.MonitoredProjectList;
 import gr.tracer.common.entities.db.SecurityLibrary;
 import gr.tracer.common.entities.db.SecurityProfile;
 import gr.tracer.common.entities.db.VulnerabilityType;
+import gr.tracer.platform.TracerPlatform;
 import gr.tracer.platform.components.SecurityProfileComponent;
 import gr.tracer.platform.components.SecurityProfileComponentImpl;
 
 public class SecurityProfileController {
 	
-	private SecurityProfileComponent spc;
-	
 	SecurityProfileController (){
-		spc = new SecurityProfileComponentImpl();
+		
 	}
 	
 	
@@ -22,27 +21,27 @@ public class SecurityProfileController {
 	 * The methods for handling Security Profile's operations
 	 */	
 	public List<SecurityProfile> getSecurityProfiles() {
-		return spc.getSecurityProfiles();	
+		return ((SecurityProfileComponentImpl) TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class)).getSecurityProfiles();	
 	}
 
 	public boolean addVulnerabilityTypeToSecurityProfile(String vtName, String spName) {
-		return spc.addVulnerabilityTypeToSecurityProfile(vtName, spName);
+		return ((SecurityProfileComponentImpl) TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class)).addVulnerabilityTypeToSecurityProfile(vtName, spName);
 	}
 
 	public SecurityProfile createSecurityProfile(String spName, String spType) {
-		return spc.createSecurityProfile(spName, spType);
+		return ((SecurityProfileComponentImpl) TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class)).createSecurityProfile(spName, spType);
 	}
 
 	public SecurityProfile searchSecurityProfile(String spName) {
-		return spc.searchSecurityProfile(spName);
+		return ((SecurityProfileComponentImpl) TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class)).searchSecurityProfile(spName);
 	}
 
 	public SecurityProfile getSecurityProfile(int spId) {
-		return spc.getSecurityProfile(spId);
+		return ((SecurityProfileComponentImpl) TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class)).getSecurityProfile(spId);
 	}
 
 	public boolean removeVulnerabilityFromSecurityProfile(String vtName, String spName) {
-		return spc.removeVulnerabilityTypeFromSecurityProfile(vtName, spName);
+		return ((SecurityProfileComponentImpl) TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class)).removeVulnerabilityTypeFromSecurityProfile(vtName, spName);
 		
 	}
 	
@@ -51,27 +50,27 @@ public class SecurityProfileController {
 	 * The methods for handling Monitored Project List's operations
 	 */
 	public MonitoredProjectList getMonitoredProjectList(int mplId) {
-		return spc.getMonitoredProjectList(mplId);
+		return ((SecurityProfileComponentImpl) TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class)).getMonitoredProjectList(mplId);
 	}
 
 	public MonitoredProjectList createMonitoredProjectList(String mplName, String mplDescription, String userName) {
-		return spc.createMonitoredProjectList(mplName, mplDescription, userName);
+		return ((SecurityProfileComponentImpl) TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class)).createMonitoredProjectList(mplName, mplDescription, userName);
 	}
 
 	public boolean setSecurityProfileToList(String spName, String mplName) {
-		return spc.setSecurityProfileToList(spName, mplName);
+		return ((SecurityProfileComponentImpl) TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class)).setSecurityProfileToList(spName, mplName);
 	}
 
 	public MonitoredProjectList searchMonitoredProjectList(String mplName) {
-		return spc.searchMonitoredProjectList(mplName);
+		return ((SecurityProfileComponentImpl) TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class)).searchMonitoredProjectList(mplName);
 	}
 
 	public boolean addProjectFromMonitoredProjectList(String monProjList, String projName) {
-		return spc.addProjectFromMonitoredProjectList(monProjList, projName);
+		return ((SecurityProfileComponentImpl) TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class)).addProjectFromMonitoredProjectList(monProjList, projName);
 	}
 	
 	public boolean removeProjectFromMonitoredProjectList(String monProjList, String projName) {
-		return spc.removeProjectFromMonitoredProjectList(monProjList, projName);
+		return ((SecurityProfileComponentImpl) TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class)).removeProjectFromMonitoredProjectList(monProjList, projName);
 	}
 	
 	
@@ -80,22 +79,22 @@ public class SecurityProfileController {
 	 */
 	
 	public List<VulnerabilityType> getVulnerabilityTypeList() {
-		return spc.getVulnerabilityTypeList();
+		return ((SecurityProfileComponentImpl) TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class)).getVulnerabilityTypeList();
 	}
 
 	public VulnerabilityType getVulnerabilityType(int vtId) {
-		return spc.getVulnerabilityType(vtId);
+		return ((SecurityProfileComponentImpl) TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class)).getVulnerabilityType(vtId);
 	}
 	
 	
 	public boolean createVulnerabilityType(String vtName, String vtDescription, String slName, String slDescription) {
-		SecurityLibrary sl = spc.createSecurityLibrary(slName, slDescription);
-		VulnerabilityType vt = spc.createVulnerabilityType(vtName, vtDescription);
-		return spc.addSecurityLibraryToVulnerabilityType(slName, vtDescription);
+		SecurityLibrary sl = ((SecurityProfileComponentImpl) TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class)).createSecurityLibrary(slName, slDescription);
+		VulnerabilityType vt = ((SecurityProfileComponentImpl) TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class)).createVulnerabilityType(vtName, vtDescription);
+		return ((SecurityProfileComponentImpl) TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class)).addSecurityLibraryToVulnerabilityType(slName, vtDescription);
 	}
 
 	public VulnerabilityType searchVulnerabilityType(String vtName) {
-		return spc.searchVulnerabilityType(vtName);
+		return ((SecurityProfileComponentImpl) TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class)).searchVulnerabilityType(vtName);
 	}	
 	
 }

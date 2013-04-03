@@ -19,19 +19,17 @@ public class SecurityDetectionComponentImpl implements
 	private DBService dbs;
 
 	@Override
-	public boolean addToDetectedVulnerabilities(
-			List<ProjectFileVulnerability> sProjVul) {
+	public boolean addToDetectedVulnerabilities(List<ProjectFileVulnerability> sProjVul) {
 		try {
 			Iterator<ProjectFileVulnerability> it = sProjVul.iterator();
 			ProjectFileVulnerability pvf;
-			SecurityProfileComponent spc = new SecurityProfileComponentImpl();
-
+			
 			if (dbs.startDBSession()) {
 				while(it.hasNext()){
 					pvf = it.next();
-					VulnerabilityType vt = spc.searchVulnerabilityType(pvf.getVulnerabilityType().getName());
+					VulnerabilityType vt = ((SecurityProfileComponentImpl) platform.getComponent(SecurityProfileComponent.class)).searchVulnerabilityType(pvf.getVulnerabilityType().getName());
 					if (vt == null) {
-						vt = spc.createVulnerabilityType(pvf.getVulnerabilityType().getName(), pvf.getVulnerabilityType().getName());
+						vt = ((SecurityProfileComponentImpl) platform.getComponent(SecurityProfileComponent.class)).createVulnerabilityType(pvf.getVulnerabilityType().getName(), pvf.getVulnerabilityType().getName());
 						pvf.setVulnerabilityType(vt);
 					} else
 						pvf.setVulnerabilityType(vt);
