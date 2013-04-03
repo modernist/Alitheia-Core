@@ -1,0 +1,162 @@
+<!DOCTYPE html>  
+<html lang="en">  
+	<head>  
+		<meta charset="utf-8">  
+		<title>TRACER</title>  
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+		<meta name="description" content="">  
+		<meta name="author" content="">
+		<link href="css/bootstrap.css" rel="stylesheet" media="screen" />
+		<link href="css/webui.css" rel="stylesheet" />
+	</head>
+	<body>
+<!-- top navbar -->
+		<div class="navbar navbar-fixed-top">
+			<div class="navbar-inner">
+		<!--	<a class="brand" href="#">TRACER</a> -->
+		
+				<ul class="nav">
+  					<li><a href="#">Home</a></li>
+  					<li><a href="#">Link</a></li>
+  					<li><a href="#">Link</a></li>
+				</ul>
+				<ul class="nav pull-right">
+					<li class="dropdown">
+						<a id="user" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+							<i class="icon-user icon-black"></i> User<b class="caret"></b>
+						</a>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="user">
+					<li role="presentation"> 
+						<a role="menuitem" tabindex="-1" href="#">Create New User</a></li>
+					<li role="presentation"> 
+					<a role="menuitem" tabindex="-1" href="#">Logout</a></li>
+			
+				</ul>
+			</li>
+			<li class="divider-vertical"></li>
+			<li class="dropdown">
+				<a id="power" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+					<i class="icon-off icon-black"></i><b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="power">
+					<li role="presentation">
+						<a role="menuitem" tabindex="-1" href="#"><i class="icon-off icon-black"></i> Shutdown</a>
+					</li>
+					<li role="presentation" class="divider"></li>
+					<li role="presentation">
+						<a role="menuitem" tabindex="-1" href="#"><i class="icon-repeat icon-black"></i> Reboot</a>
+					</li>
+
+				</ul>
+			</li>
+		</ul>
+	</div>
+</div>
+
+	<div class="container-fluid">
+<div class="row-fluid">
+    <div class="span3">
+      <!--Sidebar content-->
+	  <div class="well sidebar-nav">
+	  <ul class="nav nav-list">
+		<li class="nav-header">Προφιλ ασφαλειας</li>
+		<li>
+			<a href="#">Δημιουργία προφίλ ασφαλείας</a>
+		</li>
+		<li>
+			<a href="#">Προσθήκη εργαλείου σε προφίλ</a>
+		</li>
+		<li>
+			<a href="#">Αφαίρεση εργαλείου από προφίλ</a>
+		</li>
+		<li class="nav-header" >Λιστες παρακολουθησης</li>
+		<li>
+			<a href="#">Δημιουργία λίστας</a>
+		</li>
+		<li>
+			<a href="#">Προσθήκη έργου στη λίστα</a>
+		</li>
+		<li>
+			<a href="#">Αφαίρεση έργου από τη λίστα</a>
+		</li>
+		<li class="nav-header">Other operations</li>
+		<li>
+			<a href="#">FooBar</a>
+		</li>
+	  </ul>
+	  </div>
+    </div>
+    <div class="span9">
+      <!--Body content-->
+		<div class="row-fluid">
+			<h2>Test...</h2>
+			<p>Testing... 1-2-3 </p>
+			
+		</div>
+    </div>
+	<div class="span9">
+		<form class="form-horizontal">
+			<div class="control-group">
+			<fieldset> <legend>Στοιχεία νέου χρήστη</legend><fieldset>
+				<label class="control-label" for="fullname">Ονοματεπώνυμο χρήστη</label>
+				<div class="controls">
+					<input type="text" id="fullname" placeholder="Ονοματεπώνυμο">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="email">Email χρήστη</label>
+				<div class="controls">
+					<input type="text" id="email" placeholder="Email">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="username">Ονομα χρήστη</label>
+				<div class="controls">
+					<input type="text" id="username" placeholder="Ονομα (username)">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="pass">Κωδικός χρήστη</label>
+				<div class="controls">
+					<input type="password" id="pass" placeholder="Κωδικός πρόσβασης">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="pass2">Επανάληψη κωδικού</label>
+				<div class="controls">
+					<input type="password" id="pass2" placeholder="Κωδικός πρόσβασης">
+				</div>
+			</div>
+			<div class="control-group">
+				<fieldset> <legend>Ιδιότητα χρήστη</legend><fieldset>
+				<label class=radio>
+					<input type="radio" name="usertype" id="admin" value="admin">
+					Διαχειριστής πλατφόρμας
+				</label>
+				<label class=radio>
+					<input type="radio" name="usertype" id="programmer" value="programmer">
+					Προγραμματιστής
+				</label>
+				<label class=radio>
+					<input type="radio" name="usertype" id="user" value="user">
+					Υπέυθυνος λειτουργικών διαδικασιών
+				</label>
+			</div>
+			<div class="control-group">
+				<button type="submit" class="btn">Δημιουργία χρήστη</button>
+			</div>
+		</form>	
+	</div>
+  </div>
+	</div>
+
+	<hr>
+	<footer class="footer">
+		Copyright notice here...
+	</footer>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">
+	<script src="js/bootstrap.js"></script>
+	<script src="js/bootstrap-dropdown.js"></script>
+	</body>
+</html>
