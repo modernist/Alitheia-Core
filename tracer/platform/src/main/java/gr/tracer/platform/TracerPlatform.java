@@ -12,20 +12,12 @@ import eu.sqooss.core.AlitheiaCoreService;
 import eu.sqooss.service.db.DBService;
 import eu.sqooss.service.logging.LogManager;
 import eu.sqooss.service.logging.Logger;
-import gr.tracer.platform.components.ConfirmSecurityLibraryComponent;
-import gr.tracer.platform.components.ConfirmSecurityLibraryComponentImpl;
-import gr.tracer.platform.components.MonitoredProjectListComponent;
-import gr.tracer.platform.components.MonitoredProjectListComponentImpl;
-import gr.tracer.platform.components.SecurityLibraryComponent;
-import gr.tracer.platform.components.SecurityLibraryComponentImpl;
+import gr.tracer.platform.components.SecurityDetectionComponent;
+import gr.tracer.platform.components.SecurityDetectionComponentImpl;
 import gr.tracer.platform.components.SecurityProfileComponent;
 import gr.tracer.platform.components.SecurityProfileComponentImpl;
 import gr.tracer.platform.components.UserComponent;
 import gr.tracer.platform.components.UserComponentImpl;
-import gr.tracer.platform.components.VulnerabilityTypeComponent;
-import gr.tracer.platform.components.VulnerabilityTypeComponentImpl;
-import gr.tracer.platform.components.VulnerabilityDetectorComponent;
-import gr.tracer.platform.components.VulnerabilityDetectorComponentImpl;
 import gr.tracer.platform.security.TracerSecurityModel;
 import gr.tracer.platform.security.TracerSecurityModelImpl;
 
@@ -58,20 +50,12 @@ public class TracerPlatform {
         components.add(TracerSecurityModel.class);
         components.add(UserComponent.class);
         components.add(SecurityProfileComponent.class);
-        components.add(MonitoredProjectListComponent.class);
-        components.add(SecurityLibraryComponent.class);
-        components.add(VulnerabilityTypeComponent.class);
-        components.add(VulnerabilityDetectorComponent.class);
-        components.add(ConfirmSecurityLibraryComponent.class);
+        components.add(SecurityDetectionComponent.class);
 
         implementations.put(TracerSecurityModel.class, TracerSecurityModelImpl.class);
         implementations.put(UserComponent.class, UserComponentImpl.class);
         implementations.put(SecurityProfileComponent.class, SecurityProfileComponentImpl.class);
-        implementations.put(MonitoredProjectListComponent.class, MonitoredProjectListComponentImpl.class);
-        implementations.put(SecurityLibraryComponent.class, SecurityLibraryComponentImpl.class);
-        implementations.put(VulnerabilityTypeComponent.class, VulnerabilityTypeComponentImpl.class);
-        implementations.put(VulnerabilityDetectorComponent.class, VulnerabilityDetectorComponentImpl.class);
-        implementations.put(ConfirmSecurityLibraryComponent.class, ConfirmSecurityLibraryComponentImpl.class);
+        implementations.put(SecurityDetectionComponent.class, SecurityDetectionComponentImpl.class);
     }
     
     private AlitheiaCore core;
@@ -96,7 +80,7 @@ public class TracerPlatform {
 	
 	/**
 	 * Retrieves a reference to the instance of the class implementing the requested
-	 * component inteface
+	 * component interface
 	 * @param component The component interface requested
 	 * @return A reference to the class that implements the component interface
 	 */

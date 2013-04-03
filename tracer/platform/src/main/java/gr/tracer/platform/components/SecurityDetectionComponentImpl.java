@@ -1,6 +1,5 @@
 package gr.tracer.platform.components;
 
-import eu.sqooss.core.AlitheiaCoreService;
 import eu.sqooss.service.db.DBService;
 import eu.sqooss.service.db.ProjectFile;
 import eu.sqooss.service.logging.Logger;
@@ -12,40 +11,39 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ConfirmSecurityLibraryComponentImpl implements
-		ConfirmSecurityLibraryComponent {
+public class SecurityDetectionComponentImpl implements
+		SecurityDetectionComponent {
 	
 	private TracerPlatform platform;
 	private Logger logger;
 	private DBService dbs;
-    private VulnerabilityTypeComponent vtc;
-
-	@Override
-	public boolean setLibraryApplication(boolean aATreatVulnerability) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	@Override
 	public boolean addToDetectedVulnerabilities(
 			List<ProjectFileVulnerability> sProjVul) {
-		
-		Iterator<ProjectFileVulnerability> it = sProjVul.iterator();
-		ProjectFileVulnerability pvf;
-		if (dbs.startDBSession()) {
-			while(it.hasNext()){
-				pvf = it.next();
-				VulnerabilityType vt = vtc.searchVulnerabilityType(pvf.getVulnerabilityType().getName());
-				if (vt == null) {
-					vt = vtc.createVulnerabilityType(pvf.getVulnerabilityType().getName(), pvf.getVulnerabilityType().getName());
-					pvf.setVulnerabilityType(vt);
-				} else
-					pvf.setVulnerabilityType(vt);
-				dbs.addRecord(pvf);
-			}
-			return dbs.commitDBSession();
+		try {
+			Iterator<ProjectFileVulnerability> it = sProjVul.iterator();
+			ProjectFileVulnerability pvf;
+			SecurityProfileComponent spc = new SecurityProfileComponentImpl();
+
+			if (dbs.startDBSession()) {
+				while(it.hasNext()){
+					pvf = it.next();
+					VulnerabilityType vt = spc.searchVulnerabilityType(pvf.getVulnerabilityType().getName());
+					if (vt == null) {
+						vt = spc.createVulnerabilityType(pvf.getVulnerabilityType().getName(), pvf.getVulnerabilityType().getName());
+						pvf.setVulnerabilityType(vt);
+					} else
+						pvf.setVulnerabilityType(vt);
+					dbs.addRecord(pvf);
+				}
+			return true;
+			} else
+				return false;
+		} finally {
+			if (dbs.isDBSessionActive())
+				dbs.commitDBSession();
 		}
-		return false;
 	}
 
 	@Override
@@ -53,14 +51,11 @@ public class ConfirmSecurityLibraryComponentImpl implements
 		// TODO Auto-generated method stub
 		this.platform = platform;
 		this.logger = logger;
-		this.vtc = new VulnerabilityTypeComponentImpl();
 	}
 
 	@Override
 	public boolean startUp() {
 		// TODO Auto-generated method stub
-		if (platform != null)
-			platform.registerComponent(ConfirmSecurityLibraryComponent.class, ConfirmSecurityLibraryComponentImpl.class);
 		this.dbs = platform.getDB();
 		ProjectFile pf = new ProjectFile();
 		VulnerabilityType vt = new VulnerabilityType();

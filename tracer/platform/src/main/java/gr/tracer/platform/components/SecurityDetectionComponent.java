@@ -5,9 +5,7 @@ import gr.tracer.platform.TracerComponent;
 
 import java.util.List;
 
-public interface ConfirmSecurityLibraryComponent extends TracerComponent {
-	
-	public boolean setLibraryApplication(boolean aATreatVulnerability);
+public interface SecurityDetectionComponent extends TracerComponent {
 	
 	public boolean addToDetectedVulnerabilities(List<ProjectFileVulnerability> sProjVul);
 
