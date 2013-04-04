@@ -4,6 +4,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Session;
+
 import eu.sqooss.core.AlitheiaCore;
 import eu.sqooss.service.db.DBService;
 import eu.sqooss.service.db.StoredProject;
@@ -38,7 +40,7 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 
 	@Override
 	public boolean startUp() {
-		this.dbs = platform.getDB();
+		this.dbs = AlitheiaCore.getInstance().getDBService();
 		return true;
 	}
 
@@ -133,22 +135,18 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
      */
 	@Override
 	public boolean addVulnerabilityTypeToSecurityProfile(String vtName, String spName) {
-        try {
-        	VulnerabilityType vt = searchVulnerabilityType(vtName);
-            SecurityProfile sp = searchSecurityProfile(spName);
-            if (dbs != null &&  dbs.startDBSession())
-            	if ((vt!=null) && (sp != null)) {
-            		sp.getDetectedVulnerabilityTypes().add(vt);
-            		return true;
-            	} else {
-            		logger.error("Vulnerability type and/or Security profile do not exist");
-            		return false;
-            	}
-            else
+		VulnerabilityType vt = searchVulnerabilityType(vtName);
+        SecurityProfile sp = searchSecurityProfile(spName);
+        dbs.startDBSession();
+		try {
+        	if ((vt!=null) && (sp != null)) {
+            	return (sp.getDetectedVulnerabilityTypes().add(vt) && vt.getDetectingSecurityProfiles().add(sp));
+            } else {
+            	logger.error("Vulnerability type and/or Security profile do not exist");
             	return false;
+            }
         } finally {
-        	if (dbs.isDBSessionActive())
-				dbs.commitDBSession();
+        	dbs.commitDBSession();
         }
 	}
 	
@@ -157,22 +155,18 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
      */
 	@Override
 	public boolean removeVulnerabilityTypeFromSecurityProfile(String vtName, String spName) {
+		VulnerabilityType vt = searchVulnerabilityType(vtName);
+        SecurityProfile sp = searchSecurityProfile(spName);
+        dbs.startDBSession();
 		try {
-        	VulnerabilityType vt = searchVulnerabilityType(vtName);
-            SecurityProfile sp = searchSecurityProfile(spName);
-            if (dbs != null &&  dbs.startDBSession())
-            	if ((vt!=null) && (sp != null)) {
-            		sp.getDetectedVulnerabilityTypes().remove(vt);
-            		return true;
-            	} else {
-            		logger.error("Vulnerability type and/or Security profile do not exist");
-            		return false;
-            	}
-            else
+        	if ((vt!=null) && (sp != null)) {
+            	return (sp.getDetectedVulnerabilityTypes().remove(vt) && vt.getDetectingSecurityProfiles().remove(sp));
+            } else {
+            	logger.error("Vulnerability type and/or Security profile do not exist");
             	return false;
+            }
         } finally {
-        	if (dbs.isDBSessionActive())
-				dbs.commitDBSession();
+        	dbs.commitDBSession();
         }
 	}
 	
@@ -266,22 +260,19 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
      */
 	@Override
 	public boolean setSecurityProfileToList(String spName, String mplName) {
+		SecurityProfile sp = searchSecurityProfile(spName);
+		MonitoredProjectList mpl = searchMonitoredProjectList(mplName);
+        dbs.startDBSession();
 		try {
-			SecurityProfile sp = searchSecurityProfile(spName);
-			MonitoredProjectList mpl = searchMonitoredProjectList(mplName);
-			if (dbs.startDBSession())
-				if ((sp != null) && (mpl != null)) {
-					mpl.setSecurityProfile(sp);
-					return true;
-				} else {
-					logger.error("Security profile and/or Monitored project list do not exist");
-					return false;
-				}
-			else
+			if ((sp != null) && (mpl != null)) {
+				mpl.setSecurityProfile(sp);
+				return true;
+			} else {
+				logger.error("Security profile and/or Monitored project list do not exist");
 				return false;
+			}
 		} finally {
-			if (dbs.isDBSessionActive())
-				dbs.commitDBSession();
+			dbs.commitDBSession();
 		}
 	}
 	
@@ -290,31 +281,24 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
      */
 	@Override
 	public boolean addProjectToMonitoredProjectList(String monProjList,
-			String projFileName) {		
+			String projFileName) {	
+		MonitoredProjectList mpl = searchMonitoredProjectList(monProjList);
+		StoredProject project = StoredProject.getProjectByName(projFileName);
+		dbs.startDBSession();
+		Session session = dbs.getActiveDBSession();
 		try {
-			MonitoredProjectListProject mplps;
-			MonitoredProjectList mpl = searchMonitoredProjectList(monProjList);
-			StoredProject project = StoredProject.getProjectByName(projFileName);
-			if ((mpl != null) && (project != null))
-				mplps =  createMonitoredProjectListProject(mpl, project);
+			if ((mpl != null) && (project != null)) {
+				MonitoredProjectListProject mplp = new MonitoredProjectListProject();
+				mplp.setMonitoredProjectList(mpl);
+				mplp.setProject(project);
+				return dbs.addRecord(mplp);
+			}
 			else{
 				logger.info("MonitoredProjectList or StoredProject do not exist.");
 				return false;
 			}
-			
-			if (mplps != null) {
-				if (dbs.startDBSession()) {
-					mpl.getIncludedStoredProject().add(mplps);
-					return true;
-				} else
-					return false;
-			} else{
-				logger.info("MonitoredProjectListProject could not be created.");
-				return false;
-			}
 		} finally {
-			if(dbs.isDBSessionActive())
-    			dbs.commitDBSession();
+			dbs.commitDBSession();
 		}
 	}
 
@@ -324,29 +308,28 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	@Override
 	public boolean removeProjectFromMonitoredProjectList(String monProjList,
 			String projFileName) {
+		MonitoredProjectList mpl = searchMonitoredProjectList(monProjList);
+		StoredProject project = StoredProject.getProjectByName(projFileName);
+		dbs.startDBSession();
+		Session session = dbs.getActiveDBSession();
 		try {
-			List<MonitoredProjectListProject> mplps;
-			MonitoredProjectList mpl = searchMonitoredProjectList(monProjList);
-			StoredProject project = StoredProject.getProjectByName(projFileName);
 			if ((mpl != null) && (project != null)){
-				if (dbs.startDBSession()) {
-					synchronized (lockObject) {
-						mapProps.clear();
-						mapProps.put("monitoredProjectList", mpl.getId());
-						mapProps.put("project", project.getId());
-						mplps = dbs.findObjectsByProperties(MonitoredProjectListProject.class, mapProps);
-						return ((mplps.size() > 0) && (mplps != null)) ? dbs.deleteRecords(mplps) : false;
-					}
-				} else {
-					return false;
+				
+				List<MonitoredProjectListProject> mplps = null;
+				
+				synchronized (lockObject) {
+					mapProps.clear();
+					mapProps.put("monitoredProjectList", mpl.getId());
+					mapProps.put("project", project.getId());
+					mplps = dbs.findObjectsByProperties(MonitoredProjectListProject.class, mapProps);
+					return ((mplps.size() > 0) && (mplps != null)) ? dbs.deleteRecords(mplps) : false;
 				}
 			} else {
 				logger.info("MonitoredProjectList or StoredProject do not exist.");
 				return false;
 			}
 		} finally {
-			if (dbs.isDBSessionActive())
-				dbs.commitDBSession();
+			dbs.commitDBSession();
 		}
 	}
 	
@@ -573,22 +556,18 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
      */
 	@Override
 	public boolean addSecurityLibraryToVulnerabilityType(String slName, String vtName) {
-        try {
-        	if (dbs.startDBSession()) {
-        		SecurityLibrary sl = searchSecurityLibrary(slName);
-        		VulnerabilityType vt = searchVulnerabilityType(vtName);
-        		if ((sl!=null) && (vt != null)) {
-        			return ((sl.getTreatedVulnerabilityTypes().add(vt)));
-        		} else {
-        			logger.error("SecurityLibrary or VulnerabilityType do not exist");
-        			return false;
-        		}
+		SecurityLibrary sl = searchSecurityLibrary(slName);
+    	VulnerabilityType vt = searchVulnerabilityType(vtName);
+		dbs.startDBSession();
+		try {
+        	if ((sl!=null) && (vt != null)) {
+        		return ((sl.getTreatedVulnerabilityTypes().add(vt)) && vt.getTreatingSecurityLibraries().add(sl));
         	} else {
-    			return false;
+        		logger.error("SecurityLibrary or VulnerabilityType do not exist");
+        		return false;
         	}
         } finally {
-        	if (dbs.isDBSessionActive())
-				dbs.commitDBSession();
+        	dbs.commitDBSession();
         }
     }
 }

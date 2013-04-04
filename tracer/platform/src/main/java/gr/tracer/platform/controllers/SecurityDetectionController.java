@@ -4,8 +4,8 @@ import java.util.List;
 
 import gr.tracer.common.entities.db.ProjectFileVulnerability;
 import gr.tracer.platform.TracerPlatform;
-import gr.tracer.platform.components.SecurityDetectionComponent;
-import gr.tracer.platform.components.SecurityDetectionComponentImpl;
+import gr.tracer.platform.components.VulnerabilityDetectionComponent;
+import gr.tracer.platform.components.VulnerabilityDetectionComponentImpl;
 
 public class SecurityDetectionController {
 
@@ -14,6 +14,6 @@ public class SecurityDetectionController {
 	
 	public boolean addToDetectedVulnerabilities(List<ProjectFileVulnerability> sProjVul){
 		
-		return ((SecurityDetectionComponentImpl) TracerPlatform.getInstance().getComponent(SecurityDetectionComponent.class)).addToDetectedVulnerabilities(sProjVul);		
+		return ((VulnerabilityDetectionComponentImpl) TracerPlatform.getInstance().getComponent(VulnerabilityDetectionComponent.class)).addToDetectedVulnerabilities(sProjVul);		
 	}
 }
