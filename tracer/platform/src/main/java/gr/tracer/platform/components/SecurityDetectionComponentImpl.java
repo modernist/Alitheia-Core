@@ -3,7 +3,10 @@ package gr.tracer.platform.components;
 import eu.sqooss.service.db.DBService;
 import eu.sqooss.service.db.ProjectFile;
 import eu.sqooss.service.logging.Logger;
+import gr.tracer.common.entities.db.MonitoredProjectList;
 import gr.tracer.common.entities.db.ProjectFileVulnerability;
+import gr.tracer.common.entities.db.SecurityLibrary;
+import gr.tracer.common.entities.db.SecurityProfile;
 import gr.tracer.common.entities.db.VulnerabilityType;
 import gr.tracer.platform.TracerPlatform;
 
@@ -18,6 +21,9 @@ public class SecurityDetectionComponentImpl implements
 	private Logger logger;
 	private DBService dbs;
 
+	/**
+     * @see gr.tracer.platform.components.SecurityDetectionComponent#addToDetectedVulnerabilities(java.lang.List)
+     */
 	@Override
 	public boolean addToDetectedVulnerabilities(List<ProjectFileVulnerability> sProjVul) {
 		try {
@@ -46,37 +52,62 @@ public class SecurityDetectionComponentImpl implements
 
 	@Override
 	public void initComponent(TracerPlatform platform, Logger logger) {
-		// TODO Auto-generated method stub
 		this.platform = platform;
 		this.logger = logger;
 	}
 
 	@Override
 	public boolean startUp() {
-		// TODO Auto-generated method stub
 		this.dbs = platform.getDB();
-		ProjectFile pf = new ProjectFile();
-		VulnerabilityType vt = new VulnerabilityType();
-		ProjectFileVulnerability pvf = new ProjectFileVulnerability();
-		List<ProjectFileVulnerability> sProjVul = new ArrayList<ProjectFileVulnerability>();
-		pf.setName("Project1");
-		dbs.startDBSession();
-		dbs.addRecord(pf);
-		dbs.commitDBSession();
-		vt.setName("Sql name");
-		vt.setDescription("Sql description");
-		pvf.setDescription("Sql attack desc");
-		pvf.setLocation("Sql attack loc");
-		pvf.setProjectFile(pf);
-		pvf.setVulnerabilityType(vt);
-		sProjVul.add(pvf);
-		addToDetectedVulnerabilities(sProjVul);
+		
+//		if (((SecurityProfileComponentImpl) platform.getComponent(SecurityProfileComponent.class)).createSecurityLibrary("XSS library name", "XSS library description") != null) {
+//			if (((SecurityProfileComponentImpl) platform.getComponent(SecurityProfileComponent.class)).searchSecurityLibrary("XSS library name") != null)
+//				System.out.println("Security library created");
+//		}
+//		else
+//			System.out.println("Security library not created");
+//		
+//		if (((SecurityProfileComponentImpl) platform.getComponent(SecurityProfileComponent.class)).createVulnerabilityType("XSS name", "XSS description") != null) {
+//			if (((SecurityProfileComponentImpl) platform.getComponent(SecurityProfileComponent.class)).searchVulnerabilityType("XSS name") != null)
+//				System.out.println("Vulnerability type created");
+//		}
+//		else
+//			System.out.println("Vulnerability type not created");
+		
+		if (((SecurityProfileComponentImpl) platform.getComponent(SecurityProfileComponent.class)).addSecurityLibraryToVulnerabilityType("Sql library name", "Sql name"))
+			System.out.println("Vulnerability type associated with Security library");
+		else
+			System.out.println("Vulnerability type not associated with Security library");
+		
+		if (((SecurityProfileComponentImpl) platform.getComponent(SecurityProfileComponent.class)).createMonitoredProjectList("Monitored project list 1 name", "Monitored project list 1 description", "fotis") != null) {
+			if (((SecurityProfileComponentImpl) platform.getComponent(SecurityProfileComponent.class)).searchMonitoredProjectList("Monitored project list 1 name") != null)
+				System.out.println("Monitored project list created");
+		}
+		else
+			System.out.println("Monitored project list not created");
+		
+		if (((SecurityProfileComponentImpl) platform.getComponent(SecurityProfileComponent.class)).createSecurityProfile("Security profile 1 name", "Security profile 1 description") != null) {
+			if (((SecurityProfileComponentImpl) platform.getComponent(SecurityProfileComponent.class)).searchSecurityProfile("Security profile 1 name") != null)
+				System.out.println("Security profile not created");
+		}
+		else
+			System.out.println("Security profile not created");
+		
+		if (((SecurityProfileComponentImpl) platform.getComponent(SecurityProfileComponent.class)).setSecurityProfileToList("Security profile 1 name", "Monitored project list 1 name"))
+			System.out.println("Security profile associated with Monitored project list");
+		else
+			System.out.println("Security profile not associated with Monitored project list");
+		
+		if (((SecurityProfileComponentImpl) platform.getComponent(SecurityProfileComponent.class)).addVulnerabilityTypeToSecurityProfile("Sql name", "Security profile 1 name"))
+			System.out.println("Vulnerability type associated with Security profile");
+		else
+			System.out.println("Vulnerability type not associated with Security profile");
+		
 		return true;
 	}
 
 	@Override
 	public boolean shutDown() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 

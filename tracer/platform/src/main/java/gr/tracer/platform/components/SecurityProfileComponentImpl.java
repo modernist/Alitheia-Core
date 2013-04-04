@@ -32,21 +32,18 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	
 	@Override
 	public void initComponent(TracerPlatform platform, Logger logger) {
-		// TODO Auto-generated method stub
 		this.platform = platform;
 		this.logger = logger;
 	}
 
 	@Override
 	public boolean startUp() {
-		// TODO Auto-generated method stub
 		this.dbs = platform.getDB();
 		return true;
 	}
 
 	@Override
 	public boolean shutDown() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
@@ -56,6 +53,9 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	/*
 	 * The methods for handling Security Profile's operations
 	 */
+	/**
+     * @see gr.tracer.platform.components.SecurityProfileComponent#getSecurityProfiles()
+     */
 	@Override
 	public List<SecurityProfile> getSecurityProfiles() {
         
@@ -64,6 +64,9 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
         return (List<SecurityProfile>) dbs.doHQL(q.toString());
 	}
 
+	/**
+     * @see gr.tracer.platform.components.SecurityProfileComponent#createSecurityProfile(java.lang.String, java.lang.String)
+     */
 	@Override
 	public SecurityProfile createSecurityProfile(String spName,
 			String spDescription) {
@@ -78,11 +81,14 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
     	return null;
 	}
 
+	/**
+     * @see gr.tracer.platform.components.SecurityProfileComponent#searchSecurityProfile(java.lang.String)
+     */
 	@Override
 	public SecurityProfile searchSecurityProfile(String spName) {
 		List<SecurityProfile> secProfs;
 		try {
-			if (dbs.startDBSession()) {
+			if (dbs != null &&  dbs.startDBSession()) {
 				synchronized (lockObject) {
 					mapProps.clear();
 					mapProps.put("name", spName);
@@ -103,8 +109,12 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 		}
 	}
 
-	@Override
-	public SecurityProfile getSecurityProfile(int spId) {
+	/**
+	 * Retrieve a Security profile by its Id
+	 * @param spId The Security profile's Id
+	 * @return The Security profile or null if the Security profile is not found 
+	 */
+	private SecurityProfile getSecurityProfile(int spId) {
 		try {
 	    	if(dbs.startDBSession()) {
 	    		return dbs.findObjectById(SecurityProfile.class, spId);
@@ -118,15 +128,23 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
     	}
 	}
 	
+	/**
+     * @see gr.tracer.platform.components.SecurityProfileComponent#addVulnerabilityTypeToSecurityProfile(java.lang.String, java.lang.String)
+     */
 	@Override
 	public boolean addVulnerabilityTypeToSecurityProfile(String vtName, String spName) {
         try {
         	VulnerabilityType vt = searchVulnerabilityType(vtName);
             SecurityProfile sp = searchSecurityProfile(spName);
-            if ((dbs.startDBSession()) && (vt!=null) && (sp != null)) {
-                sp.getDetectedVulnerabilityTypes().add(vt);
-                return true;
-            } else
+            if (dbs != null &&  dbs.startDBSession())
+            	if ((vt!=null) && (sp != null)) {
+            		sp.getDetectedVulnerabilityTypes().add(vt);
+            		return true;
+            	} else {
+            		logger.error("Vulnerability type and/or Security profile do not exist");
+            		return false;
+            	}
+            else
             	return false;
         } finally {
         	if (dbs.isDBSessionActive())
@@ -134,16 +152,23 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
         }
 	}
 	
-
+	/**
+     * @see gr.tracer.platform.components.SecurityProfileComponent#removeVulnerabilityTypeFromSecurityProfile(java.lang.String, java.lang.String)
+     */
 	@Override
 	public boolean removeVulnerabilityTypeFromSecurityProfile(String vtName, String spName) {
 		try {
         	VulnerabilityType vt = searchVulnerabilityType(vtName);
             SecurityProfile sp = searchSecurityProfile(spName);
-            if ((dbs.startDBSession()) && (vt!=null) && (sp != null)) {
-                sp.getDetectedVulnerabilityTypes().remove(vt);
-                return true;
-            } else
+            if (dbs != null &&  dbs.startDBSession())
+            	if ((vt!=null) && (sp != null)) {
+            		sp.getDetectedVulnerabilityTypes().remove(vt);
+            		return true;
+            	} else {
+            		logger.error("Vulnerability type and/or Security profile do not exist");
+            		return false;
+            	}
+            else
             	return false;
         } finally {
         	if (dbs.isDBSessionActive())
@@ -157,16 +182,21 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	/*
 	 * The methods for handling Monitored Project List's operations
 	 */
+	/**
+     * @see gr.tracer.platform.components.SecurityProfileComponent#getMonitoredProjectLists(java.lang.String, java.lang.String)
+     */
 	@Override
-	public List<MonitoredProjectList> getMonitoredProjectList() {
-		// TODO Auto-generated method stub
+	public List<MonitoredProjectList> getMonitoredProjectLists() {
 		StringBuilder q = new StringBuilder("from SecurityLibrary sl");
 		return (List<MonitoredProjectList>) dbs.doHQL(q.toString());
 	}
 
-	@Override
-	public MonitoredProjectList getMonitoredProjectList(int mplId) {
-		// TODO Auto-generated method stub
+	/**
+	 * Retrieve a Monitored project list by Id
+	 * @param mplId The Monitored project list's Id
+	 * @return The Monitored project list or null if the Monitored project list is not found
+	 */
+	private MonitoredProjectList getMonitoredProjectList(int mplId) {
 		try {
 	    	if(dbs.startDBSession()) {
 	    		return dbs.findObjectById(MonitoredProjectList.class, mplId);
@@ -180,10 +210,12 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
     	}
 	}
 
+	/**
+     * @see gr.tracer.platform.components.SecurityProfileComponent#createMonitoredProjectList(java.lang.String, java.lang.String)
+     */
 	@Override
 	public MonitoredProjectList createMonitoredProjectList(String mplName,
 			String mplDescription, String userName) {
-		// TODO Auto-generated method stub
 		SecurityManager sm = AlitheiaCore.getInstance().getSecurityManager();
 		UserManager userManager = sm.getUserManager();		
 		User user = userManager.getUser(userName);
@@ -203,12 +235,14 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
     		if(dbs.addRecord(mpl)) 
     			return dbs.commitDBSession() ? mpl : null;
     	}
-    	return null;
+		return null;
 	}
 
+	/**
+     * @see gr.tracer.platform.components.SecurityProfileComponent#searchMonitoredProjectList(java.lang.String, java.lang.String)
+     */
 	@Override
 	public MonitoredProjectList searchMonitoredProjectList(String mplName) {
-		// TODO Auto-generated method stub
 		List<MonitoredProjectList> mpls = null;
 		try {
 			if (dbs.startDBSession()) {
@@ -227,43 +261,50 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 		}
 	}
 
+	/**
+     * @see gr.tracer.platform.components.SecurityProfileComponent#setSecurityProfileToList(java.lang.String, java.lang.String)
+     */
 	@Override
 	public boolean setSecurityProfileToList(String spName, String mplName) {
-		// TODO Auto-generated method stub
 		try {
-			SecurityProfileComponent spm = new SecurityProfileComponentImpl();
-			SecurityProfile sp = spm.searchSecurityProfile(spName);
+			SecurityProfile sp = searchSecurityProfile(spName);
 			MonitoredProjectList mpl = searchMonitoredProjectList(mplName);
-			if (dbs.startDBSession() && (sp != null) && (mpl != null)) {
-				mpl.setSecurityProfile(sp);
-				return true;
-			} else {
+			if (dbs.startDBSession())
+				if ((sp != null) && (mpl != null)) {
+					mpl.setSecurityProfile(sp);
+					return true;
+				} else {
+					logger.error("Security profile and/or Monitored project list do not exist");
+					return false;
+				}
+			else
 				return false;
-			}
 		} finally {
 			if (dbs.isDBSessionActive())
 				dbs.commitDBSession();
 		}
 	}
 	
+	/**
+     * @see gr.tracer.platform.components.SecurityProfileComponent#addProjectToMonitoredProjectList(java.lang.String, java.lang.String)
+     */
 	@Override
-	public boolean addProjectFromMonitoredProjectList(String monProjList,
-			String projName) {		
-		// TODO Auto-generated method stub
+	public boolean addProjectToMonitoredProjectList(String monProjList,
+			String projFileName) {		
 		try {
-			MonitoredProjectListProject mplp = null;
+			MonitoredProjectListProject mplps;
 			MonitoredProjectList mpl = searchMonitoredProjectList(monProjList);
-			StoredProject project = StoredProject.getProjectByName(projName);
+			StoredProject project = StoredProject.getProjectByName(projFileName);
 			if ((mpl != null) && (project != null))
-				mplp =  createMonitoredProjectListProject(mpl, project);
+				mplps =  createMonitoredProjectListProject(mpl, project);
 			else{
 				logger.info("MonitoredProjectList or StoredProject do not exist.");
 				return false;
 			}
 			
-			if (mplp != null) {
+			if (mplps != null) {
 				if (dbs.startDBSession()) {
-					mpl.getIncludedStoredProject().add(mplp);
+					mpl.getIncludedStoredProject().add(mplps);
 					return true;
 				} else
 					return false;
@@ -277,15 +318,16 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 		}
 	}
 
+	/**
+     * @see gr.tracer.platform.components.SecurityProfileComponent#removeProjectFromMonitoredProjectList(java.lang.String, java.lang.String)
+     */
 	@Override
 	public boolean removeProjectFromMonitoredProjectList(String monProjList,
-			String projName) {
-		// TODO Auto-generated method stub
-		
-		List<MonitoredProjectListProject> mplps = null;
+			String projFileName) {
 		try {
+			List<MonitoredProjectListProject> mplps;
 			MonitoredProjectList mpl = searchMonitoredProjectList(monProjList);
-			StoredProject project = StoredProject.getProjectByName(projName);
+			StoredProject project = StoredProject.getProjectByName(projFileName);
 			if ((mpl != null) && (project != null)){
 				if (dbs.startDBSession()) {
 					synchronized (lockObject) {
@@ -314,61 +356,82 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	/*
 	 * The methods for handling Monitored Project List Project's operations
 	 */
-	public MonitoredProjectListProject getMonitoredProjectListProject(int mplpId) {
-		// TODO Auto-generated method stub
+	/**
+	 * Retrieve an association between a Monitored project list and a Stored project by name
+	 * @param monProjList The Monitored project list's name
+	 * @param projFileName The Stored project's name
+	 * @return The retrieved association or null if the association is not found
+	 */
+	public MonitoredProjectListProject getMonitoredProjectListProject(String monProjList, String projFileName) {
 		try {
-	    	if(dbs.startDBSession()) {
-	    		return dbs.findObjectById(MonitoredProjectListProject.class, mplpId);
-	    	}
-	    	else
-	    		return null;
-    	}
+			List<MonitoredProjectListProject> mplps;
+			MonitoredProjectList mpl = searchMonitoredProjectList(monProjList);
+			StoredProject project = StoredProject.getProjectByName(projFileName);
+			if ((mpl != null) && (project != null))
+				if(dbs.startDBSession()) {
+					synchronized (lockObject) {
+						mapProps.clear();
+						mapProps.put("monitoredProjectList", mpl.getId());
+						mapProps.put("project", project.getId());
+						mplps = dbs.findObjectsByProperties(MonitoredProjectListProject.class, mapProps);
+						return ((mplps.size() > 0) && (mplps != null)) ? mplps.get(0) : null;
+					}
+				} else
+					return null;
+			else {
+				logger.error("MonitoredProjectList or StoredProject do not exist.");
+				return null;
+			}
+		}
     	finally {
     		if(dbs.isDBSessionActive())
     			dbs.commitDBSession();
     	}
 	}
 
+	/**
+	 * Create a new association between a Monitored project list and a Stored project
+	 * @param mpl The Monitored project list
+	 * @param project The Stored project
+	 * @return The new association or null if the association is not created
+	 */
 	public MonitoredProjectListProject createMonitoredProjectListProject(MonitoredProjectList mpl,
 			StoredProject project) {
-		// TODO Auto-generated method stub
-		
-		try {
-			MonitoredProjectListProject mplp = new MonitoredProjectListProject();
-			mplp.setMonitoredProjectList(mpl);
-			mplp.setProject(project);
+		MonitoredProjectListProject mplp = new MonitoredProjectListProject();
+		mplp.setMonitoredProjectList(mpl);
+		mplp.setProject(project);
 			
-			if(dbs != null && dbs.startDBSession())
-	    	{
-	    		if(dbs.addRecord(mpl)) 
-	    			return dbs.commitDBSession() ? mplp : null;
-	    		else
-	    			return null;
-	    	} else
+		if(dbs != null && dbs.startDBSession())
+	    {
+	    	if(dbs.addRecord(mpl)) 
+	    		return dbs.commitDBSession() ? mplp : null;
+	    	else
 	    		return null;
-    	}
-    	finally {
-    		if(dbs.isDBSessionActive())
-    			dbs.commitDBSession();
-    	}	
-	}
-
+	    } else
+	    	return null;
+    }	
+	
 	
 		
 	
 	/*
 	 * The methods for handling Security Libraries operations
 	 */
+	/**
+     * @see gr.tracer.platform.components.SecurityProfileComponent#getSecurityLibraries()
+     */
 	@Override
-	public List<SecurityLibrary> getSecurityLibrary() {
-		// TODO Auto-generated method stub
+	public List<SecurityLibrary> getSecurityLibraries() {
 		StringBuilder q = new StringBuilder("from SecurityLibrary sl");
 		return (List<SecurityLibrary>) dbs.doHQL(q.toString());
 	}
 
-	@Override
-	public SecurityLibrary getSecurityLibrary(int slId) {
-		// TODO Auto-generated method stub
+	/**
+	 * Retrieve a Security library by Id 
+	 * @param slId The Security library's Id
+	 * @return A Security library or null if the Security library is not found
+	 */
+	private SecurityLibrary getSecurityLibrary(int slId) {
 		try {
 	    	if(dbs.startDBSession()) {
 	    		return dbs.findObjectById(SecurityLibrary.class, slId);
@@ -382,9 +445,11 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
     	}
 	}
 
+	/**
+     * @see gr.tracer.platform.components.SecurityProfileComponent#createSecurityLibrary(java.lang.String, java.lang.String)
+     */
 	@Override
 	public SecurityLibrary createSecurityLibrary(String slName, String slDescription) {
-		// TODO Auto-generated method stub
 		SecurityLibrary sl = new SecurityLibrary();
 		sl.setName(slName);
 		sl.setDescription(slDescription);
@@ -396,9 +461,11 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
     	return null;
 	}
 
+	/**
+     * @see gr.tracer.platform.components.SecurityProfileComponent#searchSecurityLibrary(java.lang.String)
+     */
 	@Override
 	public SecurityLibrary searchSecurityLibrary(String slName) {
-		// TODO Auto-generated method stub
 		List<SecurityLibrary> secLibs;
 		try {
 			if (dbs.startDBSession()) {
@@ -428,15 +495,22 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	/*
 	 * The methods for handling Vulnerability Type's operations
 	 */
+	/**
+     * @see gr.tracer.platform.components.SecurityProfileComponent#getVulnerabilityTypes()
+     */
 	@Override
-	public List<VulnerabilityType> getVulnerabilityTypeList() {
+	public List<VulnerabilityType> getVulnerabilityTypes() {
 		
 		StringBuilder q = new StringBuilder("from VulnerabilityType vt");
 		return (List<VulnerabilityType>) dbs.doHQL(q.toString());
 	}
 
-	@Override
-	public VulnerabilityType getVulnerabilityType(int vtId) {
+	/**
+	 * Retrieve a Vulnerability type by Id
+	 * @param vtId The Vulnerability type's Id
+	 * @return A Vulnerability type or null if the Vulnerability type is not found
+	 */
+	private VulnerabilityType getVulnerabilityType(int vtId) {
 		try {
 	    	if(dbs.startDBSession()) {
 	    		return dbs.findObjectById(VulnerabilityType.class, vtId);
@@ -450,6 +524,9 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
     	}
 	}
 	
+	/**
+     * @see gr.tracer.platform.components.SecurityProfileComponent#createVulnerabilityType(java.lang.String, java.lang.String)
+     */
 	@Override
 	public VulnerabilityType createVulnerabilityType(String vtName, String vtDescription) {
 		VulnerabilityType vt = new VulnerabilityType();
@@ -463,6 +540,9 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
     	return null;
 	}
 
+	/**
+     * @see gr.tracer.platform.components.SecurityProfileComponent#searchVulnerabilityType(java.lang.String)
+     */
 	@Override
 	public VulnerabilityType searchVulnerabilityType(String vtName) {
 		List<VulnerabilityType> vulTypes;
@@ -488,6 +568,9 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 		}
 	}
 	
+	/**
+     * @see gr.tracer.platform.components.SecurityProfileComponent#addSecurityLibraryToVulnerabilityType(java.lang.String, java.lang.String)
+     */
 	@Override
 	public boolean addSecurityLibraryToVulnerabilityType(String slName, String vtName) {
         try {
@@ -495,8 +578,7 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
         		SecurityLibrary sl = searchSecurityLibrary(slName);
         		VulnerabilityType vt = searchVulnerabilityType(vtName);
         		if ((sl!=null) && (vt != null)) {
-        			return ((sl.getTreatedVulnerabilityTypes().add(vt)) &&
-        					(vt.getTreatingSecurityLibraries().add(sl)));
+        			return ((sl.getTreatedVulnerabilityTypes().add(vt)));
         		} else {
         			logger.error("SecurityLibrary or VulnerabilityType do not exist");
         			return false;

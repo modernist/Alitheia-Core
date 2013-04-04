@@ -96,7 +96,4 @@ public class SecurityProfile extends DAObject {
         
         return (List<SecurityProfile>) dbs.doHQL(q.toString());  
     }
-
-	//TODO: Add method for applying the profile on a StoredProject / ProjectVersion / ProjectFile (possibly instantly)
-    //TODO: move aforementioned method in SecurityProfileController
 }
