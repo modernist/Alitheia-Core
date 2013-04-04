@@ -11,7 +11,7 @@ public interface UserComponent extends TracerComponent {
 	 * @param userPassword The User's  password
 	 * @param userType The User's  type
 	 * @param userEmail The User's  email 
-	 * @return The new User, null if the User is not created.  
+	 * @return The new User or null if the User is not created.  
 	 */	
 	public User createNewUser(String userName, String userPassword, String userType, String userEmail);
 	

@@ -85,14 +85,12 @@ public class TracerSecurityModelImpl implements TracerSecurityModel {
 
 	@Override
 	public void initComponent(TracerPlatform platform, Logger logger) {
-		// TODO Auto-generated method stub
 		this.platform = platform;
 		this.logger = logger;
 	}
 
 	@Override
 	public boolean startUp() {
-		// TODO Auto-generated method stub
 		sm = AlitheiaCore.getInstance().getSecurityManager();
 		if (sm.getGroupManager().getGroup(TracerSecurityConstants.GroupName.VULNERABILITY_MANAGER.toString()) == null)
 			initSecurityModel();
@@ -101,7 +99,6 @@ public class TracerSecurityModelImpl implements TracerSecurityModel {
 
 	@Override
 	public boolean shutDown() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	

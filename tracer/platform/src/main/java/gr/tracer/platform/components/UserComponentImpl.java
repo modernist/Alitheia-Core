@@ -84,14 +84,12 @@ public class UserComponentImpl implements UserComponent {
 
 	@Override
 	public void initComponent(TracerPlatform platform, Logger logger) {
-		// TODO Auto-generated method stub
 		this.platform = platform;
 		this.logger = logger;
 	}
 
 	@Override
 	public boolean startUp() {
-		// TODO Auto-generated method stub
 		sm = AlitheiaCore.getInstance().getSecurityManager();
 		userLoginAttempt("admin","admin");
 		createNewUser("fotis","fotis","programmer","kostas@tracer.gr");
@@ -100,7 +98,6 @@ public class UserComponentImpl implements UserComponent {
 
 	@Override
 	public boolean shutDown() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 }
