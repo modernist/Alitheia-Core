@@ -237,6 +237,36 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
     	}
 		return null;
 	}
+	
+	/**
+     * @see gr.tracer.platform.components.SecurityProfileComponent#createMonitoredProjectList(java.lang.String, java.lang.String, java.lang.String)
+     */
+	@Override
+	public MonitoredProjectList createMonitoredProjectList(String mplName,
+			String mplDescription, String userName) {
+		SecurityManager sm = AlitheiaCore.getInstance().getSecurityManager();
+		UserManager userManager = sm.getUserManager();		
+		User user = userManager.getUser(userName);
+		MonitoredProjectList mpl = new MonitoredProjectList();
+		mpl.setName(mplName);
+		mpl.setDescription(mplDescription);
+		
+		
+		if ((user != null)) {
+			mpl.setUser(user);
+		}
+		else{
+			logger.info("User and/or Security profile do not exist with these names");
+			return null;
+		}
+		
+		if(dbs != null && dbs.startDBSession())
+    	{
+    		if(dbs.addRecord(mpl)) 
+    			return dbs.commitDBSession() ? mpl : null;
+    	}
+		return null;
+	}
 
 	/**
      * @see gr.tracer.platform.components.SecurityProfileComponent#searchMonitoredProjectList(java.lang.String, java.lang.String)
