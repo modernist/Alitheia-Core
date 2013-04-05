@@ -1,5 +1,6 @@
 package gr.tracer.platform.components;
 
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -142,7 +143,8 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
         dbs.startDBSession();
 		try {
         	if ((vt!=null) && (sp != null)) {
-            	return (sp.getDetectedVulnerabilityTypes().add(vt) && vt.getDetectingSecurityProfiles().add(sp));
+        		return ((vt.getDetectingSecurityProfiles().add(sp)) && (sp.getDetectedVulnerabilityTypes().add(vt)));
+
             } else {
             	logger.error("Vulnerability type and/or Security profile do not exist");
             	return false;
