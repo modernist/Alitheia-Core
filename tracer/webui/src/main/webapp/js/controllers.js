@@ -1,25 +1,15 @@
 /* Angjular.js controllers */
 
-//var app = angular.module('login',[]);
-//
-//app.directive('credentials', function() {
-//	return {
-//		require: 'ngModel',
-//
-//	};
-//});
-
-
 function Controller($scope) {
-	
 	$scope.login = function(user)	{
 		//Handle login credentials here. Currently logs credentials to console.
 		console.log("Username: " + user.name);
 		console.log("Password: " + user.pass);
-
+	
+		$scope.form.$setValidity('valid', true);	
 		if (user.name!=="foo" || user.pass!=="bar")	{
-				user.invalid = true;
 				console.log("login-invalid");
+				$scope.form.$setValidity('valid', false);
 		}
 	}
 }
