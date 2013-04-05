@@ -1,6 +1,5 @@
 package gr.tracer.platform.components;
 
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -210,7 +209,6 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 
 	/**
      * @see gr.tracer.platform.components.SecurityProfileComponent#createMonitoredProjectList(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-<<<<<<< HEAD
      */
 	@Override
 	public MonitoredProjectList createMonitoredProjectList(String mplName,
@@ -243,29 +241,20 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	
 	/**
      * @see gr.tracer.platform.components.SecurityProfileComponent#createMonitoredProjectList(java.lang.String, java.lang.String, java.lang.String)
-=======
->>>>>>> f342877... Changes to Tracer platform
      */
 	@Override
 	public MonitoredProjectList createMonitoredProjectList(String mplName,
-			String mplDescription, String userName, String secProfName) {
+			String mplDescription, String userName) {
 		SecurityManager sm = AlitheiaCore.getInstance().getSecurityManager();
 		UserManager userManager = sm.getUserManager();		
 		User user = userManager.getUser(userName);
-		SecurityProfile sp = searchSecurityProfile(secProfName);
 		MonitoredProjectList mpl = new MonitoredProjectList();
 		mpl.setName(mplName);
 		mpl.setDescription(mplDescription);
 		
 		
-<<<<<<< HEAD
-		if ((user != null)) {
+		if (user != null) {
 			mpl.setUser(user);
-=======
-		if ((user != null) && (sp != null)) {
-			mpl.setUser(user);
-			mpl.setSecurityProfile(sp);
->>>>>>> f342877... Changes to Tracer platform
 		}
 		else{
 			logger.info("User and/or Security profile do not exist with these names");
