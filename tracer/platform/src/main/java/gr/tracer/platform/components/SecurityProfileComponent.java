@@ -66,10 +66,11 @@ public interface SecurityProfileComponent extends TracerComponent {
 	 * Create a new Monitored project list
 	 * @param mplName The Monitored project list's name
 	 * @param mplDescription The Monitored project list's description
-	 * @param userName The User's name, that creates the Monitored project list's
+	 * @param userName The User's name, that creates the Monitored project list
+	 * @param secProfName The Security profile's name, that is associated with the Monitored project list
 	 * @return The Monitored project list or null if the Monitored project list is not created
 	 */
-	public MonitoredProjectList createMonitoredProjectList(String mplName, String mplDescription, String userName);
+	public MonitoredProjectList createMonitoredProjectList(String mplName, String mplDescription, String userName, String secProfName);
 
 	/**
 	 * Search a Monitored project list by name

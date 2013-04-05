@@ -45,8 +45,8 @@ public class SecurityProfileController {
 	/*
 	 * The methods for handling Monitored Project List's operations
 	 */
-	public MonitoredProjectList createMonitoredProjectList(String mplName, String mplDescription, String userName) {
-		return ((SecurityProfileComponentImpl) TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class)).createMonitoredProjectList(mplName, mplDescription, userName);
+	public MonitoredProjectList createMonitoredProjectList(String mplName, String mplDescription, String userName, String secProfName) {
+		return ((SecurityProfileComponentImpl) TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class)).createMonitoredProjectList(mplName, mplDescription, userName, secProfName);
 	}
 
 	public boolean setSecurityProfileToList(String spName, String mplName) {
