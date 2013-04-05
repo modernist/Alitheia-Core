@@ -66,7 +66,17 @@ public interface SecurityProfileComponent extends TracerComponent {
 	 * Create a new Monitored project list
 	 * @param mplName The Monitored project list's name
 	 * @param mplDescription The Monitored project list's description
-	 * @param userName The User's name, that creates the Monitored project list's
+	 * @param userName The User's name, that creates the Monitored project list
+	 * @param secProfName The Security profile's name, that is associated with the Monitored project list
+	 * @return The Monitored project list or null if the Monitored project list is not created
+	 */
+	public MonitoredProjectList createMonitoredProjectList(String mplName, String mplDescription, String userName, String secProfName);
+	
+	/**
+	 * Create a new Monitored project list
+	 * @param mplName The Monitored project list's name
+	 * @param mplDescription The Monitored project list's description
+	 * @param userName The User's name, that creates the Monitored project list
 	 * @return The Monitored project list or null if the Monitored project list is not created
 	 */
 	public MonitoredProjectList createMonitoredProjectList(String mplName, String mplDescription, String userName);
@@ -154,8 +164,8 @@ public interface SecurityProfileComponent extends TracerComponent {
 	
 	/**
 	 * Associate a Vulnerability type with a Security library
-	 * @param slName The Vulnerability type's name
-	 * @param vtName The Security library's name
+	 * @param slName The Security library's name
+	 * @param vtName The Vulnerability type's name
 	 * @return true or false whether the method executed successful or not
 	 */
 	public boolean addSecurityLibraryToVulnerabilityType(String slName, String vtName);

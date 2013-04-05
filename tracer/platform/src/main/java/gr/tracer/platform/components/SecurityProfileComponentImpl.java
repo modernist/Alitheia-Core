@@ -25,11 +25,19 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	private TracerPlatform platform;
 	private Logger logger;
 	private DBService dbs;
-	private Map<String, Object> mapProps;
+	private Map<String, Object> vulTypeProps;
+	private Map<String, Object> secLibProps;
+	private Map<String, Object> secProfProps;
+	private Map<String, Object> monProjListProps;
+	private Map<String, Object> monProjListProjProps;
     private Object lockObject = new Object();
 	
 	public SecurityProfileComponentImpl() {
-		mapProps = new Hashtable<String, Object>(1);		
+		vulTypeProps = new Hashtable<String, Object>(1);
+		secLibProps = new Hashtable<String, Object>(1);
+		secProfProps = new Hashtable<String, Object>(1);
+		monProjListProps = new Hashtable<String, Object>(1);
+		monProjListProjProps = new Hashtable<String, Object>(1);
 	}
 	
 	@Override
@@ -88,26 +96,20 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
      */
 	@Override
 	public SecurityProfile searchSecurityProfile(String spName) {
-		List<SecurityProfile> secProfs;
+		List<SecurityProfile> secProfs = null;
 		try {
 			if (dbs != null &&  dbs.startDBSession()) {
 				synchronized (lockObject) {
-					mapProps.clear();
-					mapProps.put("name", spName);
-					secProfs = dbs.findObjectsByProperties(SecurityProfile.class, mapProps);
-					if (secProfs.size() != 0)
-						return secProfs.get(0);
-					else {
-						logger.info("SecurityProfile with this name does not exist");
-						return null;
-					}
+					secProfProps.clear();
+					secProfProps.put("name", spName);
+					secProfs = dbs.findObjectsByProperties(SecurityProfile.class, secProfProps);
+					return (secProfs.size() > 0 && secProfs != null) ? secProfs.get(0) : null;
 				}
 			} else {
 				return null;
 			}
 		} finally {
-			if (dbs.isDBSessionActive())
-				dbs.commitDBSession();
+			dbs.commitDBSession();
 		}
 	}
 
@@ -135,12 +137,13 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
      */
 	@Override
 	public boolean addVulnerabilityTypeToSecurityProfile(String vtName, String spName) {
-		VulnerabilityType vt = searchVulnerabilityType(vtName);
-        SecurityProfile sp = searchSecurityProfile(spName);
+		VulnerabilityType vt = ((SecurityProfileComponentImpl) platform.getComponent(SecurityProfileComponent.class)).searchVulnerabilityType(vtName);
+        SecurityProfile sp = ((SecurityProfileComponentImpl) platform.getComponent(SecurityProfileComponent.class)).searchSecurityProfile(spName);
         dbs.startDBSession();
 		try {
         	if ((vt!=null) && (sp != null)) {
-            	return (sp.getDetectedVulnerabilityTypes().add(vt) && vt.getDetectingSecurityProfiles().add(sp));
+        		return ((vt.getDetectingSecurityProfiles().add(sp)) && (sp.getDetectedVulnerabilityTypes().add(vt)));
+
             } else {
             	logger.error("Vulnerability type and/or Security profile do not exist");
             	return false;
@@ -205,7 +208,39 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	}
 
 	/**
-     * @see gr.tracer.platform.components.SecurityProfileComponent#createMonitoredProjectList(java.lang.String, java.lang.String)
+     * @see gr.tracer.platform.components.SecurityProfileComponent#createMonitoredProjectList(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+     */
+	@Override
+	public MonitoredProjectList createMonitoredProjectList(String mplName,
+			String mplDescription, String userName, String secProfName) {
+		SecurityManager sm = AlitheiaCore.getInstance().getSecurityManager();
+		UserManager userManager = sm.getUserManager();		
+		User user = userManager.getUser(userName);
+		SecurityProfile sp = searchSecurityProfile(secProfName);
+		MonitoredProjectList mpl = new MonitoredProjectList();
+		mpl.setName(mplName);
+		mpl.setDescription(mplDescription);
+		
+		
+		if ((user != null) && (sp != null)) {
+			mpl.setUser(user);
+			mpl.setSecurityProfile(sp);
+		}
+		else{
+			logger.info("User and/or Security profile do not exist with these names");
+			return null;
+		}
+		
+		if(dbs != null && dbs.startDBSession())
+    	{
+    		if(dbs.addRecord(mpl)) 
+    			return dbs.commitDBSession() ? mpl : null;
+    	}
+		return null;
+	}
+	
+	/**
+     * @see gr.tracer.platform.components.SecurityProfileComponent#createMonitoredProjectList(java.lang.String, java.lang.String, java.lang.String)
      */
 	@Override
 	public MonitoredProjectList createMonitoredProjectList(String mplName,
@@ -217,10 +252,12 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 		mpl.setName(mplName);
 		mpl.setDescription(mplDescription);
 		
-		if (user != null)
+		
+		if (user != null) {
 			mpl.setUser(user);
+		}
 		else{
-			logger.info("User does not with this name");
+			logger.info("User and/or Security profile do not exist with these names");
 			return null;
 		}
 		
@@ -241,17 +278,16 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 		try {
 			if (dbs.startDBSession()) {
 				synchronized (lockObject) {
-					mapProps.clear();
-					mapProps.put("name", mplName);
-					mpls = dbs.findObjectsByProperties(MonitoredProjectList.class, mapProps);
-					return (mpls.size() != 0) ? mpls.get(0) : null;
+					monProjListProps.clear();
+					monProjListProps.put("name", mplName);
+					mpls = dbs.findObjectsByProperties(MonitoredProjectList.class, monProjListProps);
+					return (mpls.size() > 0 && mpls != null) ? mpls.get(0) : null;
 				}
 			} else {
 				return null;
 			}
 		} finally {
-			if (dbs.isDBSessionActive())
-				dbs.commitDBSession();
+			dbs.commitDBSession();
 		}
 	}
 
@@ -318,10 +354,10 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 				List<MonitoredProjectListProject> mplps = null;
 				
 				synchronized (lockObject) {
-					mapProps.clear();
-					mapProps.put("monitoredProjectList", mpl.getId());
-					mapProps.put("project", project.getId());
-					mplps = dbs.findObjectsByProperties(MonitoredProjectListProject.class, mapProps);
+					monProjListProjProps.clear();
+					monProjListProjProps.put("monitoredProjectList", mpl.getId());
+					monProjListProjProps.put("project", project.getId());
+					mplps = dbs.findObjectsByProperties(MonitoredProjectListProject.class, monProjListProjProps);
 					return ((mplps.size() > 0) && (mplps != null)) ? dbs.deleteRecords(mplps) : false;
 				}
 			} else {
@@ -347,16 +383,16 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	 */
 	public MonitoredProjectListProject getMonitoredProjectListProject(String monProjList, String projFileName) {
 		try {
-			List<MonitoredProjectListProject> mplps;
+			List<MonitoredProjectListProject> mplps = null;
 			MonitoredProjectList mpl = searchMonitoredProjectList(monProjList);
 			StoredProject project = StoredProject.getProjectByName(projFileName);
 			if ((mpl != null) && (project != null))
 				if(dbs.startDBSession()) {
 					synchronized (lockObject) {
-						mapProps.clear();
-						mapProps.put("monitoredProjectList", mpl.getId());
-						mapProps.put("project", project.getId());
-						mplps = dbs.findObjectsByProperties(MonitoredProjectListProject.class, mapProps);
+						monProjListProjProps.clear();
+						monProjListProjProps.put("monitoredProjectList", mpl.getId());
+						monProjListProjProps.put("project", project.getId());
+						mplps = dbs.findObjectsByProperties(MonitoredProjectListProject.class, monProjListProjProps);
 						return ((mplps.size() > 0) && (mplps != null)) ? mplps.get(0) : null;
 					}
 				} else
@@ -449,26 +485,20 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
      */
 	@Override
 	public SecurityLibrary searchSecurityLibrary(String slName) {
-		List<SecurityLibrary> secLibs;
+		List<SecurityLibrary> secLibs = null;
 		try {
 			if (dbs.startDBSession()) {
 				synchronized (lockObject) {
-					mapProps.clear();
-					mapProps.put("name", slName);
-					secLibs = dbs.findObjectsByProperties(SecurityLibrary.class, mapProps);
-					if (secLibs.size() != 0) 
-						return secLibs.get(0);
-					else {
-						logger.info("SecurityLibrary with this name does not exist");
-						return null;
-					}
+					secLibProps.clear();
+					secLibProps.put("name", slName);
+					secLibs = dbs.findObjectsByProperties(SecurityLibrary.class, secLibProps);
+					return (secLibs.size() > 0 && secLibs != null) ? secLibs.get(0) : null;
 				}
 			} else {
 				return null;
 			}
 		} finally {
-			if (dbs.isDBSessionActive())
-				dbs.commitDBSession();
+			dbs.commitDBSession();
 		}
 	}
 	
@@ -528,26 +558,20 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
      */
 	@Override
 	public VulnerabilityType searchVulnerabilityType(String vtName) {
-		List<VulnerabilityType> vulTypes;
+		List<VulnerabilityType> vulTypes = null;
 		try {
 			if (dbs.startDBSession()) {
 				synchronized (lockObject) {
-					mapProps.clear();
-					mapProps.put("name", vtName);
-					vulTypes = dbs.findObjectsByProperties(VulnerabilityType.class, mapProps);
-					if (vulTypes.size() != 0)
-						return vulTypes.get(0);
-					else {
-						logger.info("VulnerabilityType with this does not exist");
-						return null;
-					}
+					vulTypeProps.clear();
+					vulTypeProps.put("name", vtName);
+					vulTypes = dbs.findObjectsByProperties(VulnerabilityType.class, vulTypeProps);
+					return (vulTypes.size() > 0 && vulTypes != null) ? vulTypes.get(0) : null;
 				}
 			} else {
 				return null;
 			}
 		} finally {
-			if (dbs.isDBSessionActive())
-				dbs.commitDBSession();
+			dbs.commitDBSession();
 		}
 	}
 	
