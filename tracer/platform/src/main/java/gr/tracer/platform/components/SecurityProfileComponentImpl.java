@@ -257,7 +257,7 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 			mpl.setUser(user);
 		}
 		else{
-			logger.info("User and/or Security profile do not exist with these names");
+			logger.info("User does not exist with this name");
 			return null;
 		}
 		

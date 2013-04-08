@@ -12,12 +12,12 @@ import eu.sqooss.core.AlitheiaCoreService;
 import eu.sqooss.service.db.DBService;
 import eu.sqooss.service.logging.LogManager;
 import eu.sqooss.service.logging.Logger;
-import gr.tracer.platform.components.UserComponentImpl;
 import gr.tracer.platform.components.VulnerabilityDetectionComponent;
 import gr.tracer.platform.components.VulnerabilityDetectionComponentImpl;
 import gr.tracer.platform.components.SecurityProfileComponent;
 import gr.tracer.platform.components.SecurityProfileComponentImpl;
 import gr.tracer.platform.components.UserComponent;
+import gr.tracer.platform.components.UserComponentImpl;
 import gr.tracer.platform.security.TracerSecurityModel;
 import gr.tracer.platform.security.TracerSecurityModelImpl;
 
@@ -48,14 +48,14 @@ public class TracerPlatform {
     	 */
         
         components.add(TracerSecurityModel.class);
-        components.add(UserComponent.class);
         components.add(SecurityProfileComponent.class);
         components.add(VulnerabilityDetectionComponent.class);
-
+        components.add(UserComponent.class);
+        
         implementations.put(TracerSecurityModel.class, TracerSecurityModelImpl.class);
-        implementations.put(UserComponent.class, UserComponentImpl.class);
         implementations.put(SecurityProfileComponent.class, SecurityProfileComponentImpl.class);
         implementations.put(VulnerabilityDetectionComponent.class, VulnerabilityDetectionComponentImpl.class);
+        implementations.put(UserComponent.class, UserComponentImpl.class);
     }
     
     private AlitheiaCore core;
