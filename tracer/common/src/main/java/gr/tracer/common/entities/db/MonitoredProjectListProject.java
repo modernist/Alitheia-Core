@@ -64,6 +64,12 @@ public class MonitoredProjectListProject extends DAObject{
 	@JoinColumn(name="PROJECT_ID", referencedColumnName="PROJECT_ID")
 	private StoredProject project;
 	
+	public MonitoredProjectListProject() {
+	}
 	
+	public MonitoredProjectListProject(MonitoredProjectList list, StoredProject project) {
+		this.monitoredProjectList = list;
+		this.project = project;
+	}
 	
 }

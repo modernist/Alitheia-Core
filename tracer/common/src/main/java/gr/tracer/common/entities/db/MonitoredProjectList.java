@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import eu.sqooss.service.db.DAObject;
+import eu.sqooss.service.db.StoredProject;
 import eu.sqooss.service.db.User;
 
 @XmlRootElement(name="monitoredProjectList")
@@ -91,12 +92,11 @@ public class MonitoredProjectList extends DAObject {
      * Get a set of distinct Stored Projects that should be contained in the list
      * @return Set of Stored Projects included in the monitoring list
      */
-	
-	public Set<MonitoredProjectListProject> getIncludedStoredProject(){
+	public Set<MonitoredProjectListProject> getProjects(){
 		return this.projects;
 	}
 	
-	public void setIncludedStoredProject(Set<MonitoredProjectListProject> projects){
+	public void setProjects(Set<MonitoredProjectListProject> projects){
 		this.projects = projects;
 	}
 	
@@ -113,6 +113,20 @@ public class MonitoredProjectList extends DAObject {
 
 	public void setSecurityProfile(SecurityProfile securityProfile) {
 		this.securityProfile = securityProfile;
+	}
+	
+	public void addProject(StoredProject project) {
+		if(projects != null) {
+			MonitoredProjectListProject p = new MonitoredProjectListProject(this, project);
+			projects.add(p);
+		}
+	}
+	
+	public void removeProject(StoredProject project) {
+		if(projects != null) {
+			MonitoredProjectListProject p = new MonitoredProjectListProject(this, project);
+			projects.remove(p);
+		}
 	}
 	
 	//TODO: Add Add/Remove project methods
