@@ -16,6 +16,13 @@ public class UserComponentImpl implements UserComponent {
 	private Logger logger;
 	private SecurityManager sm;
 
+	/*
+     * Parameterless constructor of the class.
+     */
+	public UserComponentImpl () {
+		
+	}
+	
 	/**
      * @see gr.tracer.platform.components.UserComponent#createNewUser(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
      */
