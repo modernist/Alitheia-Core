@@ -32,6 +32,9 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	private Map<String, Object> monProjListProjProps;
     private Object lockObject = new Object();
 	
+    /*
+     * Parameterless constructor of the class.
+     */
 	public SecurityProfileComponentImpl() {
 		vulTypeProps = new Hashtable<String, Object>(1);
 		secLibProps = new Hashtable<String, Object>(1);
