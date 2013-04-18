@@ -40,3 +40,9 @@ footer {
 	margin-bottom: 12px;
 	padding: 7px 9px;
 }
+
+
+
+.form-horizontal input.ng-invalid.ng-dirty{
+	background-color: #FA787E;
+}
