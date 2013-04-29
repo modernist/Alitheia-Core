@@ -517,8 +517,7 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	@Override
 	public List<VulnerabilityType> getVulnerabilityTypes() {
 		
-		StringBuilder q = new StringBuilder("from VulnerabilityType vt");
-		return (List<VulnerabilityType>) dbs.doHQL(q.toString());
+		return VulnerabilityType.getVulnerabilityTypes();
 	}
 
 	/**
