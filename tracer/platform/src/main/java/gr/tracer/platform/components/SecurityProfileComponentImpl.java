@@ -140,20 +140,31 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
      */
 	@Override
 	public boolean addVulnerabilityTypeToSecurityProfile(String vtName, String spName) {
-		VulnerabilityType vt = ((SecurityProfileComponentImpl) platform.getComponent(SecurityProfileComponent.class)).searchVulnerabilityType(vtName);
-        SecurityProfile sp = ((SecurityProfileComponentImpl) platform.getComponent(SecurityProfileComponent.class)).searchSecurityProfile(spName);
-        dbs.startDBSession();
 		try {
+			VulnerabilityType vt = ((SecurityProfileComponentImpl) platform.getComponent(SecurityProfileComponent.class)).searchVulnerabilityType(vtName);
+	        SecurityProfile sp = ((SecurityProfileComponentImpl) platform.getComponent(SecurityProfileComponent.class)).searchSecurityProfile(spName);
+			dbs.startDBSession();
+	        
         	if ((vt!=null) && (sp != null)) {
-        		return ((vt.getDetectingSecurityProfiles().add(sp)) && (sp.getDetectedVulnerabilityTypes().add(vt)));
-
+        		if ((vt.getDetectingSecurityProfiles().add(sp)) && (sp.getDetectedVulnerabilityTypes().add(vt))) {
+        			dbs.attachObjectToDBSession(vt);
+        			dbs.attachObjectToDBSession(sp);
+        			Session s = dbs.getActiveDBSession();
+        			s.saveOrUpdate(sp);
+        			s.saveOrUpdate(vt);
+        			return true;
+        		}
             } else {
             	logger.error("Vulnerability type and/or Security profile do not exist");
-            	return false;
             }
-        } finally {
+        } catch(Exception e) {
+        	logger.error("failed to associate vulnerability type to security profile", e);
+        	return false;
+        }
+		finally {
         	dbs.commitDBSession();
         }
+		return false;
 	}
 	
 	/**
@@ -161,11 +172,13 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
      */
 	@Override
 	public boolean removeVulnerabilityTypeFromSecurityProfile(String vtName, String spName) {
-		VulnerabilityType vt = searchVulnerabilityType(vtName);
-        SecurityProfile sp = searchSecurityProfile(spName);
-        dbs.startDBSession();
 		try {
+			VulnerabilityType vt = searchVulnerabilityType(vtName);
+	        SecurityProfile sp = searchSecurityProfile(spName);
+			dbs.startDBSession();
         	if ((vt!=null) && (sp != null)) {
+        		dbs.attachObjectToDBSession(vt);
+    			dbs.attachObjectToDBSession(sp);
             	return (sp.getDetectedVulnerabilityTypes().remove(vt) && vt.getDetectingSecurityProfiles().remove(sp));
             } else {
             	logger.error("Vulnerability type and/or Security profile do not exist");
@@ -299,10 +312,11 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
      */
 	@Override
 	public boolean setSecurityProfileToList(String spName, String mplName) {
-		SecurityProfile sp = searchSecurityProfile(spName);
-		MonitoredProjectList mpl = searchMonitoredProjectList(mplName);
-        dbs.startDBSession();
 		try {
+			SecurityProfile sp = searchSecurityProfile(spName);
+			MonitoredProjectList mpl = searchMonitoredProjectList(mplName);
+			dbs.startDBSession();
+			
 			if ((sp != null) && (mpl != null)) {
 				mpl.setSecurityProfile(sp);
 				return true;
@@ -321,11 +335,12 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	@Override
 	public boolean addProjectToMonitoredProjectList(String monProjList,
 			String projFileName) {	
-		MonitoredProjectList mpl = searchMonitoredProjectList(monProjList);
-		StoredProject project = StoredProject.getProjectByName(projFileName);
-		dbs.startDBSession();
-		Session session = dbs.getActiveDBSession();
+		//Session session = dbs.getActiveDBSession();
 		try {
+			MonitoredProjectList mpl = searchMonitoredProjectList(monProjList);
+			StoredProject project = StoredProject.getProjectByName(projFileName);
+			dbs.startDBSession();
+			
 			if ((mpl != null) && (project != null)) {
 				MonitoredProjectListProject mplp = new MonitoredProjectListProject();
 				mplp.setMonitoredProjectList(mpl);
@@ -347,11 +362,12 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	@Override
 	public boolean removeProjectFromMonitoredProjectList(String monProjList,
 			String projFileName) {
-		MonitoredProjectList mpl = searchMonitoredProjectList(monProjList);
-		StoredProject project = StoredProject.getProjectByName(projFileName);
-		dbs.startDBSession();
-		Session session = dbs.getActiveDBSession();
+		//Session session = dbs.getActiveDBSession();
 		try {
+			MonitoredProjectList mpl = searchMonitoredProjectList(monProjList);
+			StoredProject project = StoredProject.getProjectByName(projFileName);
+			dbs.startDBSession();
+			
 			if ((mpl != null) && (project != null)){
 				
 				List<MonitoredProjectListProject> mplps = null;
@@ -582,18 +598,27 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
      */
 	@Override
 	public boolean addSecurityLibraryToVulnerabilityType(String slName, String vtName) {
-		SecurityLibrary sl = searchSecurityLibrary(slName);
-    	VulnerabilityType vt = searchVulnerabilityType(vtName);
-		dbs.startDBSession();
 		try {
-        	if ((sl!=null) && (vt != null)) {
-        		return ((sl.getTreatedVulnerabilityTypes().add(vt)) && vt.getTreatingSecurityLibraries().add(sl));
+			SecurityLibrary sl = searchSecurityLibrary(slName);
+	    	VulnerabilityType vt = searchVulnerabilityType(vtName);
+	    	dbs.startDBSession();
+	    	
+			if ((sl!=null) && (vt != null)) {
+        		if( ((sl.getTreatedVulnerabilityTypes().add(vt)) && vt.getTreatingSecurityLibraries().add(sl))) {
+        			dbs.attachObjectToDBSession(vt);
+        			dbs.attachObjectToDBSession(sl);
+        			Session s = dbs.getActiveDBSession();
+        			s.saveOrUpdate(sl);
+        			s.saveOrUpdate(vt);
+        			
+        			return dbs.commitDBSession();
+        		}
         	} else {
         		logger.error("SecurityLibrary or VulnerabilityType do not exist");
-        		return false;
         	}
-        } finally {
-        	dbs.commitDBSession();
+        } catch(Exception e) {
+        	logger.error("Failed to associate security library to vulnerability type", e);
         }
+		return false;
     }
 }

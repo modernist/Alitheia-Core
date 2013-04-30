@@ -6,8 +6,8 @@
         <id name="id" type="long" column="MONITORED_PROJECT_LIST_ID">
             <generator class="native" />
         </id>
-        <property name="name" type="java.lang.String" column="MONITORED_PROJECT_LIST_NAME" not-null="true" unique="true" />
-        <property name="description" type="java.lang.String" column="MONITORED_PROJECT_LIST_DESCRIPTION" not-null="true" />
+        <property name="name" type="string" column="MONITORED_PROJECT_LIST_NAME" not-null="true" unique="true" />
+        <property name="description" type="string" column="MONITORED_PROJECT_LIST_DESCRIPTION" not-null="true" />
         <many-to-one name="user" class="eu.sqooss.service.db.User" column="USER_ID" cascade="all" />
         <set name="projects" table="MONITORED_PROJECT_LIST_PROJECT" inverse="false" lazy="true" access="field">
             <key column="MONITORED_PROJECT_LIST_ID" />

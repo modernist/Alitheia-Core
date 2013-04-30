@@ -6,9 +6,9 @@
        <id name="id" type="long" column="SECURITY_LIBRARY_ID">
             <generator class="native" />
         </id>
-        <property name="name" type="java.lang.String" column="SECURITY_LIBRARY_NAME" not-null="true" unique="true" />
-        <property name="description" type="java.lang.String" column="SECURITY_LIBRARY_DESCRIPTION" not-null="true" />
-        <set name="treatedVulnerabilityTypes" table="TREATED_VULNERABILITY_TYPE" inverse="true" lazy="false">
+        <property name="name" type="string" column="SECURITY_LIBRARY_NAME" not-null="true" unique="true" />
+        <property name="description" type="string" column="SECURITY_LIBRARY_DESCRIPTION" not-null="true" />
+        <set name="treatedVulnerabilityTypes" table="TREATED_VULNERABILITY_TYPE" inverse="false" lazy="false">
             <key column="SECURITY_LIBRARY_ID" />
             <many-to-many class="gr.tracer.common.entities.db.VulnerabilityType" column="VULNERABILITY_TYPE_ID"/>
         </set>

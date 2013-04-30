@@ -70,6 +70,7 @@ public class SecurityProfile extends DAObject {
             name="DETECTED_VULNERABILITY_TYPE",
             joinColumns={@JoinColumn(name="SECURITY_PROFILE_ID", referencedColumnName="SECURITY_PROFILE_ID")},
             inverseJoinColumns={@JoinColumn(name="VULNERABILITY_TYPE_ID", referencedColumnName="VULNERABILITY_TYPE_ID")})
+	//@ManyToMany(mappedBy="detectingSecurityProfiles", targetEntity=VulnerabilityType.class, cascade={CascadeType.ALL})
     private Set<VulnerabilityType> detectedVulnerabilityTypes = new HashSet<VulnerabilityType>();
 	
 	/**

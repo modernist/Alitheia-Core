@@ -8,6 +8,7 @@ import eu.sqooss.core.AlitheiaCore;
 import eu.sqooss.service.db.DAObject;
 import eu.sqooss.service.db.DBService;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -70,6 +71,7 @@ public class SecurityLibrary extends DAObject {
             name="TREATED_VULNERABILITY_TYPE",
             joinColumns={@JoinColumn(name="SECURITY_LIBRARY_ID", referencedColumnName="SECURITY_LIBRARY_ID")},
             inverseJoinColumns={@JoinColumn(name="VULNERABILITY_TYPE_ID", referencedColumnName="VULNERABILITY_TYPE_ID")})
+	//@ManyToMany(mappedBy="treatingSecurityLibraries", targetEntity=VulnerabilityType.class, cascade={CascadeType.ALL})
     private Set<VulnerabilityType> treatedVulnerabilityTypes = new HashSet<VulnerabilityType>();
 	
 	/**
