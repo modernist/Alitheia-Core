@@ -144,11 +144,11 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	        
         	if ((vt!=null) && (sp != null)) {
         		if ((vt.getDetectingSecurityProfiles().add(sp)) && (sp.getDetectedVulnerabilityTypes().add(vt))) {
-        			dbs.attachObjectToDBSession(vt);
-        			dbs.attachObjectToDBSession(sp);
-        			Session s = dbs.getActiveDBSession();
-        			s.saveOrUpdate(sp);
-        			s.saveOrUpdate(vt);
+        			vt = dbs.attachObjectToDBSession(vt);
+        			sp = dbs.attachObjectToDBSession(sp);
+        			//Session s = dbs.getActiveDBSession();
+        			//s.saveOrUpdate(sp);
+        			//s.saveOrUpdate(vt);
         			return true;
         		}
             } else {
@@ -174,8 +174,8 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	        SecurityProfile sp = searchSecurityProfile(spName);
 			dbs.startDBSession();
         	if ((vt!=null) && (sp != null)) {
-        		dbs.attachObjectToDBSession(vt);
-    			dbs.attachObjectToDBSession(sp);
+        		vt = dbs.attachObjectToDBSession(vt);
+    			sp = dbs.attachObjectToDBSession(sp);
             	return (sp.getDetectedVulnerabilityTypes().remove(vt) && vt.getDetectingSecurityProfiles().remove(sp));
             } else {
             	logger.error("Vulnerability type and/or Security profile do not exist");
@@ -262,17 +262,15 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 		mpl.setName(mplName);
 		mpl.setDescription(mplDescription);
 		
-		
-		if (user != null) {
-			mpl.setUser(user);
-		}
-		else{
+		if (user == null) {
 			logger.info("User does not exist with this name");
 			return null;
 		}
 		
 		if(dbs != null && dbs.startDBSession())
     	{
+			user = dbs.attachObjectToDBSession(user);
+			mpl.setUser(user);
     		if(dbs.addRecord(mpl)) 
     			return dbs.commitDBSession() ? mpl : null;
     	}
@@ -383,9 +381,6 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 			dbs.commitDBSession();
 		}
 	}
-	
-	
-	
 		
 	/*
 	 * The methods for handling Monitored Project List Project's operations
@@ -444,9 +439,6 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	    } else
 	    	return null;
     }	
-	
-	
-		
 	
 	/*
 	 * The methods for handling Security Libraries operations
@@ -516,9 +508,6 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 			dbs.commitDBSession();
 		}
 	}
-	
-	
-	
 	
 	/*
 	 * The methods for handling Vulnerability Type's operations
@@ -601,11 +590,11 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	    	
 			if ((sl!=null) && (vt != null)) {
         		if( ((sl.getTreatedVulnerabilityTypes().add(vt)) && vt.getTreatingSecurityLibraries().add(sl))) {
-        			dbs.attachObjectToDBSession(vt);
-        			dbs.attachObjectToDBSession(sl);
-        			Session s = dbs.getActiveDBSession();
-        			s.saveOrUpdate(sl);
-        			s.saveOrUpdate(vt);
+        			vt = dbs.attachObjectToDBSession(vt);
+        			sl = dbs.attachObjectToDBSession(sl);
+        			//Session s = dbs.getActiveDBSession();
+        			//s.saveOrUpdate(sl);
+        			//s.saveOrUpdate(vt);
         			
         			return dbs.commitDBSession();
         		}
