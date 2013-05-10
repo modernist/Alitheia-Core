@@ -59,9 +59,6 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	public boolean shutDown() {
 		return true;
 	}
-
-	
-	
 	
 	/*
 	 * The methods for handling Security Profile's operations
@@ -189,9 +186,6 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
         }
 	}
 	
-	
-	
-	
 	/*
 	 * The methods for handling Monitored Project List's operations
 	 */
@@ -318,6 +312,8 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 			dbs.startDBSession();
 			
 			if ((sp != null) && (mpl != null)) {
+				mpl = dbs.attachObjectToDBSession(mpl);
+				sp = dbs.attachObjectToDBSession(sp);
 				mpl.setSecurityProfile(sp);
 				return true;
 			} else {
