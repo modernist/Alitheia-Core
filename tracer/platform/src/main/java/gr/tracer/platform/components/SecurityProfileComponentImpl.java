@@ -174,9 +174,14 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	        SecurityProfile sp = searchSecurityProfile(spName);
 			dbs.startDBSession();
         	if ((vt!=null) && (sp != null)) {
-        		vt = dbs.attachObjectToDBSession(vt);
-    			sp = dbs.attachObjectToDBSession(sp);
-            	return (sp.getDetectedVulnerabilityTypes().remove(vt) && vt.getDetectingSecurityProfiles().remove(sp));
+        		if (sp.getDetectedVulnerabilityTypes().remove(vt) && vt.getDetectingSecurityProfiles().remove(sp)) {
+        			vt = dbs.attachObjectToDBSession(vt);
+        			sp = dbs.attachObjectToDBSession(sp);
+        			return true;
+        		} else {
+                	logger.error("Vulnerability type do not remove from Security profile");
+                	return false;
+                }
             } else {
             	logger.error("Vulnerability type and/or Security profile do not exist");
             	return false;
@@ -327,12 +332,12 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
      * @see gr.tracer.platform.components.SecurityProfileComponent#addProjectToMonitoredProjectList(java.lang.String, java.lang.String)
      */
 	@Override
-	public boolean addProjectToMonitoredProjectList(String monProjList,
-			String projFileName) {	
+	public boolean addProjectToMonitoredProjectList(String storProjName,
+			String monProjList) {	
 		//Session session = dbs.getActiveDBSession();
 		try {
 			MonitoredProjectList mpl = searchMonitoredProjectList(monProjList);
-			StoredProject project = StoredProject.getProjectByName(projFileName);
+			StoredProject project = StoredProject.getProjectByName(storProjName);
 			dbs.startDBSession();
 			
 			if ((mpl != null) && (project != null)) {
@@ -354,12 +359,12 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
      * @see gr.tracer.platform.components.SecurityProfileComponent#removeProjectFromMonitoredProjectList(java.lang.String, java.lang.String)
      */
 	@Override
-	public boolean removeProjectFromMonitoredProjectList(String monProjList,
-			String projFileName) {
+	public boolean removeProjectFromMonitoredProjectList(String storProjName,
+			String monProjList) {
 		//Session session = dbs.getActiveDBSession();
 		try {
 			MonitoredProjectList mpl = searchMonitoredProjectList(monProjList);
-			StoredProject project = StoredProject.getProjectByName(projFileName);
+			StoredProject project = StoredProject.getProjectByName(storProjName);
 			dbs.startDBSession();
 			
 			if ((mpl != null) && (project != null)){

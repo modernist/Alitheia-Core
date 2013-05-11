@@ -102,7 +102,7 @@ public interface SecurityProfileComponent extends TracerComponent {
 	 * @param projFileName The Monitored project list's name
 	 * @return true or false whether the method executed successful or not
 	 */
-	public boolean addProjectToMonitoredProjectList(String monProjList, String projFileName);
+	public boolean addProjectToMonitoredProjectList(String storProjName, String monProjList);
 	
 	/**
 	 * Remove a Stored project to a Monitored project list
@@ -110,7 +110,7 @@ public interface SecurityProfileComponent extends TracerComponent {
 	 * @param projFileName The Monitored project list's name
 	 * @return true or false whether the method executed successful or not
 	 */
-	public boolean removeProjectFromMonitoredProjectList(String monProjList, String projFileName);
+	public boolean removeProjectFromMonitoredProjectList(String storProjName, String monProjList);
 	
 	
 	/*
