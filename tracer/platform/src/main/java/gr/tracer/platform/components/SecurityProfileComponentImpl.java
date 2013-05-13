@@ -138,8 +138,8 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	@Override
 	public boolean addVulnerabilityTypeToSecurityProfile(String vtName, String spName) {
 		try {
-			VulnerabilityType vt = ((SecurityProfileComponentImpl) platform.getComponent(SecurityProfileComponent.class)).searchVulnerabilityType(vtName);
-	        SecurityProfile sp = ((SecurityProfileComponentImpl) platform.getComponent(SecurityProfileComponent.class)).searchSecurityProfile(spName);
+			VulnerabilityType vt = searchVulnerabilityType(vtName);
+	        SecurityProfile sp = searchSecurityProfile(spName);
 			dbs.startDBSession();
 	        
         	if ((vt!=null) && (sp != null)) {
@@ -369,12 +369,10 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	@Override
 	public boolean removeProjectFromMonitoredProjectList(String storProjName,
 			String monProjList) {
-		//Session session = dbs.getActiveDBSession();
 		try {
 			MonitoredProjectList mpl = searchMonitoredProjectList(monProjList);
-//			dbs.startDBSession();
-			StoredProject project = StoredProject.getProjectByName(storProjName);
 			dbs.startDBSession();
+			StoredProject project = StoredProject.getProjectByName(storProjName);
 			
 			if ((mpl != null) && (project != null)){
 				
@@ -382,8 +380,8 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 				
 				synchronized (lockObject) {
 					monProjListProjProps.clear();
-					monProjListProjProps.put("monitoredProjectList", mpl.getId());
-					monProjListProjProps.put("project", project.getId());
+					monProjListProjProps.put("monitoredProjectList", mpl);
+					monProjListProjProps.put("project", project);
 					mplps = dbs.findObjectsByProperties(MonitoredProjectListProject.class, monProjListProjProps);
 					return ((mplps.size() > 0) && (mplps != null)) ? dbs.deleteRecords(mplps) : false;
 				}
