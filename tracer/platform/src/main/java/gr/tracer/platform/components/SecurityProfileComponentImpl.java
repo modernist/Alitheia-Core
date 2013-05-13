@@ -337,6 +337,7 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 		//Session session = dbs.getActiveDBSession();
 		try {
 			MonitoredProjectList mpl = searchMonitoredProjectList(monProjList);
+//			dbs.startDBSession();
 			StoredProject project = StoredProject.getProjectByName(storProjName);
 			dbs.startDBSession();
 			
@@ -364,6 +365,7 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 		//Session session = dbs.getActiveDBSession();
 		try {
 			MonitoredProjectList mpl = searchMonitoredProjectList(monProjList);
+//			dbs.startDBSession();
 			StoredProject project = StoredProject.getProjectByName(storProjName);
 			dbs.startDBSession();
 			
