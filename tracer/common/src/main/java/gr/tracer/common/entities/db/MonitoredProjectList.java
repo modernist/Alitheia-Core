@@ -115,19 +115,36 @@ public class MonitoredProjectList extends DAObject {
 		this.securityProfile = securityProfile;
 	}
 	
-	public void addProject(StoredProject project) {
+	public boolean addProject(StoredProject project) {
 		if(projects != null) {
 			MonitoredProjectListProject p = new MonitoredProjectListProject(this, project);
-			projects.add(p);
+			return projects.add(p);
 		}
+		return false;
 	}
 	
-	public void removeProject(StoredProject project) {
+	public boolean removeProject(StoredProject project) {
 		if(projects != null) {
 			MonitoredProjectListProject p = new MonitoredProjectListProject(this, project);
-			projects.remove(p);
+			return projects.remove(p);
 		}
+		return false;
 	}
 	
-	//TODO: Add Add/Remove project methods
+	public boolean addProject(MonitoredProjectListProject p) {
+		if(projects != null) {
+			p.setMonitoredProjectList(this);
+			return projects.add(p);
+		}
+		return false;
+	}
+	
+	public boolean removeProject(MonitoredProjectListProject p) {
+		if(projects != null) {
+			p.setMonitoredProjectList(this);
+			return projects.remove(p);
+		}
+		return false;
+	}
+	
 }

@@ -105,12 +105,12 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 					secProfs = dbs.findObjectsByProperties(SecurityProfile.class, secProfProps);
 					return (secProfs.size() > 0 && secProfs != null) ? secProfs.get(0) : null;
 				}
-			} else {
-				return null;
 			}
-		} finally {
-			dbs.commitDBSession();
+		} catch(Exception e) {
+			e.printStackTrace();
+			logger.warn("Failed to retrieve security profile by name", e);
 		}
+		return null;
 	}
 
 	/**
@@ -296,12 +296,12 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 					mpls = dbs.findObjectsByProperties(MonitoredProjectList.class, monProjListProps);
 					return (mpls.size() > 0 && mpls != null) ? mpls.get(0) : null;
 				}
-			} else {
-				return null;
 			}
-		} finally {
-			dbs.commitDBSession();
+		} catch(Exception e) {
+			e.printStackTrace();
+			logger.warn("Failed to retrieve monitored project list by name", e);
 		}
+		return null;
 	}
 
 	/**
@@ -333,27 +333,34 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
      */
 	@Override
 	public boolean addProjectToMonitoredProjectList(String storProjName,
-			String monProjList) {	
-		//Session session = dbs.getActiveDBSession();
+			String monProjList) {
 		try {
 			MonitoredProjectList mpl = searchMonitoredProjectList(monProjList);
-//			dbs.startDBSession();
-			StoredProject project = StoredProject.getProjectByName(storProjName);
 			dbs.startDBSession();
+			StoredProject project = StoredProject.getProjectByName(storProjName);
+			
+			boolean result = false;
 			
 			if ((mpl != null) && (project != null)) {
-				MonitoredProjectListProject mplp = new MonitoredProjectListProject();
-				mplp.setMonitoredProjectList(mpl);
-				mplp.setProject(project);
-				return dbs.addRecord(mplp);
+				
+				project = dbs.attachObjectToDBSession(project);
+				mpl = dbs.attachObjectToDBSession(mpl);
+				MonitoredProjectListProject mplp = new MonitoredProjectListProject(mpl, project);
+				dbs.addRecord(mplp);
+				mplp = dbs.attachObjectToDBSession(mplp);
+				result = mpl.addProject(mplp);
+				
+				return result & dbs.commitDBSession();
 			}
 			else{
 				logger.info("MonitoredProjectList or StoredProject do not exist.");
 				return false;
 			}
-		} finally {
-			dbs.commitDBSession();
+		} catch(Exception e) {
+			e.printStackTrace();
+			logger.warn("Failed to associate project to monitored project list", e);
 		}
+		return false;
 	}
 
 	/**
@@ -508,12 +515,12 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 					secLibs = dbs.findObjectsByProperties(SecurityLibrary.class, secLibProps);
 					return (secLibs.size() > 0 && secLibs != null) ? secLibs.get(0) : null;
 				}
-			} else {
-				return null;
 			}
-		} finally {
-			dbs.commitDBSession();
+		} catch(Exception e) {
+			e.printStackTrace();
+			logger.warn("Failed to retrieve security library by name", e);
 		}
+		return null;
 	}
 	
 	/*
@@ -574,15 +581,16 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 				synchronized (lockObject) {
 					vulTypeProps.clear();
 					vulTypeProps.put("name", vtName);
-					vulTypes = dbs.findObjectsByProperties(VulnerabilityType.class, vulTypeProps);
+					vulTypes = dbs.findObjectsByProperties(
+							VulnerabilityType.class, vulTypeProps);
 					return (vulTypes.size() > 0 && vulTypes != null) ? vulTypes.get(0) : null;
 				}
-			} else {
-				return null;
 			}
-		} finally {
-			dbs.commitDBSession();
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.warn("Failed to retrieve monitored project list by name", e);
 		}
+		return null;
 	}
 	
 	/**
