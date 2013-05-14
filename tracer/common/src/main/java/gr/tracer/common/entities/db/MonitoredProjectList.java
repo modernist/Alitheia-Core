@@ -131,6 +131,26 @@ public class MonitoredProjectList extends DAObject {
 		return false;
 	}
 	
+	public boolean containsProject(StoredProject project) {
+		if(projects != null) {
+			for(MonitoredProjectListProject p : projects) {
+				if(p.getProject().equals(project))
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	public MonitoredProjectListProject getProject(StoredProject project) {
+		if(projects != null) {
+			for(MonitoredProjectListProject p : projects) {
+				if(p.getProject().equals(project))
+					return p;
+			}
+		}
+		return null;
+	}
+	
 	public boolean addProject(MonitoredProjectListProject p) {
 		if(projects != null) {
 			p.setMonitoredProjectList(this);

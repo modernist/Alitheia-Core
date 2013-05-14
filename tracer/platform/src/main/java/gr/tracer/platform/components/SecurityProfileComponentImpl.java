@@ -343,6 +343,11 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 			
 			if ((mpl != null) && (project != null)) {
 				
+				if(mpl.containsProject(project)) {
+					logger.info("StoredProject is already associated with MonitoredProjectList");
+					return true;
+				}
+				
 				project = dbs.attachObjectToDBSession(project);
 				mpl = dbs.attachObjectToDBSession(mpl);
 				MonitoredProjectListProject mplp = new MonitoredProjectListProject(mpl, project);
@@ -408,17 +413,22 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 			List<MonitoredProjectListProject> mplps = null;
 			MonitoredProjectList mpl = searchMonitoredProjectList(monProjList);
 			StoredProject project = StoredProject.getProjectByName(projFileName);
-			if ((mpl != null) && (project != null))
+			if ((mpl != null) && (project != null)) {
+				MonitoredProjectListProject p = mpl.getProject(project);
+				if(p != null)
+					return p;
+				
 				if(dbs.startDBSession()) {
 					synchronized (lockObject) {
 						monProjListProjProps.clear();
-						monProjListProjProps.put("monitoredProjectList", mpl.getId());
-						monProjListProjProps.put("project", project.getId());
+						monProjListProjProps.put("monitoredProjectList", mpl);
+						monProjListProjProps.put("project", project);
 						mplps = dbs.findObjectsByProperties(MonitoredProjectListProject.class, monProjListProjProps);
 						return ((mplps.size() > 0) && (mplps != null)) ? mplps.get(0) : null;
 					}
 				} else
 					return null;
+			}
 			else {
 				logger.error("MonitoredProjectList or StoredProject do not exist.");
 				return null;
