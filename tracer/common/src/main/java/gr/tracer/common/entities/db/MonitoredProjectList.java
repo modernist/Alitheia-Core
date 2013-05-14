@@ -11,8 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -85,18 +86,21 @@ public class MonitoredProjectList extends DAObject {
 		this.user = user;
 	}
 
-	@OneToMany(mappedBy="monitoredProjectList", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-	private Set<MonitoredProjectListProject> projects = new HashSet<MonitoredProjectListProject>();
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name="MONITORED_PROJECT_LIST_PROJECT", 
+		joinColumns=@JoinColumn(name="MONITORED_PROJECT_LIST_ID"),
+		inverseJoinColumns=@JoinColumn(name="PROJECT_ID"))
+	private Set<StoredProject> projects = new HashSet<StoredProject>();
 	
 	/**
      * Get a set of distinct Stored Projects that should be contained in the list
      * @return Set of Stored Projects included in the monitoring list
      */
-	public Set<MonitoredProjectListProject> getProjects(){
+	public Set<StoredProject> getProjects(){
 		return this.projects;
 	}
 	
-	public void setProjects(Set<MonitoredProjectListProject> projects){
+	public void setProjects(Set<StoredProject> projects){
 		this.projects = projects;
 	}
 	
@@ -113,58 +117,6 @@ public class MonitoredProjectList extends DAObject {
 
 	public void setSecurityProfile(SecurityProfile securityProfile) {
 		this.securityProfile = securityProfile;
-	}
-	
-	public boolean addProject(StoredProject project) {
-		if(projects != null) {
-			MonitoredProjectListProject p = new MonitoredProjectListProject(this, project);
-			return projects.add(p);
-		}
-		return false;
-	}
-	
-	public boolean removeProject(StoredProject project) {
-		if(projects != null) {
-			MonitoredProjectListProject p = new MonitoredProjectListProject(this, project);
-			return projects.remove(p);
-		}
-		return false;
-	}
-	
-	public boolean containsProject(StoredProject project) {
-		if(projects != null) {
-			for(MonitoredProjectListProject p : projects) {
-				if(p.getProject().equals(project))
-					return true;
-			}
-		}
-		return false;
-	}
-	
-	public MonitoredProjectListProject getProject(StoredProject project) {
-		if(projects != null) {
-			for(MonitoredProjectListProject p : projects) {
-				if(p.getProject().equals(project))
-					return p;
-			}
-		}
-		return null;
-	}
-	
-	public boolean addProject(MonitoredProjectListProject p) {
-		if(projects != null) {
-			p.setMonitoredProjectList(this);
-			return projects.add(p);
-		}
-		return false;
-	}
-	
-	public boolean removeProject(MonitoredProjectListProject p) {
-		if(projects != null) {
-			p.setMonitoredProjectList(this);
-			return projects.remove(p);
-		}
-		return false;
 	}
 	
 }

@@ -9,9 +9,9 @@
         <property name="name" type="string" column="MONITORED_PROJECT_LIST_NAME" not-null="true" unique="true" />
         <property name="description" type="string" column="MONITORED_PROJECT_LIST_DESCRIPTION" not-null="true" />
         <many-to-one name="user" class="eu.sqooss.service.db.User" column="USER_ID" cascade="all" />
-        <set name="projects" table="MONITORED_PROJECT_LIST_PROJECT" inverse="false" lazy="true" access="field">
-            <key column="MONITORED_PROJECT_LIST_ID" />
-            <one-to-many class="gr.tracer.common.entities.db.MonitoredProjectListProject" />
+        <set name="projects" table="MONITORED_PROJECT_LIST_PROJECT" lazy="false" access="field">
+            <key column="MONITORED_PROJECT_LIST_ID" not-null="true"/>
+            <many-to-many class="eu.sqooss.service.db.StoredProject" column="PROJECT_ID" />
         </set>
         <many-to-one name="securityProfile" class="gr.tracer.common.entities.db.SecurityProfile" fetch="join" cascade="all" column="SECURITY_PROFILE_ID" />
     </class>

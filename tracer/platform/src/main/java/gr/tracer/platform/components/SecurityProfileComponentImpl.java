@@ -14,7 +14,6 @@ import eu.sqooss.service.logging.Logger;
 import eu.sqooss.service.security.SecurityManager;
 import eu.sqooss.service.security.UserManager;
 import gr.tracer.common.entities.db.MonitoredProjectList;
-import gr.tracer.common.entities.db.MonitoredProjectListProject;
 import gr.tracer.common.entities.db.SecurityLibrary;
 import gr.tracer.common.entities.db.SecurityProfile;
 import gr.tracer.common.entities.db.VulnerabilityType;
@@ -343,17 +342,14 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 			
 			if ((mpl != null) && (project != null)) {
 				
-				if(mpl.containsProject(project)) {
+				if(mpl.getProjects().contains(project)) {
 					logger.info("StoredProject is already associated with MonitoredProjectList");
 					return true;
 				}
 				
 				project = dbs.attachObjectToDBSession(project);
 				mpl = dbs.attachObjectToDBSession(mpl);
-				MonitoredProjectListProject mplp = new MonitoredProjectListProject(mpl, project);
-				dbs.addRecord(mplp);
-				mplp = dbs.attachObjectToDBSession(mplp);
-				result = mpl.addProject(mplp);
+				result = mpl.getProjects().add(project);
 				
 				return result & dbs.commitDBSession();
 			}
@@ -380,23 +376,16 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 			StoredProject project = StoredProject.getProjectByName(storProjName);
 			
 			if ((mpl != null) && (project != null)){
-				
-				List<MonitoredProjectListProject> mplps = null;
-				
-				synchronized (lockObject) {
-					monProjListProjProps.clear();
-					monProjListProjProps.put("monitoredProjectList", mpl);
-					monProjListProjProps.put("project", project);
-					mplps = dbs.findObjectsByProperties(MonitoredProjectListProject.class, monProjListProjProps);
-					return ((mplps.size() > 0) && (mplps != null)) ? dbs.deleteRecords(mplps) : false;
-				}
+					return mpl.getProjects().remove(project) & dbs.commitDBSession();
 			} else {
 				logger.info("MonitoredProjectList or StoredProject do not exist.");
 				return false;
 			}
-		} finally {
-			dbs.commitDBSession();
+		} catch(Exception e) {
+			e.printStackTrace();
+			logger.warn("Failed to remove project from monitored project list", e);
 		}
+		return false;
 	}
 		
 	/*
@@ -406,27 +395,16 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 	 * Retrieve an association between a Monitored project list and a Stored project by name
 	 * @param monProjList The Monitored project list's name
 	 * @param projFileName The Stored project's name
-	 * @return The retrieved association or null if the association is not found
+	 * @return The retrieved project or null if the association is not found
 	 */
-	public MonitoredProjectListProject getMonitoredProjectListProject(String monProjList, String projFileName) {
+	public StoredProject getMonitoredProjectListProject(String monProjList, String projFileName) {
 		try {
-			List<MonitoredProjectListProject> mplps = null;
 			MonitoredProjectList mpl = searchMonitoredProjectList(monProjList);
 			StoredProject project = StoredProject.getProjectByName(projFileName);
 			if ((mpl != null) && (project != null)) {
-				MonitoredProjectListProject p = mpl.getProject(project);
-				if(p != null)
-					return p;
-				
-				if(dbs.startDBSession()) {
-					synchronized (lockObject) {
-						monProjListProjProps.clear();
-						monProjListProjProps.put("monitoredProjectList", mpl);
-						monProjListProjProps.put("project", project);
-						mplps = dbs.findObjectsByProperties(MonitoredProjectListProject.class, monProjListProjProps);
-						return ((mplps.size() > 0) && (mplps != null)) ? mplps.get(0) : null;
-					}
-				} else
+				if(mpl.getProjects().contains(project))
+					return project;
+				else
 					return null;
 			}
 			else {
@@ -439,28 +417,6 @@ public class SecurityProfileComponentImpl implements SecurityProfileComponent {
     			dbs.commitDBSession();
     	}
 	}
-
-	/**
-	 * Create a new association between a Monitored project list and a Stored project
-	 * @param mpl The Monitored project list
-	 * @param project The Stored project
-	 * @return The new association or null if the association is not created
-	 */
-	public MonitoredProjectListProject createMonitoredProjectListProject(MonitoredProjectList mpl,
-			StoredProject project) {
-		MonitoredProjectListProject mplp = new MonitoredProjectListProject();
-		mplp.setMonitoredProjectList(mpl);
-		mplp.setProject(project);
-			
-		if(dbs != null && dbs.startDBSession())
-	    {
-	    	if(dbs.addRecord(mpl)) 
-	    		return dbs.commitDBSession() ? mplp : null;
-	    	else
-	    		return null;
-	    } else
-	    	return null;
-    }	
 	
 	/*
 	 * The methods for handling Security Libraries operations
