@@ -24,7 +24,7 @@ public class SimpleTracerComponentImpl<Tinterface, Timpl> implements SimpleTrace
 		this.componentClass = componentClass;
 		Type[] interfaces = this.getClass().getGenericInterfaces();
 		ParameterizedType ifType = (ParameterizedType)interfaces[0];
-		interfaceClass = (Class)ifType.getRawType();
+		interfaceClass = (Class<Tinterface>)ifType.getRawType();
 	}
 	
 	@Override
