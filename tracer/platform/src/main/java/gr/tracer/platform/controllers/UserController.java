@@ -3,18 +3,18 @@ package gr.tracer.platform.controllers;
 import eu.sqooss.service.db.User;
 import gr.tracer.platform.TracerPlatform;
 import gr.tracer.platform.components.UserComponent;
-import gr.tracer.platform.components.UserComponentImpl;
+import gr.tracer.platform.components.impl.UserComponentImpl;
 
 public class UserController {
 	
-	UserComponentImpl ucl = null;
+	UserComponent ucl = null;
 	
 	/*
 	 * Parameterless constructor of the class.
 	 * Retrieving an instance of UserComponent.
 	 */
 	public UserController() {
-		ucl = ((UserComponentImpl) TracerPlatform.getInstance().getComponent(UserComponent.class));
+		ucl = TracerPlatform.getInstance().getComponent(UserComponent.class);
 	}
 
 	/**

@@ -1,4 +1,4 @@
-package gr.tracer.platform.components;
+package gr.tracer.platform.components.impl;
 
 import eu.sqooss.core.AlitheiaCore;
 import eu.sqooss.service.db.Group;
@@ -8,6 +8,7 @@ import eu.sqooss.service.security.GroupManager;
 import eu.sqooss.service.security.SecurityManager;
 import eu.sqooss.service.security.UserManager;
 import gr.tracer.platform.TracerPlatform;
+import gr.tracer.platform.components.UserComponent;
 import gr.tracer.platform.security.TracerSecurityConstants;
 
 public class UserComponentImpl implements UserComponent {

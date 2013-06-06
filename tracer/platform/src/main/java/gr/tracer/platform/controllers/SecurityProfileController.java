@@ -8,20 +8,19 @@ import gr.tracer.common.entities.db.SecurityProfile;
 import gr.tracer.common.entities.db.VulnerabilityType;
 import gr.tracer.platform.TracerPlatform;
 import gr.tracer.platform.components.SecurityProfileComponent;
-import gr.tracer.platform.components.SecurityProfileComponentImpl;
+import gr.tracer.platform.components.impl.SecurityProfileComponentImpl;
 
 public class SecurityProfileController {
 	
-	SecurityProfileComponentImpl spc = null;
+	SecurityProfileComponent spc = null;
 	
 	/*
 	 * Parameterless constructor of the class.
 	 * Retrieving an instance of SecurityProfileComponent.
 	 */
 	public SecurityProfileController (){
-		spc = ((SecurityProfileComponentImpl) TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class));
+		spc = TracerPlatform.getInstance().getComponent(SecurityProfileComponent.class);
 	}
-	
 	
 	/*
 	 * The methods for handling Security Profile's operations
@@ -62,7 +61,6 @@ public class SecurityProfileController {
 		return spc.removeVulnerabilityTypeFromSecurityProfile(vtName, spName);
 		
 	}
-	
 
 	/*
 	 * The methods for handling Monitored Project List's operations

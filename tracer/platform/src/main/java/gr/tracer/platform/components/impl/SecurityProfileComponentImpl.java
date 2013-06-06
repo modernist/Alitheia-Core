@@ -1,4 +1,4 @@
-package gr.tracer.platform.components;
+package gr.tracer.platform.components.impl;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -18,6 +18,7 @@ import gr.tracer.common.entities.db.SecurityLibrary;
 import gr.tracer.common.entities.db.SecurityProfile;
 import gr.tracer.common.entities.db.VulnerabilityType;
 import gr.tracer.platform.TracerPlatform;
+import gr.tracer.platform.components.SecurityProfileComponent;
 
 public class SecurityProfileComponentImpl implements SecurityProfileComponent {
 

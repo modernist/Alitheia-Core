@@ -1,4 +1,4 @@
-package gr.tracer.platform.security;
+package gr.tracer.platform.components.impl;
 
 import eu.sqooss.core.AlitheiaCore;
 import eu.sqooss.service.db.Group;
@@ -8,14 +8,19 @@ import eu.sqooss.service.security.GroupManager;
 import eu.sqooss.service.security.SecurityManager;
 import eu.sqooss.service.security.UserManager;
 import gr.tracer.platform.TracerPlatform;
+import gr.tracer.platform.components.SecurityModelComponent;
+import gr.tracer.platform.security.TracerSecurityConstants;
+import gr.tracer.platform.security.TracerSecurityConstants.GroupName;
+import gr.tracer.platform.security.TracerSecurityConstants.Privilege;
+import gr.tracer.platform.security.TracerSecurityConstants.PrivilegeValue;
 
-public class TracerSecurityModelImpl implements TracerSecurityModel {
+public class SecurityModelComponentImpl implements SecurityModelComponent {
 	
 	private TracerPlatform platform;
 	private Logger logger;
 	private SecurityManager sm;
 	
-	public TracerSecurityModelImpl() {
+	public SecurityModelComponentImpl() {
 		sm = AlitheiaCore.getInstance().getSecurityManager();
 	}
 	
