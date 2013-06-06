@@ -1,9 +1,11 @@
-package gr.tracer.platform;
+package gr.tracer.platform.components.impl;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import eu.sqooss.service.logging.Logger;
+import gr.tracer.platform.TracerPlatform;
+import gr.tracer.platform.components.SimpleTracerComponent;
 
 /**
  * Simple Tracer component base implementation

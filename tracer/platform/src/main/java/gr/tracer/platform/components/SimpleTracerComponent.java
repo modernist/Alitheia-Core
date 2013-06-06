@@ -1,4 +1,6 @@
-package gr.tracer.platform;
+package gr.tracer.platform.components;
+
+import gr.tracer.platform.TracerComponent;
 
 public interface SimpleTracerComponent<Tinterface> extends TracerComponent {
 	
