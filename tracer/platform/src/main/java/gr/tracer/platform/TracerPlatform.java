@@ -16,10 +16,12 @@ import gr.tracer.platform.components.SecurityModelComponent;
 import gr.tracer.platform.components.VulnerabilityDetectionComponent;
 import gr.tracer.platform.components.SecurityProfileComponent;
 import gr.tracer.platform.components.UserComponent;
+import gr.tracer.platform.components.VulnerabilityDetectorActivatorComponent;
 import gr.tracer.platform.components.impl.SecurityModelComponentImpl;
 import gr.tracer.platform.components.impl.SecurityProfileComponentImpl;
 import gr.tracer.platform.components.impl.UserComponentImpl;
 import gr.tracer.platform.components.impl.VulnerabilityDetectionComponentImpl;
+import gr.tracer.platform.components.impl.VulnerabilityDetectorActivatorComponentImpl;
 
 /**
  * 
@@ -51,11 +53,13 @@ public class TracerPlatform {
         components.add(SecurityProfileComponent.class);
         components.add(VulnerabilityDetectionComponent.class);
         components.add(UserComponent.class);
+        components.add(VulnerabilityDetectorActivatorComponent.class);
         
         implementations.put(SecurityModelComponent.class, SecurityModelComponentImpl.class);
         implementations.put(SecurityProfileComponent.class, SecurityProfileComponentImpl.class);
         implementations.put(VulnerabilityDetectionComponent.class, VulnerabilityDetectionComponentImpl.class);
         implementations.put(UserComponent.class, UserComponentImpl.class);
+        implementations.put(VulnerabilityDetectorActivatorComponent.class, VulnerabilityDetectorActivatorComponentImpl.class);
     }
     
     private AlitheiaCore core;
