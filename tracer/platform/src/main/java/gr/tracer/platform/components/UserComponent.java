@@ -23,4 +23,12 @@ public interface UserComponent extends TracerComponent {
 	 * @return The authenticated User, null if the User is not authenticated.
 	 */
 	public User userLoginAttempt(String userName, String userPassword);
+	
+	/** Search if a User exists
+	 * 
+	 * @param userName The User's username
+	 * @param userPassword The User's  password
+	 * @return True, if the User exists,otherwise false
+	 */
+	public boolean userExists(String userName, String userPassword);
 }

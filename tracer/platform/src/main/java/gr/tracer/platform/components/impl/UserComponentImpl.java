@@ -89,6 +89,23 @@ public class UserComponentImpl implements UserComponent {
 		
 		return user;
 	}
+	/**
+     * @see gr.tracer.platform.components.UserComponent#userExists(java.lang.String, java.lang.String)
+     */
+	public boolean userExists(String userName, String userPassword) {
+		User user = null;       
+		UserManager userManager;
+
+		userManager = sm.getUserManager();		
+		user = userManager.getUser(userName);
+		
+		user = userManager.getUser(userName);
+		if ( user == null) {
+			return false;
+		} else { 
+			return true;
+		}
+	}
 
 	@Override
 	public void initComponent(TracerPlatform platform, Logger logger) {
