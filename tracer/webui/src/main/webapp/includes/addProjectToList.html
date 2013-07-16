@@ -1,0 +1,71 @@
+<div class="span9" xmlns="http://www.w3.org/1999/html">
+    <form class="form-horizontal" name="addprojecttolist" ng-controller="AddProjectToListCtrl">
+        <fieldset> <legend>Δημιουργία Προφίλ Ασφαλείας</legend></fieldset>
+        <div class="control-group">
+            <label class="control-label" >Λίστα διαθέσιμων λιστών παρακολούθησης έργων</label>
+            <div class="controls">
+                <select ng-model="availableList" ng-options="list.name for list in availableLists" ng-change="updateLists(availableList)"></select>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="span3">
+                <fieldset class="fieldset-block" id="monitoring-project-lists">
+                    <legend>Έργα λίστας παρακολούθησης</legend>
+                    <span ng-repeat="project in projectsOfSelectedList">
+                        <label class="checkbox" for="{{project.id}}">
+                            <input type="checkbox" ng-model="project.checked" name="{{project.id}}" id="{{project.id}}" value="{{ project.id }}"/>{{project.name}}</label>
+                    </span>
+                </fieldset>
+            </div>
+            <div class="span1">
+                <br/>
+                <br/>
+                <button type="arrow-left" class="btn" ng-click="addProject(availableProjects())"><</button>
+                <br/>
+                <br/>
+                <button type="arrow-right" class="btn" ng-click="removeProject(selectedProjects())">></button>
+            </div>
+            <div class="span3">
+                <fieldset class="fieldset-block" id="available-projects">
+                    <legend>Λίστα διαθέσιμων έργων</legend>
+                    <span ng-repeat="availableProject in availableProjectList">
+                        <label class="checkbox" for="{{availableProject.id}}">
+                            <input type="checkbox"  ng-model="availableProject.checked" name="{{availableProject.id}}" id="{{availableProject.id}}" value="{{ availableProject.id }}"/>{{availableProject.name}}</label>
+                    </span>
+                </fieldset>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="span3">
+                <fieldset class="fieldset-block" id="newproject">
+                    <legend>Στοιχεία νέου έργου</legend>
+                    <div class="control-group">
+                        <label class="control-label" for="newprojectname">Όνομα έργου</label>
+                        <div class="controls">
+                            <input type="text" id="newprojectname" ng-model="newproject.name" required />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="newprojectpathoffiles">Μονοπάτι αρχείων έργου</label>
+                        <div class="controls">
+                            <input type="text" id="newprojectpathoffiles" ng-model="newproject.pathoffiles" required />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="newprojectpathofsourcefiles">Μονοπάτι πηγαίου κώδικα αρχείων</label>
+                        <div class="controls">
+                            <input type="text" id="newprojectpathofsourcefiles" ng-model="newproject.pathofsourcefiles" required />
+                        </div>
+                    </div>
+                    <div class="control-group" style="text-align: center">
+                        <button type="button" class="btn btn-primary" ng-click="addNewProject(newproject)">Προσθήκη</button>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div class="control-group">
+            <button type="button" class="btn btn-primary" ng-click="update()">Προσθήκη</button>
+            <button type="button" class="btn btn-primary" ng-click="updateLists(availableList)">Ακύρωση</button>
+        </div>
+    </form>
+</div>
