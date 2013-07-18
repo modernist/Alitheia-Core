@@ -420,6 +420,32 @@ public class PAServiceImpl implements PluginAdmin, ServiceListener {
 
 /* ===[ Implementation of the PluginAdmin interface ]===================== */
 
+    /**
+     * @see eu.sqooss.service.pa.PluginAdmin#addServiceReferenceFilters(java.lang.String[])
+     */
+    public void addServiceReferenceFilters(String[] filters) {
+    	if(filters == null || filters.length == 0) {
+    		logger.info("No plugin filters provided for PluginAdmin, using default filter");
+    		return;
+    	}
+    	
+    	StringBuilder sb = new StringBuilder("(|" + SREF_FILTER_PLUGIN);
+    	for(String filter: filters) {
+    		sb.append("(");
+    		sb.append(Constants.OBJECTCLASS);
+    		sb.append("=");
+    		sb.append(filter);
+    		sb.append(")");
+    	}
+    	sb.append(")");
+    	
+    	try {
+            bc.addServiceListener(this, sb.toString());
+        } catch (InvalidSyntaxException e) {
+            logger.error("Invalid filter syntax ", e);
+        }
+    }
+    
     /* (non-Javadoc)
      * @see eu.sqooss.service.pa.PluginAdmin#listPlugins()
      */

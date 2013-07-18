@@ -58,6 +58,13 @@ public interface PluginAdmin extends AlitheiaCoreService {
     public final static String PLUGIN_CLASS = "*.metrics.*";
 
     /**
+     * Allows enabling additional filters for OSGi-based serviced search,
+     * all filters will be simultaneously enabled.
+     * @param filters An array of filter descriptors
+     */
+    public void addServiceReferenceFilters(String[] filters);
+    
+    /**
      * Returns a collection containing information about all metrics plug-ins
      * currently available in the SQO-OSS framework.
      *
