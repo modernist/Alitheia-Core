@@ -17,4 +17,5 @@ bin/
 *.ipr
 *.iws
 *.db
+*.mwb*
 maven-eclipse.xml
