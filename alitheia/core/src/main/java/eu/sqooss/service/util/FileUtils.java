@@ -208,6 +208,31 @@ public class FileUtils {
     }
 
     /**
+     * Recursively lists all files and folders of a given file
+     * 
+     * @param path The path to list
+     * @param includeRoot if true the root path is included in the result
+     * @return A list of all the files and directories beneath a file, possibly including
+     * the root file
+     */
+    public static List<File> listRecursively(File path, boolean includeRoot) {
+    	final List<File> result = new ArrayList<File>();
+    	if(includeRoot)
+    		result.add(path);
+    	listRecursiveCore(result, path);
+    	return result;
+    }
+    
+    private static void listRecursiveCore(Collection<File> files, File path) {
+    	for(File file : path.listFiles()) {
+    		files.add(file);
+    		if(file.isDirectory()) {
+    			listRecursiveCore(files,  file);
+    		}
+    	}
+    }
+    
+    /**
      * Search recursively for a filename pattern in the provided path
      *
      * @return A list of files whose full path matches with the

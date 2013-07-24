@@ -7,7 +7,7 @@ package gr.tracer.common;
  */
 public enum ExternalToolInvocationMode {
 	/* The tool can detect vulnerabilities on the whole project source tree */
-	PerProjectVersion,
+	PER_PROJECT_VERSION,
 	/* The tool must be invoked separately for each file */
-	PerProjectFile
+	PER_PROJECT_FILE
 }
