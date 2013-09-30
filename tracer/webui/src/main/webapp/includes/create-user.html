@@ -1,54 +1,60 @@
-<div class="span9">
-    <form class="form-horizontal" name="newuser">
-        <fieldset> <legend>Στοιχεία νέου χρήστη</legend></fieldset>
-        <div class="control-group">
-            <label class="control-label" for="fullname">Ονοματεπώνυμο χρήστη</label>
-            <div class="controls">
-                <input type="text" id=fullname ng-model="user.fullname" name="fullname" placeholder="Ονοματεπώνυμο" required />
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label" for="email">Email χρήστη</label>
-            <div class="controls">
-                <input type="email" id="email" ng-model="user.email" name="email" placeholder="Email" required />
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label" for="username">Ονομα χρήστη</label>
-            <div class="controls">
-                <input type="text" id="username" ng-model="user.username" name="username" placeholder="Ονομα (username)" required />
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label" for="pass">Κωδικός χρήστη</label>
-            <div class="controls">
-                <input type="password" id="pass" ng-model="pass1" name="pass1" placeholder="Κωδικός πρόσβασης" required />
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label" for="pass2">Επανάληψη κωδικού</label>
-            <div class="controls">
-                <input type="password" id="pass2" ng-model="user.pass" name="pass2" placeholder="Κωδικός πρόσβασης" required verify='pass1' />
-                <span class="help-inline" ng-show="newuser.pass2.$dirty && newuser.pass2.$invalid"></span>
-            </div>
-        </div>
-        <div class="control-group">
-            <fieldset> <legend>Ιδιότητα χρήστη</legend></fieldset>
-            <label class=radio>
-                <input type="radio" name="usertype" id="admin" ng-model="user.type" value="admin" required />
-                Διαχειριστής πλατφόρμας
-            </label>
-            <label class=radio>
-                <input type="radio" name="usertype" id="programmer" ng-model="user.type" value="programmer" required />
-                Προγραμματιστής
-            </label>
-            <label class=radio>
-                <input type="radio" name="usertype" id="user" ng-model="user.type" value="user" required />
-                Υπέυθυνος λειτουργικών διαδικασιών
-            </label>
-        </div>
-        <div class="control-group">
-            <button type="button" class="btn btn-primary" ng-click="addUser(user)" ng-disabled="newuser.$invalid">Δημιουργία χρήστη</button>
-        </div>
-    </form>
+<div ng-include src="'includes/navbar.html'"></div>
+<div class="container-fluid" >
+	<div ng-include src="'includes/sidebar.html'"></div>	
+
+	<!-- Actual Form -->
+	<div class="span9">
+		<form class="form-horizontal" name="newuser">
+			<fieldset> <legend>Στοιχεία νέου χρήστη</legend></fieldset>
+			<div class="control-group">
+				<label class="control-label" for="fullname">Ονοματεπώνυμο χρήστη</label>
+				<div class="controls">
+					<input type="text" id=fullname ng-model="user.fullname" name="fullname" placeholder="Ονοματεπώνυμο" required />
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="email">Email χρήστη</label>
+				<div class="controls">
+					<input type="email" id="email" ng-model="user.email" name="email" placeholder="Email" required />
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="username">Ονομα χρήστη</label>
+				<div class="controls">
+					<input type="text" id="username" ng-model="user.username" name="username" placeholder="Ονομα (username)" required />
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="pass">Κωδικός χρήστη</label>
+				<div class="controls">
+					<input type="password" id="pass" ng-model="pass1" name="pass1" placeholder="Κωδικός πρόσβασης" required />
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="pass2">Επανάληψη κωδικού</label>
+				<div class="controls">
+					<input type="password" id="pass2" ng-model="user.pass" name="pass2" placeholder="Κωδικός πρόσβασης" required verify='pass1' />
+					<span class="help-inline" ng-show="newuser.pass2.$dirty && newuser.pass2.$invalid"></span>
+				</div>
+			</div>
+			<div class="control-group">
+				<fieldset> <legend>Ιδιότητα χρήστη</legend></fieldset>
+				<label class=radio>
+					<input type="radio" name="usertype" id="admin" ng-model="user.type" value="admin" required />
+					Διαχειριστής πλατφόρμας
+				</label>
+				<label class=radio>
+					<input type="radio" name="usertype" id="programmer" ng-model="user.type" value="programmer" required />
+					Προγραμματιστής
+				</label>
+				<label class=radio>
+					<input type="radio" name="usertype" id="user" ng-model="user.type" value="user" required />
+					Υπέυθυνος λειτουργικών διαδικασιών
+				</label>
+			</div>
+			<div class="control-group">
+				<button type="button" class="btn btn-primary" ng-click="addUser(user)" ng-disabled="newuser.$invalid">Δημιουργία χρήστη</button>
+			</div>
+		</form>
+	</div>
 </div>

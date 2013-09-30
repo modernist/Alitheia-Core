@@ -1,43 +1,49 @@
-<div class="span9" xmlns="http://www.w3.org/1999/html">
-    <form class="form-horizontal" name="addtooltoprofile" ng-controller="AddToolToProfileCtrl">
-        <fieldset> <legend>Δημιουργία Προφίλ Ασφαλείας</legend></fieldset>
-        <div class="control-group">
-            <label class="control-label" >Λίστα διαθέσιμων προφίλ Ασφαλείας</label>
-            <div class="controls">
-                <select ng-model="profileList" ng-options="profile.name for profile in profileLists" ng-change="updateLists(profileList)"></select>
-            </div>
-        </div>
-        <div class="control-group">
-            <div class="span3">
-                <fieldset class="fieldset-block" id="list-profile-tools">
-                    <legend>Λίστα εργαλείων προφίλ</legend>
-                    <span ng-repeat="tool in selectedTools">
-                        <label class="checkbox" for="{{tool.id}}">
-                            <input type="checkbox" ng-model="tool.checked" name="{{tool.id}}" id="{{tool.id}}" value="{{ tool.id }}"/>{{tool.name}}</label>
-                    </span>
-                </fieldset>
-            </div>
-            <div class="span1">
-                <br/>
-                <br/>
-                <button type="arrow-left" class="btn" ng-click="addTool(selectedAvailableTools())"><</button>
-                <br/>
-                <br/>
-                <button type="arrow-right" class="btn" ng-click="removeTool(selectedProfileTools())">></button>
-            </div>
-            <div class="span3">
-                <fieldset class="fieldset-block" id="availableList-profile-tools">
-                    <legend>Λίστα διαθέσιμων εργαλείων</legend>
-                    <span ng-repeat="availableTool in profileAvailableTools">
-                        <label class="checkbox" for="{{availableTool.id}}">
-                            <input type="checkbox"  ng-model="availableTool.checked" name="{{availableTool.id}}" id="{{availableTool.id}}" value="{{ availableTool.id }}"/>{{availableTool.name}}</label>
-                    </span>
-                </fieldset>
-            </div>
-        </div>
-        <div class="control-group">
-            <button type="button" class="btn btn-primary" ng-click="updateProfile()">Δημιουργία</button>
-            <button type="button" class="btn btn-primary" ng-click="updateLists(profileList)">Ακύρωση</button>
-        </div>
-    </form>
-</div>
+<div ng-include src="'includes/navbar.html'"></div>
+<div class="container-fluid" >
+	<div ng-include src="'includes/sidebar.html'"></div>	
+
+	<div class="span9" xmlns="http://www.w3.org/1999/html">
+		<form class="form-horizontal" name="addtooltoprofile" ng-controller="AddToolToProfileCtrl">
+			<fieldset> <legend>Δημιουργία Προφίλ Ασφαλείας</legend></fieldset>
+			<div class="control-group">
+				<label class="control-label" >Λίστα διαθέσιμων προφίλ Ασφαλείας</label>
+				<div class="controls">
+					<select ng-model="profileList" ng-options="profile.name for profile in profileLists" ng-change="updateLists(profileList)"></select>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="span3">
+					<fieldset class="fieldset-block" id="list-profile-tools">
+						<legend>Λίστα εργαλείων προφίλ</legend>
+						<span ng-repeat="tool in selectedTools">
+							<label class="checkbox" for="{{tool.id}}">
+								<input type="checkbox" ng-model="tool.checked" name="{{tool.id}}" id="{{tool.id}}" value="{{ tool.id }}"/>{{tool.name}}</label>
+						</span>
+					</fieldset>
+				</div>
+				<div class="span1">
+					<br/>
+					<br/>
+					<button type="arrow-left" class="btn" ng-click="addTool(selectedAvailableTools())"><</button>
+					<br/>
+					<br/>
+					<button type="arrow-right" class="btn" ng-click="removeTool(selectedProfileTools())">></button>
+				</div>
+				<div class="span3">
+					<fieldset class="fieldset-block" id="availableList-profile-tools">
+						<legend>Λίστα διαθέσιμων εργαλείων</legend>
+						<span ng-repeat="availableTool in profileAvailableTools">
+							<label class="checkbox" for="{{availableTool.id}}">
+								<input type="checkbox"  ng-model="availableTool.checked" name="{{availableTool.id}}" id="{{availableTool.id}}" value="{{ availableTool.id }}"/>{{availableTool.name}}</label>
+						</span>
+					</fieldset>
+				</div>
+			</div>
+			<div class="control-group">
+				<button type="button" class="btn btn-primary" ng-click="updateProfile()">Δημιουργία</button>
+				<button type="button" class="btn btn-primary" ng-click="updateLists(profileList)">Ακύρωση</button>
+			</div>
+		</form>
+	</div>
+
+	</div

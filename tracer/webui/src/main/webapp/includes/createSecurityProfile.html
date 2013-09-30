@@ -1,36 +1,42 @@
-<div class="span9" xmlns="http://www.w3.org/1999/html" ng-controller="CreateSecurityProfileCtrl">
-    <form class="form-horizontal" name="newuser">
-        <fieldset> <legend>Δημιουργία Προφίλ Ασφαλείας</legend></fieldset>
-        <div class="control-group">
-            <label class="control-label"style="width: 200px">Όνομα Προφίλ Ασφαλείας</label>
-            <div class="controls">
-                <input type="text" id="securityprofilename" ng-model="securityProfile.securityprofilename" name="securityprofilename"  required />
-            </div>
-        </div>
-        <div class="control-group">
-            <fieldset class="fieldset-block" id="available-tools">
-                <legend>Διαθέσιμα εργαλεία ανίχνευσης τρωτοτήτων</legend>
-                <span ng-repeat="tool in securityProfile.tracingTools">
-                    <label class="checkbox" for="{{tool.id}}">
-                     <input type="checkbox" ng-model="tool.checked" name="securityprofiletool" id="{{tool.id}}"/>{{tool.name}}</label>
-                </span>
-            </fieldset>
-        </div>
-        <div class="control-group">
-            <fieldset class="fieldset-block" id="security-profile-type">
-                <legend >Τύπος Προφίλ Ασφαλείας</legend>
+<div ng-include src="'includes/navbar.html'"></div>
+<div class="container-fluid" >
+	<div ng-include src="'includes/sidebar.html'"></div>	
 
-                <label class="radio">
-                    <input type="radio" name="securityprofiletype" ng-model="securityProfile.type" id="manually" value="manually">Χειροκίνητη</input>
-                </label>
-                <label class="radio">
-                    <input type="radio" name="securityprofiletype" ng-model="securityProfile.type" id="auto" value="auto">Αυτόματη</input>
-                </label>
-            </fieldset>
-        </div>
-        <div class="control-group">
-            <button type="button" class="btn btn-primary" ng-click="createSecurityProfile(securityProfile, selectedTools())" ng-disabled="securityProfile.$invalid">Δημιουργία</button>
-            <button type="button" class="btn btn-primary" ng-click="clear(securityProfile)">Ακύρωση</button>
-        </div>
-    </form>
+	<div class="span9" xmlns="http://www.w3.org/1999/html" ng-controller="CreateSecurityProfileCtrl">
+		<form class="form-horizontal" name="newuser">
+			<fieldset> <legend>Δημιουργία Προφίλ Ασφαλείας</legend></fieldset>
+			<div class="control-group">
+				<label class="control-label"style="width: 200px">Όνομα Προφίλ Ασφαλείας</label>
+				<div class="controls">
+					<input type="text" id="securityprofilename" ng-model="securityProfile.securityprofilename" name="securityprofilename"  required />
+				</div>
+			</div>
+			<div class="control-group">
+				<fieldset class="fieldset-block" id="available-tools">
+					<legend>Διαθέσιμα εργαλεία ανίχνευσης τρωτοτήτων</legend>
+					<span ng-repeat="tool in securityProfile.tracingTools">
+						<label class="checkbox" for="{{tool.id}}">
+							<input type="checkbox" ng-model="tool.checked" name="securityprofiletool" id="{{tool.id}}"/>{{tool.name}}</label>
+					</span>
+				</fieldset>
+			</div>
+			<div class="control-group">
+				<fieldset class="fieldset-block" id="security-profile-type">
+					<legend >Τύπος Προφίλ Ασφαλείας</legend>
+
+					<label class="radio">
+						<input type="radio" name="securityprofiletype" ng-model="securityProfile.type" id="manually" value="manually">Χειροκίνητη</input>
+					</label>
+					<label class="radio">
+						<input type="radio" name="securityprofiletype" ng-model="securityProfile.type" id="auto" value="auto">Αυτόματη</input>
+					</label>
+				</fieldset>
+			</div>
+			<div class="control-group">
+				<button type="button" class="btn btn-primary" ng-click="createSecurityProfile(securityProfile, selectedTools())" ng-disabled="securityProfile.$invalid">Δημιουργία</button>
+				<button type="button" class="btn btn-primary" ng-click="clear(securityProfile)">Ακύρωση</button>
+			</div>
+		</form>
+	</div>
+
 </div>

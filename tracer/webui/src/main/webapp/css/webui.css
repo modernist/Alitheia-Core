@@ -1,48 +1,65 @@
 /* TRACER CSS */
 
 body {
-	padding-top: 70px;
-	padding-bottom: 70px;
+    padding-top: 70px;
+    padding-bottom: 70px;
 }
 
 body#loginpage {
-	padding-top: 40px;
-	padding-bottom: 40px;
-	background-color: #f5f5f5;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #f5f5f5;
 }
 
 footer {
-		text-align: center;
+    text-align: center;
 }
 
 .form-signin {
-	max-width: 300px;
-	padding: 19px 29px 29px;
-	margin: 0 auto 20px;
-	background-color: #fff;
-	border: 1px solid #e5e5e5;
-		-webkit-border-radius: 5px;
-		-moz-border-radius: 5px;
-	border-radius: 5px;
-		-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-		-moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-		box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    max-width: 300px;
+    padding: 19px 29px 29px;
+    margin: 0 auto 20px;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    box-shadow: 0 1px 2px rgba(0,0,0,.05);
 }
 
 .form-signin .form-signin-heading {
-	margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .form-signin input[type="text"],
 .form-signin input[type="password"] {
-	font-size: 16px;
-	height: auto;
-	margin-bottom: 12px;
-	padding: 7px 9px;
+    font-size: 16px;
+    height: auto;
+    margin-bottom: 12px;
+    padding: 7px 9px;
 }
 
 
 
 .form-horizontal input.ng-invalid.ng-dirty{
-	background-color: #FA787E;
+    background-color: #FA787E;
+}
+
+.fieldset-block {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+
+.fieldset-block legend {
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin-bottom: 0px;
+    font-size: 21px;
+    line-height: 40px;
+    color: #333333;
+    border: 0;
 }
