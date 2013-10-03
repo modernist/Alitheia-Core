@@ -16,7 +16,7 @@ angular.module('tracer', ['tracer.services', 'tracer.directives', 'tracer.contro
 	.run(['$rootScope', '$location', 'AuthService', function($rootScope, $location, AuthService) {
 		$rootScope.$on("$routeChangeStart", function (event, next, current) {
 			$rootScope.error = null;
-			if (!AuthService.getUserAuthenticated()) $location.path('/login');
+			if (!AuthService.isAuthenticated()) $location.path('/login');
 		});
 		
 	}]);

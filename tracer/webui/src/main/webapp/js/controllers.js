@@ -285,28 +285,21 @@ angular.module('tracer.controllers', []).
 			console.log("Password: " + user.pass);
 
 			$scope.form.$setValidity('valid', true);
-			if (user.name=="foo" && user.pass=="bar") {
-				//Handle here authenicated user...
-				$rootScope.loggedUser = user.name;
-				console.log("Authorized...");
-				AuthService.setUserAuthenticated(true);
-				$location.path('/');
-			} else {
-				console.log("login-invalid");
-				$scope.form.$setValidity('valid', false);
-				AuthService.setUserAuthenticated(false);
-			}
+			user = AuthService.login(user.name, user.pass);
+			// If user is authenticated, Proceed to main page.
+			// Otherwise show a message on the form.
+			if (user !== undefined) $location.path('/')
+			else $scope.form.$setValidity('valid', false)
 		}
 	}
 	])
 	.controller('LogoutController' ,['$scope', '$location', '$routeParams', 'AuthService', function ($scope, $location, $rootScope, AuthService) {
-			console.log("fsdsdf");
-			//Handle HTTP logout.
-			//Disable cookie
-			AuthService.setUserAuthenticated(false);
+			AuthService.logout();
 			$location.path('/');
 	}
 	])
 	.controller('navCtrl' ,['$scope', '$location', '$routeParams', 'AuthService', function ($scope, $location, $rootScope, AuthService) {
+		//currentUser is the name of the user shown on the navigation bar
+		$scope.currentUser = AuthService.getCurrentUser(); 
 
 	}]);
