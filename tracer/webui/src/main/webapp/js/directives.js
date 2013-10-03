@@ -21,3 +21,25 @@ app.directive('verify', function() {
         }
     };
 });
+
+
+// This directive retrist access on roles which are inferior to a role specified
+// by access. E.g <div data-restrict acces="admin"></div> will restrict access to roles
+// programmer and user. This would result in removing completely the above div.
+app.directive('restrict', function(AuthService, $rootScope){
+	return {
+		restrict: 'A',
+		priority: 10000,
+		link: function (){alert("fd");},
+		compile: function(element, attr, linker) {
+			//Get user role from AuthService
+			var userRole = AuthService.getCurrentRole();
+			var restrict = $rootScope.roles[attr.access];
+
+			if(userRole<parseInt(restrict)) {
+				element.children().remove();
+				element.remove();
+			}	
+		}
+	}
+});

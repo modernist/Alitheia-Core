@@ -5,8 +5,8 @@
 
         <ul class="nav">
             <li><a href="#">Home</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
+            <li data-restrict access="programmer"><a href="#">Link for programmers</a></li>
+            <li data-restrict access="admin"><a href="#">Link for administrators</a></li>
         </ul>
         <ul class="nav pull-right">
             <li class="dropdown">
@@ -14,7 +14,7 @@
 					<i class="icon-user icon-black"></i> {{currentUser}}<b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="user">
-                    <li role="presentation">
+                    <li role="presentation" data-restrict access='admin'>
                         <a role="menuitem" tabindex="-1" href="#/new-user">Create New User</a></li>
                     <li role="presentation">
                         <a role="menuitem" tabindex="-1" href="#/logout" >Logout</a></li>
