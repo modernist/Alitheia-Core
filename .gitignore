@@ -19,3 +19,4 @@ bin/
 *.db
 *.mwb*
 maven-eclipse.xml
+*.swp
