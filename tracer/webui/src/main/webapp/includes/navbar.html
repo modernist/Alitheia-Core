@@ -1,0 +1,42 @@
+<!-- navbar.html -->
+<div class="navbar navbar-fixed-top" ng-controller="navCtrl">
+    <div class="navbar-inner">
+        <!--	<a class="brand" href="#">TRACER</a> -->
+
+        <ul class="nav">
+            <li><a href="#">Home</a></li>
+            <li data-restrict access="programmer"><a href="#">Link for programmers</a></li>
+            <li data-restrict access="admin"><a href="#">Link for administrators</a></li>
+        </ul>
+        <ul class="nav pull-right">
+            <li class="dropdown">
+                <a id="user" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+					<i class="icon-user icon-black"></i> {{currentUser}}<b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="user">
+                    <li role="presentation" data-restrict access='admin'>
+                        <a role="menuitem" tabindex="-1" href="#/new-user">Create New User</a></li>
+                    <li role="presentation">
+                        <a role="menuitem" tabindex="-1" href="#/logout" >Logout</a></li>
+
+                </ul>
+            </li>
+            <li class="divider-vertical"></li>
+            <li class="dropdown">
+                <a id="power" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="icon-off icon-black"></i><b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="power">
+                    <li role="presentation">
+                        <a role="menuitem" tabindex="-1" href="#"><i class="icon-off icon-black"></i> Shutdown</a>
+                    </li>
+                    <li role="presentation" class="divider"></li>
+                    <li role="presentation">
+                        <a role="menuitem" tabindex="-1" href="#"><i class="icon-repeat icon-black"></i> Reboot</a>
+                    </li>
+
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

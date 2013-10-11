@@ -1,0 +1,14 @@
+<div>
+	<div align="center" style="padding-bottom:10px">
+		<img src="img/logo_tracer.png" alt="TRACER logo"/>
+	</div>
+	<form class="form-signin" name="form" novalidate>
+		<h1 class="form-signin-heading"> Σύνδεση </h1>
+		<input type="text" class="input-block-level" ng-model="user.name" name="username" placeholder="Όνομα χρήστη" />
+		<input type="password" class="input-block-level" ng-model="user.pass" name="pass" placeholder="Κωδικός χρήστη" />
+		<div class="alert alert-error" ng-show="form.username.$dirty && form.pass.$dirty && form.$invalid">
+			Το όνομα ή o κωδικός χρήστη είναι λανθασμένα!
+		</div>
+		<button class="btn btn-primary" type="button" ng-click=login(user) ng-disabled="!user.name ||!user.pass">Είσοδος</button>
+	</form>
+</div>

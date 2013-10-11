@@ -1,91 +1,97 @@
-<div class="span9" xmlns="http://www.w3.org/1999/html">
-    <form class="form-horizontal" name="createoperationalmodule" ng-controller="CreateOperationalModuleCtrl" >
+<div ng-include src="'includes/navbar.html'"></div>
+<div class="container-fluid" >
+	<div ng-include src="'includes/sidebar.html'"></div>	
 
-        <div class="control-group">
-            <div class="span8">
-                <fieldset class="fieldset-block" >
-                    <legend>Στοιχεία νέου λειτουργικού αρθρώματος</legend>
-                    <div class="control-group">
-                        <label class="control-label" for="operationalmoduletoolname">Όνομα εργαλείου</label>
-                        <div class="controls">
-                            <input type="text" id="operationalmoduletoolname" ng-model="operationalmodule.toolname" required/>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="operationalmoduletoolpath">Μονοπάτι εκτέλεσης εργαλείου</label>
-                        <div class="controls">
-                            <input type="text" id="operationalmoduletoolpath" ng-model="operationalmodule.toolpath" required/>
-                        </div>
-                    </div>
-                </fieldset>
-            </div>
-        </div>
-        <div class="control-group">
-            <div class="span4">
-                <fieldset class="fieldset-block">
-                    <legend>Τύπος εισόδου δεδομένων</legend>
-                    <div class="control-group">
-                        <span ng-repeat="inputType in inputTypeList">
-                            <label class="radio">
-                                <input type="radio" ng-model="operationalmodule.inputType" id="{{ inputType.id }}" value="{{ inputType.name }}">{{ inputType.name }}</input>
-                            </label>
-                        </span>
-                    </div>
-                </fieldset>
-            </div>
-            <div class="span4">
-                <fieldset class="fieldset-block">
-                    <legend>Τύπος εξόδου δεδομένων</legend>
-                    <div class="control-group">
-                        <span ng-repeat="outputType in outputTypeList">
-                            <label class="radio">
-                                <input type="radio" ng-model="operationalmodule.outputType" id="{{ outputType.id }}" value="{{ outputType.name }}">{{ outputType.name }}</input>
-                            </label>
-                        </span>
-                    </div>
-                </fieldset>
-            </div>
-        </div>
-        <div class="control-group">
-            <div class="span4">
-                <fieldset class="fieldset-block" id="available-vulnerabilities">
-                    <legend>Λίστα διαθέσιμων τρωτοτήτων</legend>
-                    <span ng-repeat="vulnerability in operationalmodule.availableVulnerabilityList">
-                        <label class="checkbox" for="{{vulnerability.id}}">
-                            <input type="checkbox"  ng-model="vulnerability.checked" name="{{vulnerability.name}}" id="{{vulnerability.id}}" value="{{ vulnerability.id }}"/>{{vulnerability.name}}</label>
-                    </span>
-                </fieldset>
-            </div>
-            <div class="span4">
-                <fieldset class="fieldset-block" id="newVulnerability">
-                    <legend>Στοιχεία νέας Τρωτότητας</legend>
-                    <div class="control-group">
-                        <label class="control-label" for="newvulnerabilityname">Όνομα τρωτότητας</label>
-                        <div class="controls">
-                            <input type="text" id="newvulnerabilityname" ng-model="newVulnerability.name"  />
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="newvulnerabilitydescription">Περιγραφή τρωτότητας</label>
-                        <div class="controls">
-                            <input type="text" id="newvulnerabilitydescription" ng-model="newVulnerability.description"  />
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="newvulnerabilitylibraryname">Όνομα βιβλιοθήκης</label>
-                        <div class="controls">
-                            <input type="text" id="newvulnerabilitylibraryname" ng-model="newVulnerability.libraryname" />
-                        </div>
-                    </div>
-                    <div class="control-group" style="text-align: center">
-                        <button type="button" class="btn btn-primary" ng-click="addNewVulnerability(newVulnerability)">Προσθήκη</button>
-                    </div>
-                </fieldset>
-            </div>
-        </div>
-        <div class="control-group">
-            <button type="button" class="btn btn-primary" ng-click="create(operationalmodule,selectedTools())">Δημιουργία</button>
-            <button type="button" class="btn btn-primary" ng-click="clear()">Ακύρωση</button>
-        </div>
-    </form>
+	<div class="span8" xmlns="http://www.w3.org/1999/html">
+		<form class="form-horizontal" name="createoperationalmodule" ng-controller="CreateOperationalModuleCtrl" >
+
+			<div class="control-group">
+				<div class="span8">
+					<fieldset class="fieldset-block" >
+						<legend>Στοιχεία νέου λειτουργικού αρθρώματος</legend>
+						<div class="control-group">
+							<label class="control-label" for="operationalmoduletoolname">Όνομα εργαλείου</label>
+							<div class="controls">
+								<input type="text" id="operationalmoduletoolname" ng-model="operationalmodule.toolname" required/>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="operationalmoduletoolpath">Μονοπάτι εκτέλεσης εργαλείου</label>
+							<div class="controls">
+								<input type="text" id="operationalmoduletoolpath" ng-model="operationalmodule.toolpath" required/>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="span4">
+					<fieldset class="fieldset-block">
+						<legend>Τύπος εισόδου δεδομένων</legend>
+						<div class="control-group">
+							<span ng-repeat="inputType in inputTypeList">
+								<label class="radio">
+									<input type="radio" ng-model="operationalmodule.inputType" id="{{ inputType.id }}" value="{{ inputType.name }}">{{ inputType.name }}</input>
+								</label>
+							</span>
+						</div>
+					</fieldset>
+				</div>
+				<div class="span4">
+					<fieldset class="fieldset-block">
+						<legend>Τύπος εξόδου δεδομένων</legend>
+						<div class="control-group">
+							<span ng-repeat="outputType in outputTypeList">
+								<label class="radio">
+									<input type="radio" ng-model="operationalmodule.outputType" id="{{ outputType.id }}" value="{{ outputType.name }}">{{ outputType.name }}</input>
+								</label>
+							</span>
+						</div>
+					</fieldset>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="span4">
+					<fieldset class="fieldset-block" id="available-vulnerabilities">
+						<legend>Λίστα διαθέσιμων τρωτοτήτων</legend>
+						<span ng-repeat="vulnerability in operationalmodule.availableVulnerabilityList">
+							<label class="checkbox" for="{{vulnerability.id}}">
+								<input type="checkbox"  ng-model="vulnerability.checked" name="{{vulnerability.name}}" id="{{vulnerability.id}}" value="{{ vulnerability.id }}"/>{{vulnerability.name}}</label>
+						</span>
+					</fieldset>
+				</div>
+				<div class="span4">
+					<fieldset class="fieldset-block" id="newVulnerability">
+						<legend>Στοιχεία νέας Τρωτότητας</legend>
+						<div class="control-group">
+							<label class="control-label" for="newvulnerabilityname">Όνομα τρωτότητας</label>
+							<div class="controls">
+								<input type="text" id="newvulnerabilityname" ng-model="newVulnerability.name"  />
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="newvulnerabilitydescription">Περιγραφή τρωτότητας</label>
+							<div class="controls">
+								<input type="text" id="newvulnerabilitydescription" ng-model="newVulnerability.description"  />
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="newvulnerabilitylibraryname">Όνομα βιβλιοθήκης</label>
+							<div class="controls">
+								<input type="text" id="newvulnerabilitylibraryname" ng-model="newVulnerability.libraryname" />
+							</div>
+						</div>
+						<div class="control-group" style="text-align: center">
+							<button type="button" class="btn btn-primary" ng-click="addNewVulnerability(newVulnerability)">Προσθήκη</button>
+						</div>
+					</fieldset>
+				</div>
+			</div>
+			<div class="control-group">
+				<button type="button" class="btn btn-primary" ng-click="create(operationalmodule,selectedTools())">Δημιουργία</button>
+				<button type="button" class="btn btn-primary" ng-click="clear()">Ακύρωση</button>
+			</div>
+		</form>
+	</div>
+
 </div>
