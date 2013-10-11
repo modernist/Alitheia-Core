@@ -9,7 +9,7 @@ import eu.sqooss.service.db.User;
 import gr.tracer.platform.TracerPlatform;
 import gr.tracer.platform.components.UserComponent;
 
-@Path("/controllers/user")
+@Path("/tracerapi")
 public class UserController {
 	
 	UserComponent ucl = null;
