@@ -32,7 +32,7 @@ import gr.tracer.platform.components.impl.VulnerabilityDetectorActivatorComponen
 public class TracerPlatform {
 
 	/* The single instance of the Platform */
-	private static TracerPlatform instance;
+	private final static TracerPlatform instance = new TracerPlatform();
 	
 	/** Holds initialized component instances */
     private Map<Class<? extends TracerComponent>, Object> instances;
@@ -101,10 +101,7 @@ public class TracerPlatform {
 	}
 	
 	/* Returns the single instance of the Platform */
-	public synchronized static TracerPlatform getInstance() {
-		if(instance == null) {
-			instance = new TracerPlatform();
-		}
+	public static TracerPlatform getInstance() {
 		return instance;
 	}
 	
