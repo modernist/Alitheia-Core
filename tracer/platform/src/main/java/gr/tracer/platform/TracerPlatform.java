@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import org.osgi.framework.BundleContext;
+
 import eu.sqooss.core.AlitheiaCore;
 import eu.sqooss.core.AlitheiaCoreService;
 import eu.sqooss.service.db.DBService;
@@ -33,6 +35,12 @@ public class TracerPlatform {
 
 	/* The single instance of the Platform */
 	private final static TracerPlatform instance = new TracerPlatform();
+	
+	private AlitheiaCore core;
+    private LogManager logManager;
+    private Logger logger;
+    private DBService dbs;
+    private BundleContext bc;
 	
 	/** Holds initialized component instances */
     private Map<Class<? extends TracerComponent>, Object> instances;
@@ -61,11 +69,6 @@ public class TracerPlatform {
         implementations.put(UserComponent.class, UserComponentImpl.class);
         implementations.put(VulnerabilityDetectorActivatorComponent.class, VulnerabilityDetectorActivatorComponentImpl.class);
     }
-    
-    private AlitheiaCore core;
-    private LogManager logManager;
-    private Logger logger;
-    private DBService dbs;
 	
 	/* Private constructor to ensure single instance creation */
 	private TracerPlatform() {
@@ -76,6 +79,14 @@ public class TracerPlatform {
 		logger = logManager.createLogger("tracer");
 		dbs = core.getDBService();
 		init();
+	}
+	
+	void setBundleContext(BundleContext bc) {
+		this.bc = bc;
+	}
+	
+	public BundleContext getBundleContext() {
+		return bc;
 	}
 	
 	public DBService getDB() {

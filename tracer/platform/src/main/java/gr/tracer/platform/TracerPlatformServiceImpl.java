@@ -31,6 +31,7 @@ public class TracerPlatformServiceImpl implements TracerPlatformService {
 	public boolean startUp() {
 		logger.info("TracerPlatformService starting up");
 		platform = TracerPlatform.getInstance();
+		platform.setBundleContext(bc);
 		
 		PluginAdmin pa = AlitheiaCore.getInstance().getPluginAdmin();
 		if(pa == null) {
