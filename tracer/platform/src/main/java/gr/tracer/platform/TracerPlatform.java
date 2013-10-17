@@ -14,11 +14,13 @@ import eu.sqooss.core.AlitheiaCoreService;
 import eu.sqooss.service.db.DBService;
 import eu.sqooss.service.logging.LogManager;
 import eu.sqooss.service.logging.Logger;
+import gr.tracer.platform.components.RestApiComponent;
 import gr.tracer.platform.components.SecurityModelComponent;
 import gr.tracer.platform.components.VulnerabilityDetectionComponent;
 import gr.tracer.platform.components.SecurityProfileComponent;
 import gr.tracer.platform.components.UserComponent;
 import gr.tracer.platform.components.VulnerabilityDetectorActivatorComponent;
+import gr.tracer.platform.components.impl.RestApiComponentImpl;
 import gr.tracer.platform.components.impl.SecurityModelComponentImpl;
 import gr.tracer.platform.components.impl.SecurityProfileComponentImpl;
 import gr.tracer.platform.components.impl.UserComponentImpl;
@@ -62,12 +64,14 @@ public class TracerPlatform {
         components.add(VulnerabilityDetectionComponent.class);
         components.add(UserComponent.class);
         components.add(VulnerabilityDetectorActivatorComponent.class);
+        components.add(RestApiComponent.class);
         
         implementations.put(SecurityModelComponent.class, SecurityModelComponentImpl.class);
         implementations.put(SecurityProfileComponent.class, SecurityProfileComponentImpl.class);
         implementations.put(VulnerabilityDetectionComponent.class, VulnerabilityDetectionComponentImpl.class);
         implementations.put(UserComponent.class, UserComponentImpl.class);
         implementations.put(VulnerabilityDetectorActivatorComponent.class, VulnerabilityDetectorActivatorComponentImpl.class);
+        implementations.put(RestApiComponent.class, RestApiComponentImpl.class);
     }
 	
 	/* Private constructor to ensure single instance creation */
