@@ -14,11 +14,11 @@
 	<description>TRACER project platform library</description>
 	<packaging>bundle</packaging>
 	<dependencies>
-		<!-- <dependency>
+		<dependency>
 			<groupId>eu.sqooss.alitheia</groupId>
 			<artifactId>core</artifactId>
 			<version>0.95-SNAPSHOT</version>
-		</dependency>  -->
+		</dependency>
 		<dependency>
 			<groupId>gr.tracer</groupId>
 			<artifactId>common</artifactId>
@@ -54,7 +54,7 @@
 				<configuration>
 					<instructions>
 						<Embed-Dependency>
-							*;scope=compile|runtime;artifactId=!org.osgi.core|org.osgi.compendium|core|servlet-api|junit
+							*;scope=compile|runtime;artifactId=!org.osgi.core|org.osgi.compendium|servlet-api|junit
 						</Embed-Dependency>
 						<Export-Package>gr.tracer.platform</Export-Package>
 						<Bundle-SymbolicName>gr.tracer.platform</Bundle-SymbolicName>
@@ -66,7 +66,8 @@
 							org.hibernate.annotations, eu.sqooss.alitheia.core</Eclipse-RegisterBuddy>
 						<Import-Package>*, *;resolution:=optional, gr.tracer.common.*, eu.sqooss.service.db,
 							com.sun.source.*;resolution:=optional,
-							org.apache.http.*, org.jboss.resteasy.*,
+							org.apache.http.*,
+							org.jboss.resteasy.plugins.server.servlet;resolution:=optional,
 							org.apache.commons.codec.digest,
 							org.hibernate, org.hibernate.proxy, org.hibernate.annotations, javassist.util,
 							javassist.util.proxy</Import-Package>
