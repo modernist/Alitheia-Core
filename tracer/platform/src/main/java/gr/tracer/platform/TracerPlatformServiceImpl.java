@@ -30,8 +30,8 @@ public class TracerPlatformServiceImpl implements TracerPlatformService {
 	@Override
 	public boolean startUp() {
 		logger.info("TracerPlatformService starting up");
+		TracerPlatform.setBundleContext(bc);
 		platform = TracerPlatform.getInstance();
-		platform.setBundleContext(bc);
 		
 		PluginAdmin pa = AlitheiaCore.getInstance().getPluginAdmin();
 		if(pa == null) {

@@ -58,23 +58,28 @@ public class RestApiComponentImpl implements RestApiComponent {
 	}
 	
 	private void registerApp() {
-		HttpService http = getHttpService();
-
-		Dictionary<String, String> params = new Hashtable<String, String>();
-		params.put("resteasy.scan", "false");
-		params.put("javax.ws.rs.Application", "gr.tracer.platform.rest.RestApiApplication");
-
-		RestApiDispatcher dispatcher = new RestApiDispatcher();
 		try {
+			HttpService http = getHttpService();
+	
+			Dictionary<String, String> params = new Hashtable<String, String>();
+			params.put("resteasy.scan", "false");
+			params.put("javax.ws.rs.Application", "gr.tracer.platform.rest.RestApiApplication");
+	
+			RestApiDispatcher dispatcher = new RestApiDispatcher();
+		
 			http.registerServlet("/tracerapi", dispatcher, params, null);
 		} catch (Exception e) {
-			logger.error("Error registering ResteasyServlet", e);
+			logger.error("Error registering TRACER ResteasyServlet", e);
 		}
 	}
 
 	private void unregisterApp() {
-		HttpService http = getHttpService();
-		http.unregister("/tracerapi");
+		try {
+			HttpService http = getHttpService();
+			http.unregister("/tracerapi");
+		} catch (Exception e) {
+			logger.error("Error unregistering TRACER ResteasyServlet", e);
+		}
 	}
 	
 	private HttpService getHttpService() {

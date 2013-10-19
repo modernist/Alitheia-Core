@@ -65,7 +65,7 @@
 						<Bundle-Vendor>Athens University of Economics and Business</Bundle-Vendor>
 						<Bundle-Description>TRACER project common library</Bundle-Description>
 						<Eclipse-RegisterBuddy>org.hibernate.core,
-							org.hibernate.annotations, eu.sqooss.alitheia.core</Eclipse-RegisterBuddy>
+							org.hibernate.annotations, eu.sqooss.alitheia.core, gr.tracer.common</Eclipse-RegisterBuddy>
 						<Import-Package>*, eu.sqooss.service.db,
 							org.apache.commons.codec.digest,
 							org.hibernate, org.hibernate.proxy, org.hibernate.annotations, javassist.util,

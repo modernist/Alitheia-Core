@@ -36,13 +36,13 @@ import gr.tracer.platform.components.impl.VulnerabilityDetectorActivatorComponen
 public class TracerPlatform {
 
 	/* The single instance of the Platform */
-	private final static TracerPlatform instance = new TracerPlatform();
+	private static TracerPlatform instance;
 	
 	private AlitheiaCore core;
     private LogManager logManager;
     private Logger logger;
     private DBService dbs;
-    private BundleContext bc;
+    private static BundleContext bc;
 	
 	/** Holds initialized component instances */
     private Map<Class<? extends TracerComponent>, Object> instances;
@@ -75,7 +75,7 @@ public class TracerPlatform {
     }
 	
 	/* Private constructor to ensure single instance creation */
-	private TracerPlatform() {
+	private TracerPlatform(BundleContext bc) {
 		instances = new HashMap<Class<? extends TracerComponent>, Object>();
 		
 		core = AlitheiaCore.getInstance();
@@ -85,8 +85,8 @@ public class TracerPlatform {
 		init();
 	}
 	
-	void setBundleContext(BundleContext bc) {
-		this.bc = bc;
+	static void setBundleContext(BundleContext bc) {
+		TracerPlatform.bc = bc;
 	}
 	
 	public BundleContext getBundleContext() {
@@ -116,7 +116,10 @@ public class TracerPlatform {
 	}
 	
 	/* Returns the single instance of the Platform */
-	public static TracerPlatform getInstance() {
+	public static synchronized TracerPlatform getInstance() {
+		if(instance == null) {
+			instance = new TracerPlatform(TracerPlatform.bc);
+		}
 		return instance;
 	}
 	
