@@ -23,6 +23,7 @@
 			<groupId>gr.tracer</groupId>
 			<artifactId>common</artifactId>
 			<version>0.1</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.osgi</groupId>
@@ -54,21 +55,25 @@
 				<configuration>
 					<instructions>
 						<Embed-Dependency>
-							*;scope=compile|runtime;artifactId=!org.osgi.core|org.osgi.compendium|core|servlet-api|junit
+							*;scope=compile|runtime;artifactId=!org.osgi.core|org.osgi.compendium|common|core|servlet-api|junit|resteasy-jaxrs
 						</Embed-Dependency>
-						<Export-Package>gr.tracer.platform</Export-Package>
+						<Export-Package>gr.tracer.platform,gr.tracer.platform.components,
+						gr.tracer.platform.controllers, gr.tracer.platform.rest</Export-Package>
 						<Bundle-SymbolicName>gr.tracer.platform</Bundle-SymbolicName>
 						<Bundle-Activator>gr.tracer.platform.Activator</Bundle-Activator>
 						<Bundle-Version>0.1</Bundle-Version>
 						<Bundle-Vendor>Athens University of Economics and Business</Bundle-Vendor>
 						<Bundle-Description>TRACER project platform library</Bundle-Description>
 						<Eclipse-RegisterBuddy>org.hibernate.core,
-							org.hibernate.annotations, eu.sqooss.alitheia.core, gr.tracer.common, javax.servlet.api</Eclipse-RegisterBuddy>
-						<Import-Package>*, *;resolution:=optional, gr.tracer.common.*, eu.sqooss.service.db,
+							org.hibernate.annotations, eu.sqooss.alitheia.core, gr.tracer.common, javax.servlet.api, org.jbos.resteasy.resteasy-jaxrs</Eclipse-RegisterBuddy>
+						<Import-Package>*, gr.tracer.common.*, eu.sqooss.service.db,
 							com.sun.source.*;resolution:=optional,
 							org.apache.http.*,
-							org.jboss.resteasy.plugins.server.servlet;resolution:=optional,
 							javax.servlet.*,
+							javax.ws.rs.*,
+							org.jboss.resteasy.plugins.server.servlet,
+							org.jboss.resteasy.*;resolution:=optional,
+							*;resolution:=optional,
 							org.apache.commons.codec.digest,
 							org.hibernate, org.hibernate.proxy, org.hibernate.annotations, javassist.util,
 							javassist.util.proxy</Import-Package>

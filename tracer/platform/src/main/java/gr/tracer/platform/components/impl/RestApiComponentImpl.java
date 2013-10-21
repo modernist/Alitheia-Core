@@ -65,9 +65,10 @@ public class RestApiComponentImpl implements RestApiComponent {
 			params.put("resteasy.scan", "false");
 			params.put("javax.ws.rs.Application", "gr.tracer.platform.rest.RestApiApplication");
 	
-			RestApiDispatcher dispatcher = new RestApiDispatcher();
-		
+			RestApiDispatcher dispatcher = new RestApiDispatcher(); 
+			
 			http.registerServlet("/tracerapi", dispatcher, params, null);
+			
 		} catch (Exception e) {
 			logger.error("Error registering TRACER ResteasyServlet", e);
 		}
