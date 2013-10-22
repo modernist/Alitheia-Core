@@ -38,6 +38,7 @@ import org.osgi.service.http.HttpService;
 
 import eu.sqooss.service.logging.Logger;
 import eu.sqooss.service.rest.RestService;
+import eu.sqooss.service.rest.RestServiceApp;
 
 public class ResteasyServiceImpl implements RestService {
 
@@ -63,7 +64,7 @@ public class ResteasyServiceImpl implements RestService {
 
 		Dictionary<String, String> params = new Hashtable<String, String>();
 		params.put("resteasy.scan", "false");
-		params.put("javax.ws.rs.Application", "eu.sqooss.service.rest.RestServiceApp");
+		params.put("javax.ws.rs.Application", RestServiceApp.class.getName());
 
 		ResteasyServlet bridge = new ResteasyServlet();
 		try {

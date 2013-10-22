@@ -65,7 +65,7 @@
 						<Bundle-Vendor>Athens University of Economics and Business</Bundle-Vendor>
 						<Bundle-Description>TRACER project platform library</Bundle-Description>
 						<Eclipse-RegisterBuddy>org.hibernate.core,
-							org.hibernate.annotations, eu.sqooss.alitheia.core, gr.tracer.common, javax.servlet.api, org.jbos.resteasy.resteasy-jaxrs</Eclipse-RegisterBuddy>
+							org.hibernate.annotations, eu.sqooss.alitheia.core, gr.tracer.common, javax.servlet.api, org.jboss.resteasy.resteasy-jaxrs</Eclipse-RegisterBuddy>
 						<Import-Package>*, gr.tracer.common.*, eu.sqooss.service.db,
 							com.sun.source.*;resolution:=optional,
 							org.apache.http.*,
