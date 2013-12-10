@@ -15,6 +15,7 @@ import gr.tracer.common.entities.db.VulnerabilityType;
 import gr.tracer.platform.TracerPlatform;
 import gr.tracer.platform.components.SecurityProfileComponent;
 
+@Path("/tracerapi")
 public class SecurityProfileController {
 	
 	SecurityProfileComponent spc = null;
