@@ -60,7 +60,9 @@ import eu.sqooss.service.scheduler.Job;
 import eu.sqooss.service.scheduler.Job.State;
 import eu.sqooss.service.scheduler.JobStateListener;
 import eu.sqooss.service.scheduler.SchedulerException;
+import eu.sqooss.service.tds.BTSAccessor;
 import eu.sqooss.service.tds.InvalidAccessorException;
+import eu.sqooss.service.tds.MailAccessor;
 import eu.sqooss.service.tds.ProjectAccessor;
 import eu.sqooss.service.tds.TDSService;
 import eu.sqooss.service.updater.MetadataUpdater;
@@ -160,11 +162,23 @@ public class UpdaterServiceImpl implements UpdaterService, JobStateListener {
         //Import phase updaters
         try {
             schemes.addAll(pa.getSCMAccessor().getSupportedURLSchemes());
-            schemes.addAll(pa.getBTSAccessor().getSupportedURLSchemes());
-            schemes.addAll(pa.getMailAccessor().getSupportedURLSchemes());
+            BTSAccessor btsa = pa.getBTSAccessor();
+            if(btsa == null) {
+            	logger.warn("Project " + project
+                        + " does not include a BTS accessor");
+            } else {
+            	schemes.addAll(btsa.getSupportedURLSchemes());
+            }
+            MailAccessor ma = pa.getMailAccessor();
+            if(ma == null) {
+            	logger.warn("Project " + project
+                        + " does not include a Mail accessor");
+            } else {
+            	schemes.addAll(ma.getSupportedURLSchemes());
+            }
         } catch (InvalidAccessorException e) {
-            logger.warn("Project " + project
-                    + " does not include a Mail accessor: " + e.getMessage());
+            logger.warn("Invalid Accessor for Project " + project
+                    + ": " + e.getMessage());
         }
 
         for (URI uri : schemes) {

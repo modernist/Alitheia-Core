@@ -41,7 +41,7 @@ import eu.sqooss.service.tds.ProjectAccessor;
 import eu.sqooss.service.tds.BTSAccessor;
 import eu.sqooss.service.tds.MailAccessor;
 import eu.sqooss.service.tds.SCMAccessor;
-import eu.sqooss.service.util.URIUtills;
+import eu.sqooss.service.util.URIUtils;
 
 /**
  * A collection of accessors to project data sources. 
@@ -73,7 +73,7 @@ public class ProjectDataAccessorImpl implements ProjectAccessor {
 
 		URI uri = null;
 
-		if ((uri = URIUtills.toURI(bts)) == null) {
+		if ((uri = URIUtils.toURI(bts)) == null) {
 			logger.warn("Error converting to URI: " + bts);
 			return null;
 		}
@@ -95,7 +95,7 @@ public class ProjectDataAccessorImpl implements ProjectAccessor {
 	public MailAccessor getMailAccessor() throws InvalidAccessorException {
 		URI uri = null;
 
-		if ((uri = URIUtills.toURI(mail)) == null) {
+		if ((uri = URIUtils.toURI(mail)) == null) {
 			logger.warn("Error converting to URI: " + mail);
 			return null;
 		}
@@ -119,7 +119,7 @@ public class ProjectDataAccessorImpl implements ProjectAccessor {
     	try {
     		URI uri = null;
     		
-    		if ((uri = URIUtills.toURI(scm)) == null) {
+    		if ((uri = URIUtils.toURI(scm)) == null) {
             	logger.warn("Error converting to URI: " + scm);
             	return null;
             }
@@ -135,7 +135,7 @@ public class ProjectDataAccessorImpl implements ProjectAccessor {
 			}
 		} catch (Exception e) {
 			throw new InvalidAccessorException(scmAccessor, 
-					URIUtills.toURI(scm));
+					URIUtils.toURI(scm));
 		}
 
         return scmAccessor;

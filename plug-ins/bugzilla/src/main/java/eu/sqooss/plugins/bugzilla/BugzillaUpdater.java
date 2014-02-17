@@ -97,33 +97,37 @@ public class BugzillaUpdater implements MetadataUpdater, JobStateListener  {
 
         this.bts = AlitheiaCore.getInstance().getTDSService().getAccessor(
                 project.getId()).getBTSAccessor();
-        if (Bug.getLastUpdate(project) != null) {
-            bugIds = bts.getBugsNewerThan(Bug.getLastUpdate(project).getUpdateRun());
+        
+        if(this.bts != null) {
+	        if (Bug.getLastUpdate(project) != null) {
+	            bugIds = bts.getBugsNewerThan(Bug.getLastUpdate(project).getUpdateRun());
+	        } else {
+	            bugIds = bts.getAllBugs();
+	        }
+	        logger.info(project.getName() + ": Got " + bugIds.size() + " new bugs");
+	        logger.info(project.getName() + ": Spawing jobs");
+	
+	        Set<Job> jobs = new HashSet<Job>();
+	        
+	        // Update
+	        for (String bugID : bugIds) {
+	            BugzillaXMLJob job = new BugzillaXMLJob(project, bugID, logger);
+	            job.addJobStateListener(this);
+	            jobs.add(job);
+	            numbugs++;
+	        }
+	        jobCounter.set(jobs.size());
+	        s.enqueueNoDependencies(jobs);
+	
+	      //Poor man's synchronization
+	        while (jobCounter.intValue() > 0) {
+	            try {
+	                Thread.sleep(1000);
+	            } catch(InterruptedException ignored){}
+	        }
         } else {
-            bugIds = bts.getAllBugs();
+        	logger.info("No BTS available for project " + project.getName());
         }
-        logger.info(project.getName() + ": Got " + bugIds.size() + " new bugs");
-        logger.info(project.getName() + ": Spawing jobs");
-
-        Set<Job> jobs = new HashSet<Job>();
-        
-        // Update
-        for (String bugID : bugIds) {
-            BugzillaXMLJob job = new BugzillaXMLJob(project, bugID, logger);
-            job.addJobStateListener(this);
-            jobs.add(job);
-            numbugs++;
-        }
-        jobCounter.set(jobs.size());
-        s.enqueueNoDependencies(jobs);
-
-      //Poor man's synchronization
-        while (jobCounter.intValue() > 0) {
-            try {
-                Thread.sleep(1000);
-            } catch(InterruptedException ignored){}
-        }
-        
         if (dbs.isDBSessionActive())
             dbs.commitDBSession();
     }

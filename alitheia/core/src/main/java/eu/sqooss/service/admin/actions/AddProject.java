@@ -163,7 +163,7 @@ public class AddProject extends AdminActionBase {
             debug("Testing mail accessor for project: " + name);
             MailAccessor ma = a.getMailAccessor();
             if (ma == null) {
-                warn("tds.mail.maildir", "Mail accessor failed initialization for URI:" + bts);
+                warn("tds.mail.maildir", "Mail accessor failed initialization for URI:" + mail);
             } else {
             	debug("Mail accessor OK.");
             }

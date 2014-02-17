@@ -47,7 +47,7 @@ import eu.sqooss.service.logging.Logger;
 import eu.sqooss.service.tds.DataAccessor;
 import eu.sqooss.service.tds.ProjectAccessor;
 import eu.sqooss.service.tds.TDSService;
-import eu.sqooss.service.util.URIUtills;
+import eu.sqooss.service.util.URIUtils;
 
 public class TDSServiceImpl implements TDSService, AlitheiaCoreService {
     private Logger logger = null;
@@ -121,7 +121,7 @@ public class TDSServiceImpl implements TDSService, AlitheiaCoreService {
         boolean supported = false;
         URI toTest = null;
         
-        if ((toTest = URIUtills.toURI(url)) == null) {
+        if ((toTest = URIUtils.toURI(url)) == null) {
         	logger.warn("Error converting to URI: " + url);
         	return false;
         }
