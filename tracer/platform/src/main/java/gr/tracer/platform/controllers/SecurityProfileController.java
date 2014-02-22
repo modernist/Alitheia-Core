@@ -7,6 +7,8 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.GenericEntity;
 
 import gr.tracer.common.entities.db.MonitoredProjectList;
 import gr.tracer.common.entities.db.SecurityLibrary;
@@ -40,6 +42,14 @@ public class SecurityProfileController {
 	@Path("/SecurityProfile/")
 	public List<SecurityProfile> getSecurityProfiles() {
 		return spc.getSecurityProfiles();	
+	}
+	
+	@GET
+	@Produces({"application/xml", "application/json"})
+	@Path("/SecurityProfile2/")
+	public Response getSecurityProfiles2() {
+		return Response.ok(
+		        new GenericEntity<List<SecurityProfile>>(spc.getSecurityProfiles()) {}).build();
 	}
 
 	/**
@@ -210,6 +220,5 @@ public class SecurityProfileController {
 	@Path("/MonitoredProjectList/get-by-name/{vtName}")
 	public VulnerabilityType searchVulnerabilityType(String vtName) {
 		return spc.searchVulnerabilityType(vtName);
-	}	
-	
+	}
 }

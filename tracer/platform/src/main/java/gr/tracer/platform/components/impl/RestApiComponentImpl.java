@@ -31,6 +31,8 @@ public class RestApiComponentImpl implements RestApiComponent {
 	@Override
 	public boolean startUp() {
 		addResource(gr.tracer.platform.controllers.UserController.class);
+		addResource(gr.tracer.platform.controllers.SecurityProfileController.class);
+		addResource(gr.tracer.platform.controllers.VulnerabilityDetectionController.class);
 		//Add all JAX-RS annotated POJOs here
 		return true;
 	}
@@ -38,6 +40,8 @@ public class RestApiComponentImpl implements RestApiComponent {
 	@Override
 	public boolean shutDown() {
 		removeResource(gr.tracer.platform.controllers.UserController.class);
+		removeResource(gr.tracer.platform.controllers.SecurityProfileController.class);
+		removeResource(gr.tracer.platform.controllers.VulnerabilityDetectionController.class);
 		//Remove all JAX-RS annotated POJOs here
 		unregisterApp();
 		return false;
