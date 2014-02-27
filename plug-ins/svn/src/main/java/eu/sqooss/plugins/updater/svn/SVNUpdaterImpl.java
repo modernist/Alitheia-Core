@@ -348,6 +348,10 @@ public class SVNUpdaterImpl implements MetadataUpdater {
      	
     	this.inclPaths = project.getConfigValues(ConfigOption.PROJECT_SCM_PATHS_INCL);
     	
+    	if(this.inclPaths == Collections.<String>emptyList()) {
+    		this.inclPaths = new ArrayList<String>();
+    	}
+    	
     	/*
     	 * Based on the assumption that if users do not specify a path to 
     	 * process then want all paths to be processed.
