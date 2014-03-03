@@ -71,6 +71,7 @@
 							org.apache.http.*,
 							javax.servlet.*,
 							javax.ws.rs.*,
+							javax.ws.rs.ext.*,
 							org.jboss.resteasy.plugins.server.servlet,
 							org.jboss.resteasy.*;resolution:=optional,
 							*;resolution:=optional,
