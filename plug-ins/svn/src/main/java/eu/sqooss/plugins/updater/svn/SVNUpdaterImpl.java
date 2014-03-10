@@ -916,11 +916,27 @@ public class SVNUpdaterImpl implements MetadataUpdater {
     private void updateValidUntil(ProjectVersion pv) {
 
         ProjectVersion previous = pv.getPreviousVersion();
-
+        if(previous == null) {
+        	warn("No previous version available for ProjectVersion " + 
+        		pv.toString());
+        }
+        
         for (ProjectFile pf : versionFiles) {
             if (!pf.isAdded()) {
-                ProjectFile old = pf.getPreviousFileVersion();
-                old.setValidUntil(previous);
+                ProjectFile old = null;
+                if(pf.isReplaced()) {
+                	old = pf.getCopyFrom();
+                } else {
+                	old = pf.getPreviousFileVersion();
+                }
+                
+                if(old != null && previous != null) {
+                	old.setValidUntil(previous);
+                } else {
+                	warn("Previous file version of version " + 
+                        pv.getRevisionId() + " not found for file: " + 
+                        pf.toString());
+                }
             }
 
             if (pf.isDeleted()) {

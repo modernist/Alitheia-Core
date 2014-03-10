@@ -312,13 +312,15 @@ public class SVNAccessorImpl implements SCMAccessor {
                 return spr;
             }
             
-            List<SVNLogEntry> log = Collections.EMPTY_LIST;
-            if (svnrev.getSVNRevision() + 1 < getHeadSVNRevision())
+            List<SVNLogEntry> log = Collections.emptyList();
+            if (svnrev.getSVNRevision() + 1 <= getHeadSVNRevision())
                 log = getSVNLog("", svnrev.getSVNRevision(), svnrev.getSVNRevision() + 1);
             else 
                 log = getSVNLog("", svnrev.getSVNRevision(), -1);
-            SVNLogEntry full = log.iterator().next();
-            return new SVNProjectRevision(full, "");
+            if(log.iterator().hasNext()) {
+	            SVNLogEntry full = log.iterator().next();
+	            return new SVNProjectRevision(full, "");
+            }
         } catch (InvalidRepositoryException e) {
             logger.error("Revision " + r + " of project " + projectname
                     + "refers to invalid project " + "repository " + url, e);
