@@ -55,7 +55,7 @@
 				<configuration>
 					<instructions>
 						<Embed-Dependency>
-							*;scope=compile|runtime;artifactId=!org.osgi.core|org.osgi.compendium|common|core|servlet-api|junit|resteasy-jaxrs
+							*;scope=compile|runtime;artifactId=!org.osgi.core|org.osgi.compendium|common|core|servlet-api|junit|resteasy-jaxrs|resteasy-jackson-provider
 						</Embed-Dependency>
 						<Export-Package>gr.tracer.platform,gr.tracer.platform.components,
 						gr.tracer.platform.controllers, gr.tracer.platform.rest</Export-Package>
@@ -65,14 +65,15 @@
 						<Bundle-Vendor>Athens University of Economics and Business</Bundle-Vendor>
 						<Bundle-Description>TRACER project platform library</Bundle-Description>
 						<Eclipse-RegisterBuddy>org.hibernate.core,
-							org.hibernate.annotations, eu.sqooss.alitheia.core, gr.tracer.common, javax.servlet.api, org.jboss.resteasy.resteasy-jaxrs</Eclipse-RegisterBuddy>
+							org.hibernate.annotations, eu.sqooss.alitheia.core, gr.tracer.common, javax.servlet.api, org.jboss.resteasy.resteasy-jaxrs, org.jboss.resteasy.resteasy-jackson-provider</Eclipse-RegisterBuddy>
 						<Import-Package>*, gr.tracer.common.*, eu.sqooss.service.db,
 							com.sun.source.*;resolution:=optional,
 							org.apache.http.*,
 							javax.servlet.*,
 							javax.ws.rs.*,
 							javax.ws.rs.ext.*,
-							org.jboss.resteasy.plugins.server.servlet,
+							org.codehaus.jackson.*,
+							org.jboss.resteasy.plugins.server.servlet; version="2.3.7.Final",
 							org.jboss.resteasy.*;resolution:=optional,
 							*;resolution:=optional,
 							org.apache.commons.codec.digest,

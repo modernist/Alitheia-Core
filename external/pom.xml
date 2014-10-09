@@ -27,6 +27,7 @@
     <module>h2</module>
     <module>antlr3</module>
 	<module>org.jboss.resteasy.resteasy-jaxrs</module>
+	<module>org.jboss.resteasy.resteasy-jackson-provider</module>
   </modules>
 
   <build>

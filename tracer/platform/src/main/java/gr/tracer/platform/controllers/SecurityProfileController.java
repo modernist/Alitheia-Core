@@ -53,6 +53,30 @@ public class SecurityProfileController {
 		return Response.ok(
 		        new GenericEntity<List<SecurityProfile>>(spc.getSecurityProfiles()) {}).build();
 	}
+	
+	@GET
+	//@Produces({"application/xml", "application/json"})
+	@Path("/SecurityProfile3/")
+	public Response getSecurityProfiles3() {
+		return Response.ok(spc.getSecurityProfiles().toArray()).build();
+	}
+	
+	@GET
+	//@Produces({"application/xml", "application/json"})
+	@Path("/SecurityProfile4/")
+	public SecurityProfile[] getSecurityProfiles4() {
+		List<SecurityProfile> l = spc.getSecurityProfiles();
+		SecurityProfile[] result = new SecurityProfile[l.size()];
+		l.toArray(result);
+		return result;
+	}
+	
+	@GET
+	//@Produces({"application/xml", "application/json"})
+	@Path("/SecurityProfile5/")
+	public Response getSecurityProfiles5() {
+		return Response.ok("test", MediaType.APPLICATION_JSON).build();
+	}
 
 	/**
      * @see gr.tracer.platform.components.SecurityProfileComponent#addVulnerabilityTypeToSecurityProfile(java.lang.String, java.lang.String)
