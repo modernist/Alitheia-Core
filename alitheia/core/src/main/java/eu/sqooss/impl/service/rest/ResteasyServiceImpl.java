@@ -32,6 +32,7 @@ package eu.sqooss.impl.service.rest;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpService;
@@ -59,11 +60,32 @@ public class ResteasyServiceImpl implements RestService {
 		registerApp();
 	}
 	
+	@Override
+	public Class<?> loadResource(String clazz)
+	{
+		try {
+			/*for (Bundle b : bc.getBundles()) {
+		        try {
+		            Class<?> c = b.loadClass(clazz);
+		            return c;
+		        } catch (ClassNotFoundException e) {
+		            // No problem, this bundle doesn't have the class
+		        }
+		    }*/
+			Class<?> c = this.getClass().getClassLoader().loadClass(clazz);
+			return c;
+		} catch(Exception e) {
+			log.error("Unable to load class " + clazz, e);
+		}
+		return null;
+	}
+	
 	private void registerApp() {
 		HttpService http = getHttpService();
 
 		Dictionary<String, String> params = new Hashtable<String, String>();
 		params.put("resteasy.scan", "false");
+		params.put("resteasy.use.builtin.providers", "true");
 		params.put("javax.ws.rs.Application", RestServiceApp.class.getName());
 
 		ResteasyServlet bridge = new ResteasyServlet();

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="eu.sqooss.tracer.common.entities.db.SecurityProfile" table="SECURITY_PROFILE" lazy="false">
+        <id name="id" type="long" column="SECURITY_PROFILE_ID">
+            <generator class="native" />
+        </id>
+        <property name="name" type="string" column="SECURITY_PROFILE_NAME" not-null="true" unique="true" />
+        <property name="description" type="string" column="SECURITY_PROFILE_DESCRIPTION" not-null="true" />
+        <set name="detectedVulnerabilityTypes" table="DETECTED_VULNERABILITY_TYPE" inverse="false" lazy="false">
+            <key column="SECURITY_PROFILE_ID" />
+            <many-to-many class="eu.sqooss.tracer.common.entities.db.VulnerabilityType" column="VULNERABILITY_TYPE_ID"/>
+        </set>
+    </class>
+</hibernate-mapping>

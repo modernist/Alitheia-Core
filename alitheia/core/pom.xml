@@ -25,6 +25,13 @@
         </includes>
       </resource>
       <resource>
+		<targetPath>eu/sqooss/service/db</targetPath>
+		<directory>${basedir}/main/java/eu/sqooss/tracer/common/entities/db</directory>
+		<includes>
+			<include>**/*.xml</include>
+		</includes>
+	  </resource>
+      <resource>
         <directory>${basedir}/src/main/resources</directory>
         <includes>
           <include>**/*</include>
@@ -40,20 +47,27 @@
         <configuration>
           <instructions>
             <Embed-Dependency> 
-              *;scope=compile|runtime;artifactId=!core|org.osgi.core|org.osgi.compendium|servlet-api|junit
+              *;scope=compile|runtime;artifactId=!core|org.osgi.core|org.osgi.compendium|servlet-api|junit|resteasy-jaxrs|resteasy-jackson-provider
             </Embed-Dependency>
             <Export-Package>
               eu.sqooss.core, eu.sqooss.service.*,
-              com.mws.squal.service.*
+              com.mws.squal.service.*,
+              eu.sqooss.tracer.*
             </Export-Package>
             <Import-Package>
               com.mysql.jdbc;resolution:=optional, org.h2;resolution:=optional, 
               javassist.util, javassist.util.proxy,
               javax.persistence,
+              javax.servlet.*,
+			  javax.ws.rs.*,
+			  javax.ws.rs.ext.*,
+			  org.codehaus.jackson.*,
+			  org.jboss.resteasy.plugins.server.servlet; version="2.3.7.Final",
+			  org.jboss.resteasy.*;resolution:=optional,
               org.hibernate, org.hibernate.cfg, org.hibernate.classic, org.hibernate.exception,
               org.hibernate.proxy, org.hibernate.type, org.hibernate.connection,
               org.hibernate.cache, org.hibernate.annotations,
-              org.hsqldb;resolution:=optional, 
+              org.hsqldb;resolution:=optional,
               com.sun.source.*;resolution:=optional, *;resolution:=optional,
               gr.tracer.common.entities.*;resolution:=optional
             </Import-Package>
@@ -162,6 +176,7 @@
 		<groupId>org.jboss.resteasy</groupId>
 		<artifactId>jaxrs-api</artifactId>
 		<version>2.3.7.Final</version>
+		<scope>compile,provided</scope>
 	</dependency>
 	<dependency>
 		<groupId>org.jboss.resteasy</groupId>
