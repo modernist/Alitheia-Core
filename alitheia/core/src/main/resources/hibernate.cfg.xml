@@ -85,6 +85,7 @@
         <mapping class="eu.sqooss.tracer.common.entities.db.StoredProjectVulnerability"/>
         <mapping class="eu.sqooss.tracer.common.entities.db.ProjectVersionVulnerability"/>
         <mapping class="eu.sqooss.tracer.common.entities.db.ProjectFileVulnerability"/>
+        <mapping class="eu.sqooss.tracer.common.entities.db.MonitoredProjectList"/>
     </session-factory>
 
 </hibernate-configuration>

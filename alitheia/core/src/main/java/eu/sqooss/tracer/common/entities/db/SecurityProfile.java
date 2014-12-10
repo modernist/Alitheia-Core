@@ -16,6 +16,8 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonManagedReference;
+
 import eu.sqooss.core.AlitheiaCore;
 import eu.sqooss.service.db.DAObject;
 import eu.sqooss.service.db.DBService;
@@ -71,7 +73,8 @@ public class SecurityProfile extends DAObject {
             joinColumns={@JoinColumn(name="SECURITY_PROFILE_ID", referencedColumnName="SECURITY_PROFILE_ID")},
             inverseJoinColumns={@JoinColumn(name="VULNERABILITY_TYPE_ID", referencedColumnName="VULNERABILITY_TYPE_ID")})
 	//@ManyToMany(mappedBy="detectingSecurityProfiles", targetEntity=VulnerabilityType.class, cascade={CascadeType.ALL})
-    private Set<VulnerabilityType> detectedVulnerabilityTypes = new HashSet<VulnerabilityType>();
+    @JsonManagedReference
+	private Set<VulnerabilityType> detectedVulnerabilityTypes = new HashSet<VulnerabilityType>();
 	
 	/**
      * Get a set of distinct Vulnerability Types that should be detected when the profile is used

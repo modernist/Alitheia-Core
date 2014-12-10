@@ -35,9 +35,6 @@ public class RestApiComponentImpl implements RestApiComponent {
 		addResource(eu.sqooss.tracer.platform.controllers.UserController.class);
 		addResource(eu.sqooss.tracer.platform.controllers.SecurityProfileController.class);
 		addResource(eu.sqooss.tracer.platform.controllers.VulnerabilityDetectionController.class);
-		addResource(eu.sqooss.tracer.common.entities.db.SecurityProfile.class);
-		addResource(eu.sqooss.tracer.common.entities.db.SecurityLibrary.class);
-		addResource(eu.sqooss.tracer.common.entities.db.VulnerabilityType.class);
 		//Add all JAX-RS annotated POJOs here
 		return true;
 	}
@@ -47,9 +44,6 @@ public class RestApiComponentImpl implements RestApiComponent {
 		removeResource(eu.sqooss.tracer.platform.controllers.UserController.class);
 		removeResource(eu.sqooss.tracer.platform.controllers.SecurityProfileController.class);
 		removeResource(eu.sqooss.tracer.platform.controllers.VulnerabilityDetectionController.class);
-		removeResource(eu.sqooss.tracer.common.entities.db.SecurityProfile.class);
-		removeResource(eu.sqooss.tracer.common.entities.db.SecurityLibrary.class);
-		removeResource(eu.sqooss.tracer.common.entities.db.VulnerabilityType.class);
 		//Remove all JAX-RS annotated POJOs here
 		unregisterApp();
 		return false;
@@ -103,7 +97,8 @@ public class RestApiComponentImpl implements RestApiComponent {
 			Dictionary<String, String> params = new Hashtable<String, String>();
 			params.put("resteasy.scan", "false");
 			params.put("resteasy.use.builtin.providers", "true");
-			params.put("javax.ws.rs.Application", "gr.tracer.platform.rest.RestApiApplication");
+			params.put("resteasy.servlet.mapping.prefix", "/tracerapi/*");
+			params.put("javax.ws.rs.Application", "eu.sqooss.service.rest.RestServiceApp");
 			
 			RestApiDispatcher dispatcher = new RestApiDispatcher(); 
 			

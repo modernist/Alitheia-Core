@@ -21,6 +21,8 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonManagedReference;
+
 @XmlRootElement(name="securityLibrary")
 @Entity
 @Table(name="SECURITY_LIBRARY")
@@ -72,7 +74,8 @@ public class SecurityLibrary extends DAObject {
             joinColumns={@JoinColumn(name="SECURITY_LIBRARY_ID", referencedColumnName="SECURITY_LIBRARY_ID")},
             inverseJoinColumns={@JoinColumn(name="VULNERABILITY_TYPE_ID", referencedColumnName="VULNERABILITY_TYPE_ID")})
 	//@ManyToMany(mappedBy="treatingSecurityLibraries", targetEntity=VulnerabilityType.class, cascade={CascadeType.ALL})
-    private Set<VulnerabilityType> treatedVulnerabilityTypes = new HashSet<VulnerabilityType>();
+    @JsonManagedReference
+	private Set<VulnerabilityType> treatedVulnerabilityTypes = new HashSet<VulnerabilityType>();
 	
 	/**
      * Get a set of distinct Vulnerability Types that can be treated by the library

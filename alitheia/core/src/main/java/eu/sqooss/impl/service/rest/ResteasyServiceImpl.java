@@ -39,7 +39,6 @@ import org.osgi.service.http.HttpService;
 
 import eu.sqooss.service.logging.Logger;
 import eu.sqooss.service.rest.RestService;
-import eu.sqooss.service.rest.RestServiceApp;
 
 public class ResteasyServiceImpl implements RestService {
 
@@ -64,16 +63,16 @@ public class ResteasyServiceImpl implements RestService {
 	public Class<?> loadResource(String clazz)
 	{
 		try {
-			/*for (Bundle b : bc.getBundles()) {
+			for (Bundle b : bc.getBundles()) {
 		        try {
 		            Class<?> c = b.loadClass(clazz);
 		            return c;
 		        } catch (ClassNotFoundException e) {
 		            // No problem, this bundle doesn't have the class
 		        }
-		    }*/
-			Class<?> c = this.getClass().getClassLoader().loadClass(clazz);
-			return c;
+		    }
+			//Class<?> c = this.getClass().getClassLoader().loadClass(clazz);
+			//return c;
 		} catch(Exception e) {
 			log.error("Unable to load class " + clazz, e);
 		}
@@ -86,7 +85,8 @@ public class ResteasyServiceImpl implements RestService {
 		Dictionary<String, String> params = new Hashtable<String, String>();
 		params.put("resteasy.scan", "false");
 		params.put("resteasy.use.builtin.providers", "true");
-		params.put("javax.ws.rs.Application", RestServiceApp.class.getName());
+		params.put("resteasy.servlet.mapping.prefix", "/api/*");
+		params.put("javax.ws.rs.Application", "eu.sqooss.service.rest.RestServiceApp");
 
 		ResteasyServlet bridge = new ResteasyServlet();
 		try {

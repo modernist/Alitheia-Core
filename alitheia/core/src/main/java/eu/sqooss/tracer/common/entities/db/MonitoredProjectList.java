@@ -18,6 +18,9 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonManagedReference;
+
 import eu.sqooss.service.db.DAObject;
 import eu.sqooss.service.db.StoredProject;
 import eu.sqooss.service.db.User;
@@ -90,6 +93,7 @@ public class MonitoredProjectList extends DAObject {
 	@JoinTable(name="MONITORED_PROJECT_LIST_PROJECT", 
 		joinColumns=@JoinColumn(name="MONITORED_PROJECT_LIST_ID"),
 		inverseJoinColumns=@JoinColumn(name="PROJECT_ID"))
+	@JsonManagedReference
 	private Set<StoredProject> projects = new HashSet<StoredProject>();
 	
 	/**
