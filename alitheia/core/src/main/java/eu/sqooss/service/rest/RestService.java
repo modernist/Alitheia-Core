@@ -59,5 +59,8 @@ public interface RestService extends AlitheiaCoreService {
 	 * Remove a resource from the resource registry.
 	 * @param resource  The resource to remove.
 	 */
-	public void removeResource(Class<?> resource);	
+	public void removeResource(Class<?> resource);
+	
+	
+	public Class<?> loadResource(String clazz);
 }

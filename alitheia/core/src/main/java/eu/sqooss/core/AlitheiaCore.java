@@ -68,6 +68,8 @@ import eu.sqooss.service.security.SecurityManager;
 import eu.sqooss.service.tds.TDSService;
 import eu.sqooss.service.updater.UpdaterService;
 import eu.sqooss.service.webadmin.WebadminService;
+import eu.sqooss.tracer.platform.TracerPlatformService;
+import eu.sqooss.tracer.platform.TracerPlatformServiceImpl;
 
 /**
  * Startup class of the Alitheia framework's core. Its main goal is to
@@ -117,6 +119,7 @@ public class AlitheiaCore {
     	services.add(RestService.class);
     	services.add(AdminService.class);
     	services.add(SecurityManager.class);
+    	services.add(TracerPlatformService.class);
 
     	implementations.put(LogManager.class, LogManagerImpl.class);
     	implementations.put(DBService.class, DBServiceImpl.class);	 
@@ -131,6 +134,7 @@ public class AlitheiaCore {
         implementations.put(RestService.class, ResteasyServiceImpl.class);
     	implementations.put(AdminService.class, AdminServiceImpl.class);
     	implementations.put(SecurityManager.class, SecurityManagerImpl.class);
+    	implementations.put(TracerPlatformService.class, TracerPlatformServiceImpl.class);
     }
    
     /**
@@ -329,6 +333,15 @@ public class AlitheiaCore {
     public DBService getDBService() {
         //return (DBServiceImpl)instances.get(DBService.class);
         return DBServiceImpl.getInstance(); // <-- Ugly but required for testing.
+    }
+    
+    /**
+     * Returns the locally stored RestService component's instance.
+     * 
+     * @return The RestService component's instance.
+     */
+    public RestService getRestService() {
+        return (RestService)instances.get(RestService.class);
     }
     
     /**

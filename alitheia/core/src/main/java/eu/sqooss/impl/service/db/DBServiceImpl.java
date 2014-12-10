@@ -256,7 +256,7 @@ public class DBServiceImpl implements DBService, AlitheiaCoreService {
                     File[] metricsJars = searchDir.listFiles(new FilenameFilter() {
                         public boolean accept(File dir, String name) {
                             return (name.endsWith(".jar") && 
-                            		(name.startsWith("eu.sqooss.metrics") || name.startsWith("gr.tracer")));
+                            		(name.startsWith("eu.sqooss.metrics") || name.startsWith("gr.tracer.vulnerabilitydetectors")));
                         }
                     });
                     for( File jarFile: metricsJars ) {
